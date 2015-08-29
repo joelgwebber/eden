@@ -1,0 +1,2 @@
+#!/bin/sh
+tsc --out eden.js -w eden.ts

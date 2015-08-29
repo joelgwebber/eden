@@ -1,3 +1,4 @@
+/// <reference path="blocktypes.ts"/>
 /// <reference path="wall.ts"/>
 /// <reference path="floor.ts"/>
 
@@ -12,19 +13,13 @@ module Eden {
     render(env: number[]): BlockGeometry;
   }
 
-  var _blockTypes: {[id: number]: BlockType} = {
-    0: null,
-    1: new WallBlock(),
-    2: new FloorBlock(),
-  };
-
   var _geomCache: {[key: string]: BlockGeometry } = {};
 
   export function geomForEnv(env: number[]): BlockGeometry {
     var key = envKey(env);
     if (!(key in _geomCache)) {
       // Crappy on/off blocks for now.
-      var bt = _blockTypes[env[13]];
+      var bt = blockTypes[env[13]];
       if (bt) {
         _geomCache[key] = bt.render(env);
       } else {

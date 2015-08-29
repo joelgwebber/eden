@@ -36,14 +36,22 @@ module Eden {
         }
       }
 
-      for (var x = 6; x < 12; x++) {
-        for (var z = 6; z < 12; z++) {
-          this.setCell(x, 1, z, 1);
-        }
+      this.fill(6, 1, 6, 12, 1, 12, 1);
+      this.fill(7, 1, 7, 11, 1, 11, 2);
+
+      this.fill(6, 2, 6, 12, 2, 12, 1);
+      this.fill(7, 2, 7, 11, 2, 11, 0);
+      for (var i = 6; i < 12; i++) {
+        this.setCell(i, 2, i, 1);
       }
-      for (var x = 7; x < 11; x++) {
-        for (var z = 7; z < 11; z++) {
-          this.setCell(x, 1, z, 2);
+    }
+
+    private fill(x0: number, y0: number, z0: number, x1: number, y1: number, z1: number, cell: number) {
+      for (var x = x0; x <= x1; x++) {
+        for (var y = y0; y <= y1; y++) {
+          for (var z = z0; z <= z1; z++) {
+            this.setCell(x, y, z, cell);
+          }
         }
       }
     }
@@ -108,7 +116,7 @@ module Eden {
       for (var x = 0; x < 3; x++) {
         for (var y = 0; y < 3; y++) {
           for (var z = 0; z < 3; z++) {
-            env[z * 9 + y * 3 + x] = this.cell(cx+x-1, cy+y-1, cz+z-1);
+            env[y * 9 + z * 3 + x] = this.cell(cx+x-1, cy+y-1, cz+z-1); // Y, Z, X dominant order.
           }
         }
       }

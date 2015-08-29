@@ -4,6 +4,8 @@
 /// <reference path="lib/threejs/three-css3drenderer.d.ts"/>
 /// <reference path="lib/threejs/three-projector.d.ts"/>
 /// <reference path="lib/threejs/three-orbitcontrols.d.ts"/>
+/// <reference path="./lib/threejs/three-firstpersoncontrols.d.ts"/>
+/// <reference path="./lib/threejs/three-flycontrols.d.ts"/>
 /// <reference path="lib/threejs/three-trackballcontrols.d.ts"/>
 /// <reference path="lib/threejs/three-effectcomposer.d.ts"/>
 /// <reference path="lib/threejs/three-renderpass.d.ts"/>
@@ -16,23 +18,14 @@
 /// <reference path="arcball.ts"/>
 /// <reference path="blocks.ts"/>
 
-declare module THREE {
-  var AWDLoader: any;
-  var FlyControls: any;
-  var BloomPass: any;
-  var DotScreenShader: Shader;
-  var RGBShiftShader: Shader;
-  var FXAAShader: Shader;
-}
-
 module Eden {
   var camera: THREE.PerspectiveCamera;
   var scene: THREE.Scene;
   var renderer: THREE.WebGLRenderer;
   var mouse = new THREE.Vector2();
-  var target = new THREE.Vector3();
-  var radius = 20, theta = 0, phi = 0;
+  var controls: THREE.FlyControls;
   var world: World;
+  var clock = new THREE.Clock();
 
   function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -42,8 +35,6 @@ module Eden {
 
   function onDocumentMouseMove(event) {
     event.preventDefault();
-    theta = - (event.clientX / window.innerWidth) * 2 + 1;
-    phi = - (event.clientY / window.innerHeight) * 2 + 1;
   }
 
   function init() {
@@ -59,13 +50,18 @@ module Eden {
 
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 10000);
+    camera.position.z = 20;
 
     var light = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(1, 1, 1).normalize();
+    light.position.set(1, 2, 3).normalize();
     scene.add(light);
 
     world = new World(scene);
-    target.x = 8; target.z = 8;
+
+    controls = new THREE.FlyControls(camera, container);
+    controls.movementSpeed = 8;
+    controls.rollSpeed = 0.5;
+    controls.dragToLook = true;
 
     document.addEventListener('mousemove', onDocumentMouseMove, false);
     window.addEventListener('resize', onWindowResize, false);
@@ -74,12 +70,8 @@ module Eden {
   function render() {
     requestAnimationFrame(render);
 
+    controls.update(clock.getDelta());
     world.update();
-
-    camera.position.x = radius * Math.cos(theta) * Math.cos(phi);
-    camera.position.y = radius * Math.sin(phi);
-    camera.position.z = radius * Math.sin(theta) * Math.cos(phi);
-    camera.lookAt(target);
 
     camera.updateMatrixWorld(false);
 

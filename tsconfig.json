@@ -37,6 +37,7 @@
     "files": [
         "./arcball.ts",
         "./blocks.ts",
+        "./blocktypes.ts",
         "./eden.ts",
         "./floor.ts",
         "./lib/csg/csg.d.ts",
@@ -77,6 +78,8 @@
         "./lib/threejs/three-copyshader.d.ts",
         "./lib/threejs/three-css3drenderer.d.ts",
         "./lib/threejs/three-effectcomposer.d.ts",
+        "./lib/threejs/three-firstpersoncontrols.d.ts",
+        "./lib/threejs/three-flycontrols.d.ts",
         "./lib/threejs/three-maskpass.d.ts",
         "./lib/threejs/three-orbitcontrols.d.ts",
         "./lib/threejs/three-projector.d.ts",

@@ -36,13 +36,14 @@ module Eden {
         }
       }
 
-      this.fill(6, 1, 6, 12, 1, 12, 1);
-      this.fill(7, 1, 7, 11, 1, 11, 2);
+      this.fill(6, 1, 6, 12, 1, 12, BlockWall);
+      this.fill(7, 1, 7, 11, 1, 11, BlockFloor);
 
-      this.fill(6, 2, 6, 12, 2, 12, 1);
-      this.fill(7, 2, 7, 11, 2, 11, 0);
-      for (var i = 6; i < 12; i++) {
-        this.setCell(i, 2, i, 1);
+      this.fill(6, 2, 6, 12, 2, 12, BlockWall);
+      this.fill(7, 2, 7, 11, 2, 11, BlockAir);
+
+      for (var i = 7; i < 12; i++) {
+        this.setCell(i, 2, i, BlockWall);
       }
     }
 

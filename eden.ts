@@ -1,10 +1,10 @@
 /// <reference path="lib/threejs/three.d.ts"/>
-
 /// <reference path="csg.ts"/>
 /// <reference path="flycontrols.ts"/>
 /// <reference path="world.ts"/>
 /// <reference path="arcball.ts"/>
 /// <reference path="blocks.ts"/>
+/// <reference path="math.ts"/>
 
 module Eden {
   var camera: THREE.PerspectiveCamera;
@@ -14,8 +14,6 @@ module Eden {
   var controls: FlyControls;
   var world: World;
   var clock = new THREE.Clock();
-
-  export var TAU = 2 * Math.PI;
 
   function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -38,9 +36,9 @@ module Eden {
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 10000);
     camera.rotation.x = -TAU / 4;
-    camera.position.x = 9;
+    camera.position.x = 5;
     camera.position.y = 8;
-    camera.position.z = 9;
+    camera.position.z = 6;
 
     var light = new THREE.DirectionalLight(0xffffff, 1);
     light.position.set(1, 2, 3).normalize();

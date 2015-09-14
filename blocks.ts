@@ -15,12 +15,32 @@ module Eden {
 
   var _geomCache: {[key: string]: BlockGeometry } = {};
 
-  export function geomForEnv(env: number[]): BlockGeometry {
+  // HACK: Just prints out y=2 plane for now.
+  export function envStr(env: number[]): string {
+    var s = "";
+    for (var z = 0; z < 5; z++) {
+      for (var x = 0; x < 5; x++) {
+        s += "" + env[envOfs(x, 2, z)] + " ";
+      }
+      s += "\n";
+    }
+    return s;
+  }
+
+  export function envOfs(x: number, y: number, z: number): number {
+    return (y * 25) + (z * 5) + x;
+  }
+
+  export function envOfsCenter(dx: number, dy: number, dz: number): number {
+    return 62 + (dy * 25) + (dz * 5) + dx;
+  }
+
+  export function geomForEnv(x: number, y: number, z: number, env: number[]): BlockGeometry {
     var key = envKey(env);
     if (!(key in _geomCache)) {
-      // Crappy on/off blocks for now.
-      var bt = blockTypes[env[13]];
+      var bt = blockTypes[env[envOfsCenter(0, 0, 0)]];
       if (bt) {
+        console.log(">>> " + x + ", " + y + ", " + z);
         _geomCache[key] = bt.render(env);
       } else {
         _geomCache[key] = null;

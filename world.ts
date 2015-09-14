@@ -36,14 +36,13 @@ module Eden {
         }
       }
 
-      this.fill(6, 1, 6, 12, 1, 12, BlockWall);
-      this.fill(7, 1, 7, 11, 1, 11, BlockFloor);
-
-      this.fill(6, 2, 6, 12, 2, 12, BlockWall);
-      this.fill(7, 2, 7, 11, 2, 11, BlockAir);
-
-      for (var i = 7; i < 12; i++) {
+      this.fill(2, 2, 2, 9, 2, 9, BlockWall);
+      this.fill(3, 2, 3, 8, 2, 8, BlockAir);
+      for (var i = 3; i <= 8; i++) {
         this.setCell(i, 2, i, BlockWall);
+      }
+      for (var i = 3; i <= 8; i++) {
+        this.setCell(i, 2, 11-i, BlockWall);
       }
     }
 
@@ -83,12 +82,12 @@ module Eden {
       // - Keep track of dirty region to minimize walking.
       // - Use typed array for env.
       var meshIdx = 0;
-      for (var x = 1; x < ChunkSize-2; x++) {
-        for (var y = 1; y < ChunkSize-2; y++) {
-          for (var z = 1; z < ChunkSize-2; z++) {
+      for (var y = 2; y < 3/*ChunkSize - 4*/; y++) {
+        for (var z = 2; z < ChunkSize - 4; z++) {
+          for (var x = 2; x < ChunkSize - 4; x++) {
             var mesh = this._meshes[meshIdx];
             var env = this.env(x, y, z);
-            var geom = geomForEnv(env);
+            var geom = geomForEnv(x, y, z, env);
             if (!geom) {
               if (mesh) {
                 mesh.parent.remove(mesh);
@@ -114,10 +113,11 @@ module Eden {
 
     private env(cx: number, cy: number, cz: number): number[] {
       var env = [];
-      for (var x = 0; x < 3; x++) {
-        for (var y = 0; y < 3; y++) {
-          for (var z = 0; z < 3; z++) {
-            env[y * 9 + z * 3 + x] = this.cell(cx+x-1, cy+y-1, cz+z-1); // Y, Z, X dominant order.
+      for (var x = 0; x < 5; x++) {
+        for (var y = 0; y < 5; y++) {
+          for (var z = 0; z < 5; z++) {
+            // Y, Z, X dominant order.
+            env[y * 25 + z * 5 + x] = this.cell(cx + x - 2, cy + y - 2, cz + z - 2);
           }
         }
       }

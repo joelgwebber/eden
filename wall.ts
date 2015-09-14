@@ -20,8 +20,7 @@ module Eden {
   // TODO:
   // - Convert env to booleans to avoid the `== BlockWall` crap.
   // - Cache found lines.
-  // - When caching, fill all rotations/inversions to avoid redundant work.
-  // 
+  //   When caching, fill all rotations/inversions to avoid redundant work.
 
   // Fills the line that passes in the given direction through the given point.
   // Keeps track of already-visited points/directions in `marks`.
@@ -118,16 +117,26 @@ module Eden {
   function optimizeHelper(lines: Line[], total: number, touched: boolean[]): Line[] {
     // Find all candidate lines of equal length.
     var bestResult: Line[], bestLength = 100;
-    for (var i = 0; (i < lines.length) && (lines[i].len == lines[0].len); i++) {
-      var head = lines[i];
-      var tail = lines.slice();
-      tail = tail.slice(0, i).concat(tail.slice(i + 1));
+    while (true) {
+      for (var i = 0; (i < lines.length) && (lines[i].len == lines[0].len); i++) {
+        var head = lines[i];
+        var tail = lines.slice();
+        tail = tail.slice(0, i).concat(tail.slice(i + 1));
 
-      var result = optimizeLine(head, tail, total, touched.slice()); // Always copy `touched` (TODO: Can skip the first).
-      if (result.length && result.length < bestLength) {
-        bestResult = result;
-        bestLength = result.length;
+        var result = optimizeLine(head, tail, total, touched.slice()); // Always copy `touched` (TODO: Can skip the first).
+        if (result.length && result.length < bestLength) {
+          bestResult = result;
+          bestLength = result.length;
+        }
       }
+
+      if (!bestResult && lines.length > i) {
+        // We didn't find anything at len=N, so go ahead and try the next set.
+        lines = lines.slice(i);
+        continue;
+      }
+
+      break;
     }
 
     return bestResult;
@@ -152,14 +161,13 @@ module Eden {
     var result: Line[] = [];
     if (anythingTouched) {
       result.push(head);
-      // TODO: Deal with orphan cells, or this will do too much work.
       if (total > 0) {
         if (tail.length > 0) {
+          // TODO: Deal with orphan cells, so we can guarantee that `optimized` always contains something.
+          // Fixing this will reduce unnecessary work.
           var optimized = optimizeHelper(tail, total, touched);
           if (optimized) {
             result = result.concat(optimized);
-          } else {
-            console.log("wut?");
           }
         }
       }

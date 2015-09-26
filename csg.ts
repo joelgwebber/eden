@@ -48,7 +48,7 @@ module CSG {
 
   // Holds a binary space partition tree representing a 3D solid. Two solids can
   // be combined using the `union()`, `subtract()`, and `intersect()` methods.
-  class Model {
+  export class Model {
     polygons: Polygon[];
 
     constructor() {
@@ -160,6 +160,11 @@ module CSG {
       csg.polygons.map(function(p) { p.flip(); });
       return csg;
     }
+  }
+
+  // Construct an empty model.
+  export function empty(): Model {
+    return Model.fromPolygons([]);
   }
 
   // Construct an axis-aligned solid cuboid. Optional parameters are `center`,

@@ -11,59 +11,43 @@ module Eden {
 
   export class WallBlock implements BlockType {
     render(env: number[]): BlockGeometry {
-      // Find all the lines that should be filled in.
-      var lines = linesForEnv(env);
-
-      // Find the directions of these lines if/as they cross the middle.
-      var bits = 0;
-      for (var i = 0; i < lines.length; i++) {
-        var line = lines[i];
-        var x = line.x, z = line.z, dx = LineDirs[line.dir][0], dz = LineDirs[line.dir][1];
-
-        for (var j = 0; j < line.len-1; j++) {
-          if ((x == 2) && (z == 2)) {
-            bits |= 1 << line.dir;
-          } else if ((x+dx == 2) && (z+dz == 2)) {
-            bits |= 0x10 << line.dir;
-          }
-          x += dx; z += dz;
-        }
-      }
+      var bits = bitsForEnv(env);
 
       // Now render all the walls.
       // Start with a pillar (TODO: Drop the pillar if there are other walls).
-      var csg = CSG.cube({ radius: [0.1, 0.45, 0.1] });
+      // TODO: Start with empty model if any pair of opposite walls is present (east-west, etc).
+      var csg = CSG.cube({ radius: [0.1, 0.5, 0.1] });
 
       // X wall.
-      if (bits & 0x01) {
-        csg = csg.union(CSG.cube({ center: [0.25, 0, 0], radius: [0.225, 0.45, 0.1] }));
+      if (bits & EAST_BIT) {
+        csg = csg.union(CSG.cube({ center: [0.25, 0, 0], radius: [0.25, 0.5, 0.1] }));
       }
-      if (bits & 0x10) {
-        csg = csg.union(CSG.cube({ center: [-0.25, 0, 0], radius: [0.225, 0.45, 0.1] }));
+      if (bits & WEST_BIT) {
+        csg = csg.union(CSG.cube({ center: [-0.25, 0, 0], radius: [0.25, 0.5, 0.1] }));
       }
 
       // Z wall.
-      if (bits & 0x02) {
-        csg = csg.union(CSG.cube({ center: [0, 0, 0.25], radius: [0.1, 0.45, 0.225] }));
+      if (bits & SOUTH_BIT) {
+        csg = csg.union(CSG.cube({ center: [0, 0, 0.25], radius: [0.1, 0.5, 0.25] }));
       }
-      if (bits & 0x20) {
-        csg = csg.union(CSG.cube({ center: [0, 0, -0.25], radius: [0.1, 0.45, 0.225] }));
+      if (bits & NORTH_BIT) {
+        csg = csg.union(CSG.cube({ center: [0, 0, -0.25], radius: [0.1, 0.5, 0.25] }));
       }
 
       // XZ wall.
-      if (bits & 0x04) {
-        csg = csg.union(CSG.cube({ center: [0.25, 0, 0.25], radius: [0.225 * Root2, 0.45, 0.1], xform: xform(3) }));
+      if (bits & SOUTHEAST_BIT) {
+        csg = csg.union(CSG.cube({ center: [0.25, 0, 0.25], radius: [0.25 * Root2, 0.5, 0.1], xform: xform(3) }));
       }
-      if (bits & 0x40) {
-        csg = csg.union(CSG.cube({ center: [-0.25, 0, -0.25], radius: [0.225 * Root2, 0.45, 0.1], xform: xform(7) }));
+      if (bits & NORTHWEST_BIT) {
+        csg = csg.union(CSG.cube({ center: [-0.25, 0, -0.25], radius: [0.25 * Root2, 0.5, 0.1], xform: xform(7) }));
       }
 
       // ZX wall.
-      if (bits & 0x08) {
-        csg = csg.union(CSG.cube({ center: [0.25, 0, -0.25], radius: [0.225 * Root2, 0.45, 0.1], xform: xform(5) }));
+      if (bits & NORTHEAST_BIT) {
+        csg = csg.union(CSG.cube({ center: [0.25, 0, -0.25], radius: [0.25 * Root2, 0.5, 0.1], xform: xform(5) }));
       }
-      if (bits & 0x80) {
-        csg = csg.union(CSG.cube({ center: [-0.25, 0, 0.25], radius: [0.225 * Root2, 0.45, 0.1], xform: xform(1) }));
+      if (bits & SOUTHWEST_BIT) {
+        csg = csg.union(CSG.cube({ center: [-0.25, 0, 0.25], radius: [0.25 * Root2, 0.5, 0.1], xform: xform(1) }));
       }
 
       return {

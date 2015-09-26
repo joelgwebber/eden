@@ -666,6 +666,12 @@ var CSG;
         };
         return Model;
     })();
+    CSG.Model = Model;
+    // Construct an empty model.
+    function empty() {
+        return Model.fromPolygons([]);
+    }
+    CSG.empty = empty;
     // Construct an axis-aligned solid cuboid. Optional parameters are `center`,
     // `radius`, and `xform`, which default to `[0, 0, 0]` and `[1, 1, 1]` and
     // the 3x3 identity matrix.
@@ -1091,89 +1097,6 @@ var CSG;
     })();
     CSG.Node = Node;
 })(CSG || (CSG = {}));
-var Eden;
-(function (Eden) {
-    Eden.TAU = 2 * Math.PI;
-})(Eden || (Eden = {}));
-/// <reference path="lib/threejs/three.d.ts"/>
-/// <reference path="blocktypes.ts"/>
-/// <reference path="csg.ts"/>
-/// <reference path="blocks.ts"/>
-/// <reference path="math.ts"/>
-/// <reference path="envlines.ts"/>
-var Eden;
-(function (Eden) {
-    var Root2 = Math.sqrt(2);
-    var TwoRoot2 = 2 * Root2;
-    var WallBlock = (function () {
-        function WallBlock() {
-        }
-        WallBlock.prototype.render = function (env) {
-            // Find all the lines that should be filled in.
-            var lines = Eden.linesForEnv(env);
-            // Find the directions of these lines if/as they cross the middle.
-            var bits = 0;
-            for (var i = 0; i < lines.length; i++) {
-                var line = lines[i];
-                var x = line.x, z = line.z, dx = Eden.LineDirs[line.dir][0], dz = Eden.LineDirs[line.dir][1];
-                for (var j = 0; j < line.len - 1; j++) {
-                    if ((x == 2) && (z == 2)) {
-                        bits |= 1 << line.dir;
-                    }
-                    else if ((x + dx == 2) && (z + dz == 2)) {
-                        bits |= 0x10 << line.dir;
-                    }
-                    x += dx;
-                    z += dz;
-                }
-            }
-            // Now render all the walls.
-            // Start with a pillar (TODO: Drop the pillar if there are other walls).
-            var csg = CSG.cube({ radius: [0.1, 0.45, 0.1] });
-            // X wall.
-            if (bits & 0x01) {
-                csg = csg.union(CSG.cube({ center: [0.25, 0, 0], radius: [0.225, 0.45, 0.1] }));
-            }
-            if (bits & 0x10) {
-                csg = csg.union(CSG.cube({ center: [-0.25, 0, 0], radius: [0.225, 0.45, 0.1] }));
-            }
-            // Z wall.
-            if (bits & 0x02) {
-                csg = csg.union(CSG.cube({ center: [0, 0, 0.25], radius: [0.1, 0.45, 0.225] }));
-            }
-            if (bits & 0x20) {
-                csg = csg.union(CSG.cube({ center: [0, 0, -0.25], radius: [0.1, 0.45, 0.225] }));
-            }
-            // XZ wall.
-            if (bits & 0x04) {
-                csg = csg.union(CSG.cube({ center: [0.25, 0, 0.25], radius: [0.225 * Root2, 0.45, 0.1], xform: xform(3) }));
-            }
-            if (bits & 0x40) {
-                csg = csg.union(CSG.cube({ center: [-0.25, 0, -0.25], radius: [0.225 * Root2, 0.45, 0.1], xform: xform(7) }));
-            }
-            // ZX wall.
-            if (bits & 0x08) {
-                csg = csg.union(CSG.cube({ center: [0.25, 0, -0.25], radius: [0.225 * Root2, 0.45, 0.1], xform: xform(5) }));
-            }
-            if (bits & 0x80) {
-                csg = csg.union(CSG.cube({ center: [-0.25, 0, 0.25], radius: [0.225 * Root2, 0.45, 0.1], xform: xform(1) }));
-            }
-            return {
-                geom: Eden.csgPolysToGeometry(csg.toPolygons()),
-                mat: new THREE.MeshLambertMaterial({ color: 0xa0a0a0 })
-            };
-        };
-        return WallBlock;
-    })();
-    Eden.WallBlock = WallBlock;
-    function xform(eigth) {
-        var m = new THREE.Matrix4();
-        m.makeRotationY(eigth * Eden.TAU / 8);
-        var e = m.elements;
-        return [e[0], e[1], e[2], e[4], e[5], e[6], e[8], e[9], e[10]];
-    }
-    Eden.registerBlock(Eden.BlockWall, new WallBlock());
-})(Eden || (Eden = {}));
 /// <reference path="lib/threejs/three.d.ts"/>
 /// <reference path="blocktypes.ts"/>
 /// <reference path="csg.ts"/>
@@ -1261,75 +1184,113 @@ var Eden;
         return env.toString();
     }
 })(Eden || (Eden = {}));
+var Eden;
+(function (Eden) {
+    Eden.TAU = 2 * Math.PI;
+})(Eden || (Eden = {}));
 /// <reference path="blocktypes.ts"/>
 /// <reference path="blocks.ts"/>
 var Eden;
 (function (Eden) {
+    Eden.EAST_BIT = 0x01;
+    Eden.WEST_BIT = 0x10;
+    Eden.SOUTH_BIT = 0x02;
+    Eden.NORTH_BIT = 0x20;
+    Eden.SOUTHEAST_BIT = 0x04;
+    Eden.NORTHWEST_BIT = 0x40;
+    Eden.NORTHEAST_BIT = 0x08;
+    Eden.SOUTHWEST_BIT = 0x80;
     Eden.LineDirs = [[1, 0], [0, 1], [1, 1], [1, -1]];
+    var AllLines = [
+        { dir: 0, x: 0, z: 0, len: 5, hit: 0 },
+        { dir: 0, x: 0, z: 1, len: 5, hit: 0 },
+        { dir: 0, x: 0, z: 2, len: 5, hit: 0, bits: Eden.WEST_BIT | Eden.EAST_BIT },
+        { dir: 0, x: 0, z: 3, len: 5, hit: 0 },
+        { dir: 0, x: 0, z: 4, len: 5, hit: 0 },
+        { dir: 1, x: 0, z: 0, len: 5, hit: 0 },
+        { dir: 1, x: 1, z: 0, len: 5, hit: 0 },
+        { dir: 1, x: 2, z: 0, len: 5, hit: 0, bits: Eden.NORTH_BIT | Eden.SOUTH_BIT },
+        { dir: 1, x: 3, z: 0, len: 5, hit: 0 },
+        { dir: 1, x: 4, z: 0, len: 5, hit: 0 },
+        { dir: 2, x: 0, z: 3, len: 2, hit: 0 },
+        { dir: 2, x: 0, z: 2, len: 3, hit: 0 },
+        { dir: 2, x: 0, z: 1, len: 4, hit: 0 },
+        { dir: 2, x: 0, z: 0, len: 5, hit: 0, bits: Eden.NORTHWEST_BIT | Eden.SOUTHEAST_BIT },
+        { dir: 2, x: 1, z: 0, len: 4, hit: 0 },
+        { dir: 2, x: 2, z: 0, len: 3, hit: 0 },
+        { dir: 2, x: 3, z: 0, len: 2, hit: 0 },
+        { dir: 3, x: 0, z: 1, len: 2, hit: 0 },
+        { dir: 3, x: 0, z: 2, len: 3, hit: 0 },
+        { dir: 3, x: 0, z: 3, len: 4, hit: 0 },
+        { dir: 3, x: 0, z: 4, len: 5, hit: 0, bits: Eden.SOUTHWEST_BIT | Eden.NORTHEAST_BIT },
+        { dir: 3, x: 1, z: 4, len: 4, hit: 0 },
+        { dir: 3, x: 2, z: 4, len: 3, hit: 0 },
+        { dir: 3, x: 3, z: 4, len: 2, hit: 0 }
+    ];
+    function copyLine(l) {
+        return { x: l.x, z: l.z, dir: l.dir, len: l.len, hit: l.hit, bits: l.bits };
+    }
     // TODO:
     // - Convert env to booleans to avoid the `== BlockWall` crap.
     // - Cache found lines.
     //   When caching, fill all rotations/inversions to avoid redundant work.
-    // - Aggressively drop lines that touch nothing after longer lines are considered.
-    function linesForEnv(env) {
+    // TODO: Explain.
+    function bitsForEnv(env) {
+        // Get bits for filled lines.
         var lines = findAllLines(env);
-        lines = optimizeLines(lines, countBlocks(env));
-        console.log(Eden.envStr(env));
+        lines = optimizeLines(lines, env);
         console.log(">>> " + _count);
-        return lines;
-    }
-    Eden.linesForEnv = linesForEnv;
-    // Fills the line that passes in the given direction through the given point.
-    // Keeps track of already-visited points/directions in `marks`.
-    function fillLine(env, marks, x, z, dir) {
-        // Find the starting point.
-        var dx = -Eden.LineDirs[dir][0], dz = -Eden.LineDirs[dir][1];
-        while ((x >= 1) && (x < 4) && (z >= 1) && (z < 4) && (env[Eden.envOfs(x + dx, 2, z + dz)] == Eden.BlockWall)) {
-            x += dx;
-            z += dz;
-        }
-        // Walk the line.
-        dx = -dx;
-        dz = -dz;
-        var bit = 1 << dir;
-        var line = { x: x, z: z, dir: dir, len: 1 };
-        marks[Eden.envOfs(x, 2, z)] |= bit;
-        while ((x + dx >= 0) && (x + dx < 5) && (z + dz >= 0) && (z + dz < 5) && (env[Eden.envOfs(x + dx, 2, z + dz)] == Eden.BlockWall)) {
-            line.len++;
-            x += dx;
-            z += dz;
-            marks[Eden.envOfs(x, 2, z)] |= bit;
-        }
-        return line;
-    }
-    // Finds all lines that run through a given point, adding them to the `lines` array.
-    // Uses `marks` (must be the same size as `env`) to keep track of visited blocks/directions.
-    function findLines(env, marks, lines, x, z) {
-        var ofs = Eden.envOfs(x, 2, z);
-        for (var dir = 0; dir < 4; dir++) {
-            if ((env[ofs] != Eden.BlockWall) || (marks[ofs] & (1 << dir))) {
-                continue;
-            }
-            var line = fillLine(env, marks, x, z, dir);
-            if (line.len > 1) {
-                lines.push(line);
+        var bits = 0;
+        for (var i = 0; i < lines.length; i++) {
+            if (lines[i].bits) {
+                bits |= lines[i].bits;
             }
         }
+        // And bits for the immediate environment.
+        var envbits = 0;
+        if (env[Eden.envOfsCenter(-1, 0, 0)] == Eden.BlockWall) {
+            envbits |= Eden.WEST_BIT;
+        }
+        if (env[Eden.envOfsCenter(1, 0, 0)] == Eden.BlockWall) {
+            envbits |= Eden.EAST_BIT;
+        }
+        if (env[Eden.envOfsCenter(0, 0, -1)] == Eden.BlockWall) {
+            envbits |= Eden.NORTH_BIT;
+        }
+        if (env[Eden.envOfsCenter(0, 0, 1)] == Eden.BlockWall) {
+            envbits |= Eden.SOUTH_BIT;
+        }
+        if (env[Eden.envOfsCenter(-1, 0, -1)] == Eden.BlockWall) {
+            envbits |= Eden.NORTHWEST_BIT;
+        }
+        if (env[Eden.envOfsCenter(1, 0, 1)] == Eden.BlockWall) {
+            envbits |= Eden.SOUTHEAST_BIT;
+        }
+        if (env[Eden.envOfsCenter(-1, 0, 1)] == Eden.BlockWall) {
+            envbits |= Eden.SOUTHWEST_BIT;
+        }
+        if (env[Eden.envOfsCenter(1, 0, -1)] == Eden.BlockWall) {
+            envbits |= Eden.NORTHEAST_BIT;
+        }
+        // Walls go wherever both are set.
+        return bits & envbits;
     }
-    // Finds all the lines that run through occupied cells in the environment.
+    Eden.bitsForEnv = bitsForEnv;
     function findAllLines(env) {
-        var marks = [];
-        for (var i = 0; i < 125; i++) {
-            marks[i] = 0;
-        }
         var lines = [];
-        var total = 0;
-        for (var x = 0; x < 5; x++) {
-            for (var z = 0; z < 5; z++) {
+        for (var i = 0; i < AllLines.length; ++i) {
+            var line = copyLine(AllLines[i]);
+            var x = line.x, z = line.z;
+            var dx = Eden.LineDirs[line.dir][0], dz = Eden.LineDirs[line.dir][1];
+            for (var j = 0; j < line.len; j++) {
                 if (env[Eden.envOfs(x, 2, z)] == Eden.BlockWall) {
-                    findLines(env, marks, lines, x, z);
-                    total++;
+                    line.hit++;
                 }
+                x += dx;
+                z += dz;
+            }
+            if (line.hit > 0) {
+                lines.push(line);
             }
         }
         return lines;
@@ -1347,10 +1308,11 @@ var Eden;
         return total;
     }
     var _count = 0;
-    function optimizeLines(lines, total) {
+    function optimizeLines(lines, env) {
+        var total = countBlocks(env);
         // Sort lines by descending length.
         lines.sort(function (a, b) {
-            return b.len - a.len;
+            return b.hit - a.hit;
         });
         // 'Touched' bits for each cell in the environment.
         var touched = [];
@@ -1358,17 +1320,17 @@ var Eden;
             touched[i] = false;
         }
         _count = 0;
-        return optimizeHelper(lines, total, touched);
+        return optimizeHelper(lines, total, env, touched);
     }
-    function optimizeHelper(lines, total, touched) {
+    function optimizeHelper(lines, total, env, touched) {
         // Find all candidate lines of equal length.
         var bestResult, bestLength = 100;
         while (true) {
-            for (var i = 0; (i < lines.length) && (lines[i].len == lines[0].len); i++) {
+            for (var i = 0; (i < lines.length) && (lines[i].hit == lines[0].hit); i++) {
                 var head = lines[i];
                 var tail = lines.slice();
                 tail = tail.slice(0, i).concat(tail.slice(i + 1));
-                var result = optimizeLine(head, tail, total, touched.slice()); // Always copy `touched` (TODO: Can skip the first).
+                var result = optimizeLine(head, tail, total, env, touched.slice()); // Always copy `touched` (TODO: Can skip the first).
                 if (result.length && result.length < bestLength) {
                     bestResult = result;
                     bestLength = result.length;
@@ -1383,14 +1345,14 @@ var Eden;
         }
         return bestResult;
     }
-    function optimizeLine(head, tail, total, touched) {
+    function optimizeLine(head, tail, total, env, touched) {
         _count++;
         // Walk the line through the environment, updating `total` and `touched`.
         var anythingTouched = false;
         var x = head.x, z = head.z, dx = Eden.LineDirs[head.dir][0], dz = Eden.LineDirs[head.dir][1];
         for (var j = 0; j < head.len; j++) {
             var ofs = Eden.envOfs(x, 2, z);
-            if (!touched[ofs]) {
+            if (env[ofs] == Eden.BlockWall && !touched[ofs]) {
                 anythingTouched = true;
                 touched[ofs] = true;
                 total--;
@@ -1405,7 +1367,7 @@ var Eden;
                 if (tail.length > 0) {
                     // TODO: Deal with orphan cells, so we can guarantee that `optimized` always contains something.
                     // Fixing this will reduce unnecessary work.
-                    var optimized = optimizeHelper(tail, total, touched);
+                    var optimized = optimizeHelper(tail, total, env, touched);
                     if (optimized) {
                         result = result.concat(optimized);
                     }
@@ -1415,7 +1377,71 @@ var Eden;
         return result;
     }
 })(Eden || (Eden = {}));
+/// <reference path="lib/threejs/three.d.ts"/>
+/// <reference path="blocktypes.ts"/>
+/// <reference path="csg.ts"/>
+/// <reference path="blocks.ts"/>
+/// <reference path="math.ts"/>
+/// <reference path="envlines.ts"/>
+var Eden;
+(function (Eden) {
+    var Root2 = Math.sqrt(2);
+    var TwoRoot2 = 2 * Root2;
+    var WallBlock = (function () {
+        function WallBlock() {
+        }
+        WallBlock.prototype.render = function (env) {
+            var bits = Eden.bitsForEnv(env);
+            // Now render all the walls.
+            // Start with a pillar (TODO: Drop the pillar if there are other walls).
+            // TODO: Start with empty model if any pair of opposite walls is present (east-west, etc).
+            var csg = CSG.cube({ radius: [0.1, 0.5, 0.1] });
+            // X wall.
+            if (bits & Eden.EAST_BIT) {
+                csg = csg.union(CSG.cube({ center: [0.25, 0, 0], radius: [0.25, 0.5, 0.1] }));
+            }
+            if (bits & Eden.WEST_BIT) {
+                csg = csg.union(CSG.cube({ center: [-0.25, 0, 0], radius: [0.25, 0.5, 0.1] }));
+            }
+            // Z wall.
+            if (bits & Eden.SOUTH_BIT) {
+                csg = csg.union(CSG.cube({ center: [0, 0, 0.25], radius: [0.1, 0.5, 0.25] }));
+            }
+            if (bits & Eden.NORTH_BIT) {
+                csg = csg.union(CSG.cube({ center: [0, 0, -0.25], radius: [0.1, 0.5, 0.25] }));
+            }
+            // XZ wall.
+            if (bits & Eden.SOUTHEAST_BIT) {
+                csg = csg.union(CSG.cube({ center: [0.25, 0, 0.25], radius: [0.25 * Root2, 0.5, 0.1], xform: xform(3) }));
+            }
+            if (bits & Eden.NORTHWEST_BIT) {
+                csg = csg.union(CSG.cube({ center: [-0.25, 0, -0.25], radius: [0.25 * Root2, 0.5, 0.1], xform: xform(7) }));
+            }
+            // ZX wall.
+            if (bits & Eden.NORTHEAST_BIT) {
+                csg = csg.union(CSG.cube({ center: [0.25, 0, -0.25], radius: [0.25 * Root2, 0.5, 0.1], xform: xform(5) }));
+            }
+            if (bits & Eden.SOUTHWEST_BIT) {
+                csg = csg.union(CSG.cube({ center: [-0.25, 0, 0.25], radius: [0.25 * Root2, 0.5, 0.1], xform: xform(1) }));
+            }
+            return {
+                geom: Eden.csgPolysToGeometry(csg.toPolygons()),
+                mat: new THREE.MeshLambertMaterial({ color: 0xa0a0a0 })
+            };
+        };
+        return WallBlock;
+    })();
+    Eden.WallBlock = WallBlock;
+    function xform(eigth) {
+        var m = new THREE.Matrix4();
+        m.makeRotationY(eigth * Eden.TAU / 8);
+        var e = m.elements;
+        return [e[0], e[1], e[2], e[4], e[5], e[6], e[8], e[9], e[10]];
+    }
+    Eden.registerBlock(Eden.BlockWall, new WallBlock());
+})(Eden || (Eden = {}));
 /// <reference path="tsUnit.ts"/>
+/// <reference path="wall.ts"/>
 /// <reference path="envlines.ts"/>
 var EdenTests;
 (function (EdenTests) {
@@ -1435,21 +1461,6 @@ var EdenTests;
             (exp.x == act.x) &&
             (exp.z == act.z);
     }
-    function linesMatch(exp, act) {
-        if (exp.length != act.length) {
-            return false;
-        }
-        var matches = 0;
-        for (var i = 0; i < exp.length; i++) {
-            for (var j = 0; j < act.length; j++) {
-                if (lineEq(exp[i], act[j])) {
-                    matches++;
-                    break;
-                }
-            }
-        }
-        return matches == exp.length;
-    }
     var cases = [
         {
             env: onePlane([
@@ -1459,22 +1470,17 @@ var EdenTests;
                 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0
             ]),
-            lines: [
-                { x: 0, z: 2, dir: 0, len: 5 }
-            ]
+            bits: Eden.WEST_BIT | Eden.EAST_BIT
         },
         {
             env: onePlane([
-                0, 0, 1, 0, 0,
-                0, 0, 1, 0, 0,
-                1, 1, 1, 1, 1,
-                0, 0, 1, 0, 0,
-                0, 0, 1, 0, 0
+                0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0,
+                0, 0, 1, 1, 1,
+                0, 0, 1, 1, 0,
+                0, 0, 1, 0, 1
             ]),
-            lines: [
-                { x: 2, z: 0, dir: 1, len: 5 },
-                { x: 0, z: 2, dir: 0, len: 5 }
-            ]
+            bits: Eden.EAST_BIT | Eden.SOUTH_BIT | Eden.SOUTHEAST_BIT
         }
     ];
     var WallTests = (function (_super) {
@@ -1484,8 +1490,8 @@ var EdenTests;
         }
         WallTests.prototype.testLinesForEnv = function () {
             for (var i = 0; i < cases.length; i++) {
-                var act = Eden.linesForEnv(cases[i].env);
-                if (!linesMatch(cases[i].lines, act)) {
+                var act = Eden.bitsForEnv(cases[i].env);
+                if (cases[i].bits != act) {
                     throw "Failed on case " + i;
                 }
             }

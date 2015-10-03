@@ -1,7 +1,42 @@
 <!DOCTYPE html>
 <html>
-<body style="margin:0">
-  <script src="lib/threejs/three.js"></script>
+<body style="margin:0; overflow: hidden;">
+
+  <script id="vs" type="notjs">
+  precision mediump float;
+
+  uniform mat4 u_viewProjection;
+  uniform mat4 u_model;
+  uniform vec3 u_lightDir;
+
+  attribute vec4 a_position;
+  attribute vec3 a_normal;
+  attribute vec2 a_texcoord;
+
+  varying vec3 v_color;
+  varying vec2 v_texCoord;
+
+  void main() {
+    v_texCoord = a_texcoord;
+    gl_Position = u_viewProjection * u_model * a_position;
+
+    float lit = dot(u_lightDir, a_normal);
+    v_color = vec3(1, 1, 1) * lit;
+  }
+  </script>
+
+  <script id="fs" type="notjs">
+  precision mediump float;
+
+  varying vec3 v_color;
+  varying vec2 v_texCoord;
+
+  void main() {
+    gl_FragColor = vec4(v_color, 1);
+  }
+  </script>
+
+  <script src="lib/twgl-full.js"></script>
   <script src="eden.js"></script>
 </body>
 </html>

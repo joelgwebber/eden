@@ -1,69 +1,83 @@
-/// <reference path="lib/threejs/three.d.ts"/>
+/// <reference path="lib/twgl.d.ts"/>
 /// <reference path="csg.ts"/>
-/// <reference path="flycontrols.ts"/>
 /// <reference path="world.ts"/>
 /// <reference path="arcball.ts"/>
 /// <reference path="blocks.ts"/>
 /// <reference path="math.ts"/>
 
 module Eden {
-  var camera: THREE.PerspectiveCamera;
-  var scene: THREE.Scene;
-  var renderer: THREE.WebGLRenderer;
-  var mouse = new THREE.Vector2();
-  var controls: FlyControls;
+  export var gl: WebGLRenderingContext;
   var world: World;
-  var clock = new THREE.Clock();
+  var camera: Camera;
 
-  function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  }
+  export class Camera {
+    private _mat = m4.identity();
+    private _view = m4.identity();
+    private _viewProjection = m4.identity();
 
-  function onDocumentMouseMove(event) {
-    event.preventDefault();
+    private aspect = 1;
+
+    setPosition(pos: Vec3) {
+      m4.setTranslation(this._mat, pos, this._mat);
+    }
+
+    lookAt(target: Vec3, up: Vec3) {
+      this._mat = m4.lookAt(m4.getTranslation(this._mat), target, up);
+    }
+
+    setAspect(aspect: number) {
+      this.aspect = aspect;
+    }
+
+    update() {
+      var projection = m4.perspective(30 * Math.PI / 180, this.aspect, 0.1, 1000);
+      m4.inverse(this._mat, this._view);
+      m4.multiply(this._view, projection, this._viewProjection);
+    }
+
+    view(): Mat4 {
+      return this._view;
+    }
+
+    viewProjection(): Mat4 {
+      return this._viewProjection;
+    }
   }
 
   function init() {
-    renderer = new THREE.WebGLRenderer();
-    renderer.setClearColor(0xf0f0f0);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.sortObjects = false;
-    document.body.appendChild(renderer.domElement);
+    twgl.setAttributePrefix("a_");
 
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 10000);
-    camera.rotation.x = -TAU / 4;
-    camera.position.x = 5;
-    camera.position.y = 8;
-    camera.position.z = 6;
+    var canvas = document.createElement("canvas");
+    canvas.style.width = "100%";
+    canvas.style.height = "100%";
+    document.body.appendChild(canvas);
 
-    var light = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(1, 2, 3).normalize();
-    scene.add(light);
+    gl = twgl.getWebGLContext(canvas);
 
-    world = new World(scene);
-
-    controls = new FlyControls(camera);
-    controls.movementSpeed = 8;
-    controls.rollSpeed = 0.5;
-    controls.dragToLook = true;
-
-    document.addEventListener('mousemove', onDocumentMouseMove, false);
-    window.addEventListener('resize', onWindowResize, false);
+    world = new World();
+    camera = new Camera();
+    camera.setPosition([5, 15, -15]);
+    camera.lookAt([5, 2, 5], [0, 1, 0]);
   }
 
   function render() {
     requestAnimationFrame(render);
 
-    controls.update(clock.getDelta());
+    gl.canvas.width = window.innerWidth;
+    gl.canvas.height = window.innerHeight;
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+    // controls.update(clock.getDelta());
+    camera.setAspect(gl.canvas.offsetWidth / gl.canvas.offsetHeight);
+    camera.update();
     world.update();
 
-    camera.updateMatrixWorld(false);
+    gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.CULL_FACE);
+    gl.clearColor(0x7e/0x100, 0xc0/0x100, 0xee/0x100, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    renderer.render(scene, camera);
+    world.render(camera);
   }
 
   export function main() {

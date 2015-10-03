@@ -1,4 +1,3 @@
-/// <reference path="lib/threejs/three.d.ts"/>
 /// <reference path="blocktypes.ts"/>
 /// <reference path="csg.ts"/>
 /// <reference path="blocks.ts"/>
@@ -10,7 +9,7 @@ module Eden {
   var TwoRoot2 = 2 * Root2;
 
   export class WallBlock implements BlockType {
-    render(env: number[]): BlockGeometry {
+    render(env: number[]): twgl.BufferInfo {
       var bits = bitsForEnv(env);
 
       // Now render all the walls.
@@ -50,18 +49,13 @@ module Eden {
         csg = csg.union(CSG.cube({ center: [-0.25, 0, 0.25], radius: [0.25 * Root2, 0.5, 0.1], xform: xform(1) }));
       }
 
-      return {
-        geom: csgPolysToGeometry(csg.toPolygons()),
-        mat: new THREE.MeshLambertMaterial({ color: 0xa0a0a0 })
-      };
+      return csgPolysToBuffers(csg.toPolygons());
     }
   }
 
-  function xform(eigth: number): number[] {
-    var m = new THREE.Matrix4();
-    m.makeRotationY(eigth * TAU / 8);
-    var e = m.elements;
-    return [e[0], e[1], e[2], e[4], e[5], e[6], e[8], e[9], e[10]];
+  function xform(eighth: number): number[] {
+    var m = m4.rotationY(eighth * TAU / 8);
+    return [m[0], m[1], m[2], m[4], m[5], m[6], m[8], m[9], m[10]];
   }
 
   registerBlock(BlockWall, new WallBlock());

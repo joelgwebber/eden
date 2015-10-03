@@ -7,27 +7,32 @@ module Eden {
   const ChunkExp3 = ChunkExp << 2;
   const ChunkSize = 1 << ChunkExp;
 
+  var programInfo: twgl.ProgramInfo;
+
   export class World {
     private _chunk: Chunk;
+    private _programInfo: twgl.ProgramInfo;
 
-    constructor(private _scene: THREE.Scene) {
+    constructor() {
       this._chunk = new Chunk();
-      _scene.add(this._chunk.group());
+      programInfo = twgl.createProgramInfo(gl, ["vs", "fs"]);
     }
 
     update() {
       this._chunk.update();
     }
+
+    render(camera: Camera) {
+      this._chunk.render(camera);
+    }
   }
 
   class Chunk {
-    private _group: THREE.Group;
     private _cells = new Uint32Array(1 << ChunkExp3);
-    private _meshes: THREE.Mesh[] = [];
+    private _meshes: twgl.BufferInfo[] = [];
     private _dirty: boolean;
 
     constructor() {
-      this._group = new THREE.Group();
       for (var x = 0; x < ChunkSize; x++) {
         for (var y = 0; y < ChunkSize; y++) {
           for (var z = 0; z < ChunkSize; z++) {
@@ -46,6 +51,36 @@ module Eden {
       }
     }
 
+    render(camera: Camera) {
+      var meshIdx = 0;
+      for (var y = 2; y < ChunkSize - 4; y++) {
+        for (var z = 2; z < ChunkSize - 4; z++) {
+          for (var x = 2; x < ChunkSize - 4; x++) {
+            var bi = this._meshes[meshIdx++];
+            if (bi) {
+              this.renderCell(camera, bi, x, y, z);
+            }
+          }
+        }
+      }
+    }
+
+    private renderCell(camera: Camera, bi: twgl.BufferInfo, x: number, y: number, z: number) {
+      var cell = this.cell(x, y, z);
+      var model = m4.translation([x, y, z]);
+
+      var uniforms: {[name: string]: any} = {
+        u_lightDir: v3.normalize([-1, 2, -3]),
+        u_viewProjection: camera.viewProjection(),
+        u_model: model
+      };
+
+      gl.useProgram(programInfo.program);
+      twgl.setBuffersAndAttributes(gl, programInfo, bi);
+      twgl.setUniforms(programInfo, uniforms);
+      gl.drawElements(gl.TRIANGLES, bi.numElements, gl.UNSIGNED_SHORT, 0);
+    }
+
     private fill(x0: number, y0: number, z0: number, x1: number, y1: number, z1: number, cell: number) {
       for (var x = x0; x <= x1; x++) {
         for (var y = y0; y <= y1; y++) {
@@ -54,10 +89,6 @@ module Eden {
           }
         }
       }
-    }
-
-    group(): THREE.Group {
-      return this._group;
     }
 
     cell(x: number, y: number, z: number): number {
@@ -82,28 +113,18 @@ module Eden {
       // - Keep track of dirty region to minimize walking.
       // - Use typed array for env.
       var meshIdx = 0;
-      for (var y = 2; y < 3/*ChunkSize - 4*/; y++) {
+      for (var y = 2; y < ChunkSize - 4; y++) {
         for (var z = 2; z < ChunkSize - 4; z++) {
           for (var x = 2; x < ChunkSize - 4; x++) {
-            var mesh = this._meshes[meshIdx];
+            var bi = this._meshes[meshIdx];
             var env = this.env(x, y, z);
             var geom = geomForEnv(x, y, z, env);
             if (!geom) {
-              if (mesh) {
-                mesh.parent.remove(mesh);
+              if (bi) {
                 delete this._meshes[meshIdx];
               }
             } else {
-              if (!mesh) {
-                mesh = new THREE.Mesh();
-                mesh.position.x = x;
-                mesh.position.y = y;
-                mesh.position.z = z;
-                this._group.add(mesh);
-                this._meshes[meshIdx] = mesh;
-              }
-              mesh.geometry = geom.geom;
-              mesh.material = geom.mat;
+              this._meshes[meshIdx] = geom;
             }
             meshIdx++;
           }

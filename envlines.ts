@@ -4,8 +4,8 @@
 module Eden {
 
   export interface Line {
-    x: number;
-    z: number;
+    u: number;
+    v: number;
     dir: number;
     len: number;
     hit: number;
@@ -27,37 +27,45 @@ module Eden {
   export var LineDirs: number[][] = [[1, 0], [0, 1], [1, 1], [1, -1]];
 
   var AllLines: Line[] = [
-    { dir: 0, x: 0, z: 0, len: 5, hit: 0 },
-    { dir: 0, x: 0, z: 1, len: 5, hit: 0 },
-    { dir: 0, x: 0, z: 2, len: 5, hit: 0, bits: WEST_BIT | EAST_BIT },
-    { dir: 0, x: 0, z: 3, len: 5, hit: 0 },
-    { dir: 0, x: 0, z: 4, len: 5, hit: 0 },
+    { dir: 0, u: 0, v: 0, len: 5, hit: 0 },
+    { dir: 0, u: 0, v: 1, len: 5, hit: 0 },
+    { dir: 0, u: 0, v: 2, len: 5, hit: 0, bits: WEST_BIT | EAST_BIT },
+    { dir: 0, u: 0, v: 3, len: 5, hit: 0 },
+    { dir: 0, u: 0, v: 4, len: 5, hit: 0 },
 
-    { dir: 1, x: 0, z: 0, len: 5, hit: 0 },
-    { dir: 1, x: 1, z: 0, len: 5, hit: 0 },
-    { dir: 1, x: 2, z: 0, len: 5, hit: 0, bits: NORTH_BIT | SOUTH_BIT },
-    { dir: 1, x: 3, z: 0, len: 5, hit: 0 },
-    { dir: 1, x: 4, z: 0, len: 5, hit: 0 },
+    { dir: 1, u: 0, v: 0, len: 5, hit: 0 },
+    { dir: 1, u: 1, v: 0, len: 5, hit: 0 },
+    { dir: 1, u: 2, v: 0, len: 5, hit: 0, bits: NORTH_BIT | SOUTH_BIT },
+    { dir: 1, u: 3, v: 0, len: 5, hit: 0 },
+    { dir: 1, u: 4, v: 0, len: 5, hit: 0 },
 
-    { dir: 2, x: 0, z: 3, len: 2, hit: 0 },
-    { dir: 2, x: 0, z: 2, len: 3, hit: 0 },
-    { dir: 2, x: 0, z: 1, len: 4, hit: 0 },
-    { dir: 2, x: 0, z: 0, len: 5, hit: 0, bits: NORTHWEST_BIT | SOUTHEAST_BIT },
-    { dir: 2, x: 1, z: 0, len: 4, hit: 0 },
-    { dir: 2, x: 2, z: 0, len: 3, hit: 0 },
-    { dir: 2, x: 3, z: 0, len: 2, hit: 0 },
+    { dir: 2, u: 0, v: 3, len: 2, hit: 0 },
+    { dir: 2, u: 0, v: 2, len: 3, hit: 0 },
+    { dir: 2, u: 0, v: 1, len: 4, hit: 0 },
+    { dir: 2, u: 0, v: 0, len: 5, hit: 0, bits: NORTHWEST_BIT | SOUTHEAST_BIT },
+    { dir: 2, u: 1, v: 0, len: 4, hit: 0 },
+    { dir: 2, u: 2, v: 0, len: 3, hit: 0 },
+    { dir: 2, u: 3, v: 0, len: 2, hit: 0 },
 
-    { dir: 3, x: 0, z: 1, len: 2, hit: 0 },
-    { dir: 3, x: 0, z: 2, len: 3, hit: 0 },
-    { dir: 3, x: 0, z: 3, len: 4, hit: 0 },
-    { dir: 3, x: 0, z: 4, len: 5, hit: 0, bits: SOUTHWEST_BIT | NORTHEAST_BIT },
-    { dir: 3, x: 1, z: 4, len: 4, hit: 0 },
-    { dir: 3, x: 2, z: 4, len: 3, hit: 0 },
-    { dir: 3, x: 3, z: 4, len: 2, hit: 0 }
+    { dir: 3, u: 0, v: 1, len: 2, hit: 0 },
+    { dir: 3, u: 0, v: 2, len: 3, hit: 0 },
+    { dir: 3, u: 0, v: 3, len: 4, hit: 0 },
+    { dir: 3, u: 0, v: 4, len: 5, hit: 0, bits: SOUTHWEST_BIT | NORTHEAST_BIT },
+    { dir: 3, u: 1, v: 4, len: 4, hit: 0 },
+    { dir: 3, u: 2, v: 4, len: 3, hit: 0 },
+    { dir: 3, u: 3, v: 4, len: 2, hit: 0 }
   ];
 
   function copyLine(l: Line): Line {
-    return { x: l.x, z: l.z, dir: l.dir, len: l.len, hit: l.hit, bits: l.bits };
+    return { u: l.u, v: l.v, dir: l.dir, len: l.len, hit: l.hit, bits: l.bits };
+  }
+
+  function penvOfs(u: number, v: number): number {
+    return (u * 5) + v;
+  }
+
+  function penvOfsCenter(du: number, dv: number): number {
+    return 12 + (dv * 5) + du;
   }
 
   // TODO:
@@ -71,8 +79,6 @@ module Eden {
     var lines = findAllLines(env);
     lines = optimizeLines(lines, env);
 
-    console.log(">>> " + _count);
-
     var bits = 0;
     for (var i = 0; i < lines.length; i++) {
       if (lines[i].bits) {
@@ -82,14 +88,14 @@ module Eden {
 
     // And bits for the immediate environment.
     var envbits = 0;
-    if (env[envOfsCenter(-1, 0, 0)] == BlockWall) { envbits |= WEST_BIT; }
-    if (env[envOfsCenter( 1, 0, 0)] == BlockWall) { envbits |= EAST_BIT; }
-    if (env[envOfsCenter( 0, 0,-1)] == BlockWall) { envbits |= NORTH_BIT; }
-    if (env[envOfsCenter( 0, 0, 1)] == BlockWall) { envbits |= SOUTH_BIT; }
-    if (env[envOfsCenter(-1, 0,-1)] == BlockWall) { envbits |= NORTHWEST_BIT; }
-    if (env[envOfsCenter( 1, 0, 1)] == BlockWall) { envbits |= SOUTHEAST_BIT; }
-    if (env[envOfsCenter(-1, 0, 1)] == BlockWall) { envbits |= SOUTHWEST_BIT; }
-    if (env[envOfsCenter( 1, 0,-1)] == BlockWall) { envbits |= NORTHEAST_BIT; }
+    if (env[penvOfsCenter(-1, 0)] == BlockWall) { envbits |= WEST_BIT; }
+    if (env[penvOfsCenter( 1, 0)] == BlockWall) { envbits |= EAST_BIT; }
+    if (env[penvOfsCenter( 0,-1)] == BlockWall) { envbits |= NORTH_BIT; }
+    if (env[penvOfsCenter( 0, 1)] == BlockWall) { envbits |= SOUTH_BIT; }
+    if (env[penvOfsCenter(-1,-1)] == BlockWall) { envbits |= NORTHWEST_BIT; }
+    if (env[penvOfsCenter( 1, 1)] == BlockWall) { envbits |= SOUTHEAST_BIT; }
+    if (env[penvOfsCenter(-1, 1)] == BlockWall) { envbits |= SOUTHWEST_BIT; }
+    if (env[penvOfsCenter( 1,-1)] == BlockWall) { envbits |= NORTHEAST_BIT; }
 
     // Walls go wherever both are set.
     return bits & envbits;
@@ -99,13 +105,13 @@ module Eden {
     var lines: Line[] = [];
     for (var i = 0; i < AllLines.length; ++i) {
       var line = copyLine(AllLines[i]);
-      var x = line.x, z = line.z;
-      var dx = LineDirs[line.dir][0], dz = LineDirs[line.dir][1];
+      var u = line.u, v = line.v;
+      var du = LineDirs[line.dir][0], dv = LineDirs[line.dir][1];
       for (var j = 0; j < line.len; j++) {
-        if (env[envOfs(x, 2, z)] == BlockWall) {
+        if (env[penvOfs(u, v)] == BlockWall) {
           line.hit++;
         }
-        x += dx; z += dz;
+        u += du; v += dv;
       }
       if (line.hit > 0) {
         lines.push(line);
@@ -117,9 +123,9 @@ module Eden {
   // Counts the number of blocks set in the given environment.
   function countBlocks(env: number[]): number {
     var total = 0;
-    for (var x = 0; x < 5; x++) {
-      for (var z = 0; z < 5; z++) {
-        if (env[envOfs(x, 2, z)] == BlockWall) {
+    for (var u = 0; u < 5; u++) {
+      for (var v = 0; v < 5; v++) {
+        if (env[penvOfs(u, v)] == BlockWall) {
           total++;
         }
       }
@@ -180,15 +186,15 @@ module Eden {
 
     // Walk the line through the environment, updating `total` and `touched`.
     var anythingTouched = false;
-    var x = head.x, z = head.z, dx = LineDirs[head.dir][0], dz = LineDirs[head.dir][1];
+    var u = head.u, v = head.v, du = LineDirs[head.dir][0], dv = LineDirs[head.dir][1];
     for (var j = 0; j < head.len; j++) {
-      var ofs = envOfs(x, 2, z);
+      var ofs = penvOfs(u, v);
       if (env[ofs] == BlockWall && !touched[ofs]) {
         anythingTouched = true;
         touched[ofs] = true;
         total--;
       }
-      x += dx; z += dz;
+      u += du; v += dv;
     }
 
     var result: Line[] = [];

@@ -18,6 +18,10 @@ module Eden {
       programInfo = twgl.createProgramInfo(gl, ["vs", "fs"]);
     }
 
+    chunk(x: number, y: number, z: number): Chunk {
+      return this._chunk;
+    }
+
     update() {
       this._chunk.update();
     }
@@ -41,14 +45,15 @@ module Eden {
         }
       }
 
-      this.fill(2, 2, 2, 9, 2, 9, BlockWall);
-      this.fill(3, 2, 3, 8, 2, 8, BlockAir);
-      for (var i = 3; i <= 8; i++) {
-        this.setCell(i, 2, i, BlockWall);
-      }
-      for (var i = 3; i <= 8; i++) {
-        this.setCell(i, 2, 11-i, BlockWall);
-      }
+      // this.fill(2, 2, 2, 2, 4, 4, BlockWall); // X__
+      this.fill(4, 2, 2, 5, 2, 4, BlockWall); // _Y_
+      // this.fill(2, 2, 2, 4, 4, 2, BlockWall); // __Z
+
+      this.fill(3, 3, 2, 3, 3, 4, BlockWall);
+      this.fill(3, 4, 2, 3, 4, 4, BlockWall);
+      // this.fill(2, 5, 2, 2, 5, 4, BlockWall);
+
+      // this.setCell(6, 2, 3, BlockWall);
     }
 
     render(camera: Camera) {
@@ -70,7 +75,7 @@ module Eden {
       var model = m4.translation([x, y, z]);
 
       var uniforms: {[name: string]: any} = {
-        u_lightDir: v3.normalize([-1, 2, -3]),
+        u_lightDir: v3.normalize([1, 2, 3]),
         u_viewProjection: camera.viewProjection(),
         u_model: model
       };

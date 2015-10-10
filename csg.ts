@@ -531,7 +531,6 @@ module CSG {
   // polygons) are added directly to that node and the other polygons are added to
   // the front and/or back subtrees. This is not a leafy BSP tree since there is
   // no distinction between internal and leaf nodes.
-  var _depth = 0;
   export class Node {
     plane: Plane;
     polygons: Polygon[];
@@ -613,17 +612,11 @@ module CSG {
     // nodes there. Each set of polygons is partitioned using the first polygon
     // (no heuristic is used to pick a good split).
     build(polygons: Polygon[]) {
-      _depth = 0;
       this._build(polygons);
     }
 
     private _build(polygons: Polygon[]) {
-      ++_depth;
-      if (_depth > 10) {
-        debugger;
-      }
       if (!polygons.length) {
-        --_depth;
         return;
       }
       if (!this.plane) {
@@ -645,7 +638,6 @@ module CSG {
         }
         this.back._build(back);
       }
-      --_depth;
     }
   }
 }

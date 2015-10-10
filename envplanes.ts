@@ -3,6 +3,7 @@
 module Eden {
 
   export interface Plane {
+    planeBit: number; // for debugging.
     points: number[];
     hit: number;
     bit?: number;
@@ -34,25 +35,25 @@ module Eden {
     PlaneNormals[Plane_Y_] = [[0, 1, 0], [ 1, 0, 0], [ 0, 0, 1]];
     PlaneNormals[Plane__Z] = [[0, 0, 1], [ 1, 0, 0], [ 0, 1, 0]];
     PlaneNormals[PlaneXY_] = [[1, 1, 0], [ 0, 0, 1], [-1, 1, 0]];
-    PlaneNormals[PlaneXy_] = [[1,-1, 0], [ 0, 0, 0], [ 0, 1, 0]]; // TODO
-    PlaneNormals[PlaneX_Z] = [[1, 0, 1], [ 0, 0, 0], [ 0, 1, 0]]; // TODO
-    PlaneNormals[PlaneX_z] = [[1, 0,-1], [ 0, 0, 0], [ 0, 1, 0]]; // TODO
-    PlaneNormals[Plane_YZ] = [[0, 1, 1], [ 0, 0, 0], [ 0, 1, 0]]; // TODO
-    PlaneNormals[Plane_Yz] = [[0, 1,-1], [ 0, 0, 0], [ 0, 1, 0]]; // TODO
-    PlaneNormals[PlaneXYZ] = [[1, 1, 1], [ 0, 0, 0], [ 0, 1, 0]]; // TODO
-    PlaneNormals[PlaneXYz] = [[1, 1,-1], [ 0, 0, 0], [ 0, 1, 0]]; // TODO
-    PlaneNormals[PlaneXyZ] = [[1,-1, 1], [ 0, 0, 0], [ 0, 1, 0]]; // TODO
-    PlaneNormals[PlaneXyz] = [[1,-1,-1], [ 0, 0, 0], [ 0, 1, 0]]; // TODO
+    PlaneNormals[PlaneXy_] = [[1,-1, 0], [ 0, 0, 1], [ 1, 1, 0]];
+    PlaneNormals[PlaneX_Z] = [[1, 0, 1], [ 0, 1, 0], [ 1, 0,-1]];
+    PlaneNormals[PlaneX_z] = [[1, 0,-1], [ 0, 1, 0], [ 1, 0, 1]];
+    PlaneNormals[Plane_YZ] = [[0, 1, 1], [ 1, 0, 0], [ 0,-1, 1]];
+    PlaneNormals[Plane_Yz] = [[0, 1,-1], [ 1, 0, 0], [ 0, 1, 1]];
+    PlaneNormals[PlaneXYZ] = [[1, 1, 1], [ 1, 0,-1], [-1, 1,-1]];
+    PlaneNormals[PlaneXYz] = [[1, 1,-1], [-1, 0,-1], [-1, 1, 1]];
+    PlaneNormals[PlaneXyZ] = [[1,-1, 1], [ 1, 0,-1], [ 1, 1, 1]];
+    PlaneNormals[PlaneXyz] = [[1,-1,-1], [-1, 0,-1], [ 1, 1,-1]];
 
-    for (var i = 0, planeBit = 1; i < 4/*TODO: PlaneCount*/; i++, planeBit <<= 1) {
+    for (var i = 0, planeBit = 1; i < PlaneCount; i++, planeBit <<= 1) {
       addPlane(planeBit);
     }
   }
 
-  function addPlane(plane: number) {
-    var n = PlaneNormals[plane][0];
-    var du = PlaneNormals[plane][1];
-    var dv = PlaneNormals[plane][2];
+  function addPlane(planeBit: number) {
+    var n = PlaneNormals[planeBit][0];
+    var du = PlaneNormals[planeBit][1];
+    var dv = PlaneNormals[planeBit][2];
 
     for (var ofs = -2; ofs <= 2; ofs++) {
       var points: number[] = [];
@@ -71,16 +72,16 @@ module Eden {
         }
       }
 
-      var p: Plane = { points: points, hit: 0 };
+      var p: Plane = { planeBit: planeBit, points: points, hit: 0 };
       if (ofs == 0) {
-        p.bit = plane;
+        p.bit = planeBit;
       }
       AllPlanes.push(p);
     }
   }
 
   function copyPlane(l: Plane): Plane {
-    return { points: l.points, hit: l.hit, bit: l.bit };
+    return { planeBit: l.planeBit, points: l.points, hit: l.hit, bit: l.bit };
   }
 
   // TODO:

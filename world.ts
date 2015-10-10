@@ -1,4 +1,5 @@
 /// <reference path="blocks.ts"/>
+/// <reference path="camera.ts"/>
 
 module Eden {
 
@@ -46,14 +47,8 @@ module Eden {
       }
 
       // this.fill(2, 2, 2, 2, 4, 4, BlockWall); // X__
-      this.fill(4, 2, 2, 5, 2, 4, BlockWall); // _Y_
+      this.fill(2, 2, 2, 10, 2, 10, BlockWall); // _Y_
       // this.fill(2, 2, 2, 4, 4, 2, BlockWall); // __Z
-
-      this.fill(3, 3, 2, 3, 3, 4, BlockWall);
-      this.fill(3, 4, 2, 3, 4, 4, BlockWall);
-      // this.fill(2, 5, 2, 2, 5, 4, BlockWall);
-
-      // this.setCell(6, 2, 3, BlockWall);
     }
 
     render(camera: Camera) {

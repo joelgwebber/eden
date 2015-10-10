@@ -15,7 +15,8 @@ module Eden {
   var world: World;
   var camera: Camera;
 
-  var target = [2, 2, 2];
+  var theta = 0, phi = 0;
+  var target = [8, 3, 8];
 
   function init() {
     // Order matters. Yuck.
@@ -33,8 +34,11 @@ module Eden {
 
     world = new World();
     camera = new Camera();
-    camera.setPosition([10, 10, 10]);
-    camera.lookAt([3, 3, 3], [0, 1, 0]);
+
+    document.addEventListener("mousemove", (e: MouseEvent) => {
+      theta = e.clientX / 100;
+      phi   = e.clientY / 100;
+    });
 
     document.addEventListener("keydown", (e: KeyboardEvent) => {
       switch (e.keyCode) {
@@ -57,7 +61,10 @@ module Eden {
   function render() {
     requestAnimationFrame(render);
 
-    camera.setPosition([target[0] + 8, target[1] + 8, target[2] + 8]);
+    var cx = 8 * Math.cos(theta);
+    var cy = 6;
+    var cz = 8 * Math.sin(theta);
+    camera.setPosition([target[0] + cx, target[1] + cy, target[2] + cz]);
     camera.lookAt([target[0], target[1], target[2]], [0, 1, 0]);
 
     gl.canvas.width = window.innerWidth;

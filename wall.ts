@@ -17,16 +17,6 @@ module Eden {
   export const NORTHEAST = 0x40; // +du -dv
   export const SOUTHWEST = 0x80; // -du +dv
 
-  var Root2 = Math.sqrt(2);
-  var TwoRoot2 = 2 * Root2;
-
-  const Half = 1 / 2;
-  const Quarter = 1 / 4;
-  const Eighth = 1 / 8;
-  const HalfPlus = (Half + Eighth) / 2;
-  const QuarterPlus = (Quarter + Eighth) / 2;
-  const Offset = (1 / 2 - 1 / 8) / 2;
-
   // plane -> dir -> [point on plane]
   var planePoints: { [plane: number]: { [dir: number]: number[] } } = {};
 
@@ -56,16 +46,6 @@ module Eden {
     for (var i = 0, planeBit = 1; i < PlaneCount; i++, planeBit <<= 1) {
       var pieces: { [dir: number]: number[][] } = {};
       var points = planePoints[planeBit];
-
-      // pieces[EAST]  = [[0,  Offset, 0], [Eighth,  HalfPlus, Eighth]],
-      // pieces[WEST]  = [[0, -Offset, 0], [Eighth,  HalfPlus, Eighth]],
-      // pieces[SOUTH] = [[0, 0,  Offset], [Eighth,  Eighth,   HalfPlus]],
-      // pieces[NORTH] = [[0, 0, -Offset], [Eighth,  Eighth,   HalfPlus]],
-
-      // pieces[SOUTHEAST] = [[0,   HalfPlus,  HalfPlus], [Eighth, QuarterPlus, QuarterPlus]],
-      // pieces[NORTHWEST] = [[0,  -HalfPlus, -HalfPlus], [Eighth, QuarterPlus, QuarterPlus]],
-      // pieces[NORTHEAST] = [[0,   HalfPlus, -HalfPlus], [Eighth, QuarterPlus, QuarterPlus]],
-      // pieces[SOUTHWEST] = [[0,  -HalfPlus,  HalfPlus], [Eighth, QuarterPlus, QuarterPlus]],
 
       // Just 1/3 cubes for now.
       for (var j = 0, dirBit = 1; j < 8; j++, dirBit <<= 1) {

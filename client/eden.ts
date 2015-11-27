@@ -83,7 +83,18 @@ module Eden {
     world.render(camera);
   }
 
+  function ws() {
+    var socket = new WebSocket('ws://localhost:2112');
+    socket.onopen = () => {
+      socket.send("wut?");
+    };
+    socket.onmessage = (message) => {
+      console.log('Connection 1', message.data);
+    };
+  }
+
   export function main() {
+    ws();
     init();
     render();
   }

@@ -1,6 +1,3 @@
-/// <reference path="blocktypes.ts"/>
-/// <reference path="blocks.ts"/>
-
 module Eden {
 
   export interface Line {
@@ -69,12 +66,11 @@ module Eden {
   }
 
   // TODO:
-  // - Convert env to booleans to avoid the `== BlockWall` crap.
   // - Cache found lines.
   //   When caching, fill all rotations/inversions to avoid redundant work.
 
   // TODO: Explain.
-  export function bitsForEnv(env: number[]): number {
+  export function bitsForEnv(env: boolean[]): number {
     // Get bits for filled lines.
     var lines = findAllLines(env);
     lines = optimizeLines(lines, env);
@@ -88,27 +84,27 @@ module Eden {
 
     // And bits for the immediate environment.
     var envbits = 0;
-    if (env[penvOfsCenter(-1, 0)] == BlockWall) { envbits |= WEST_BIT; }
-    if (env[penvOfsCenter( 1, 0)] == BlockWall) { envbits |= EAST_BIT; }
-    if (env[penvOfsCenter( 0,-1)] == BlockWall) { envbits |= NORTH_BIT; }
-    if (env[penvOfsCenter( 0, 1)] == BlockWall) { envbits |= SOUTH_BIT; }
-    if (env[penvOfsCenter(-1,-1)] == BlockWall) { envbits |= NORTHWEST_BIT; }
-    if (env[penvOfsCenter( 1, 1)] == BlockWall) { envbits |= SOUTHEAST_BIT; }
-    if (env[penvOfsCenter(-1, 1)] == BlockWall) { envbits |= SOUTHWEST_BIT; }
-    if (env[penvOfsCenter( 1,-1)] == BlockWall) { envbits |= NORTHEAST_BIT; }
+    if (env[penvOfsCenter(-1, 0)]) { envbits |= WEST_BIT; }
+    if (env[penvOfsCenter( 1, 0)]) { envbits |= EAST_BIT; }
+    if (env[penvOfsCenter( 0,-1)]) { envbits |= NORTH_BIT; }
+    if (env[penvOfsCenter( 0, 1)]) { envbits |= SOUTH_BIT; }
+    if (env[penvOfsCenter(-1,-1)]) { envbits |= NORTHWEST_BIT; }
+    if (env[penvOfsCenter( 1, 1)]) { envbits |= SOUTHEAST_BIT; }
+    if (env[penvOfsCenter(-1, 1)]) { envbits |= SOUTHWEST_BIT; }
+    if (env[penvOfsCenter( 1,-1)]) { envbits |= NORTHEAST_BIT; }
 
     // Walls go wherever both are set.
     return bits & envbits;
   }
 
-  function findAllLines(env: number[]): Line[] {
+  function findAllLines(env: boolean[]): Line[] {
     var lines: Line[] = [];
     for (var i = 0; i < AllLines.length; ++i) {
       var line = copyLine(AllLines[i]);
       var u = line.u, v = line.v;
       var du = LineDirs[line.dir][0], dv = LineDirs[line.dir][1];
       for (var j = 0; j < line.len; j++) {
-        if (env[penvOfs(u, v)] == BlockWall) {
+        if (env[penvOfs(u, v)]) {
           line.hit++;
         }
         u += du; v += dv;
@@ -120,12 +116,12 @@ module Eden {
     return lines;
   }
 
-  // Counts the number of blocks set in the given environment.
-  function countBlocks(env: number[]): number {
+  // Counts the number of cells set in the given environment.
+  function countCells(env: boolean[]): number {
     var total = 0;
     for (var u = 0; u < 5; u++) {
       for (var v = 0; v < 5; v++) {
-        if (env[penvOfs(u, v)] == BlockWall) {
+        if (env[penvOfs(u, v)]) {
           total++;
         }
       }
@@ -135,8 +131,8 @@ module Eden {
   }
 
   var _count = 0;
-  function optimizeLines(lines: Line[], env: number[]): Line[] {
-    var total = countBlocks(env);
+  function optimizeLines(lines: Line[], env: boolean[]): Line[] {
+    var total = countCells(env);
 
     // Sort lines by descending length.
     lines.sort((a, b) => {
@@ -153,7 +149,7 @@ module Eden {
     return optimizeHelper(lines, total, env, touched);
   }
 
-  function optimizeHelper(lines: Line[], total: number, env: number[], touched: boolean[]): Line[] {
+  function optimizeHelper(lines: Line[], total: number, env: boolean[], touched: boolean[]): Line[] {
     // Find all candidate lines of equal length.
     var bestResult: Line[], bestLength = 100;
     while (true) {
@@ -181,7 +177,7 @@ module Eden {
     return bestResult;
   }
 
-  function optimizeLine(head: Line, tail: Line[], total: number, env: number[], touched: boolean[]): Line[] {
+  function optimizeLine(head: Line, tail: Line[], total: number, env: boolean[], touched: boolean[]): Line[] {
     _count++;
 
     // Walk the line through the environment, updating `total` and `touched`.
@@ -189,7 +185,7 @@ module Eden {
     var u = head.u, v = head.v, du = LineDirs[head.dir][0], dv = LineDirs[head.dir][1];
     for (var j = 0; j < head.len; j++) {
       var ofs = penvOfs(u, v);
-      if (env[ofs] == BlockWall && !touched[ofs]) {
+      if (env[ofs] && !touched[ofs]) {
         anythingTouched = true;
         touched[ofs] = true;
         total--;

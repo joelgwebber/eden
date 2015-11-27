@@ -5,7 +5,7 @@
 /// <reference path="camera.ts"/>
 /// <reference path="world.ts"/>
 /// <reference path="arcball.ts"/>
-/// <reference path="blocks.ts"/>
+/// <reference path="cells.ts"/>
 /// <reference path="math.ts"/>
 /// <reference path="keys.ts"/>
 
@@ -51,7 +51,7 @@ module Eden {
         case KeySpace:
           var chunk = world.chunk(0, 0, 0);
           var cell = chunk.cell(target[0], target[1], target[2]);
-          chunk.setCell(target[0], target[1], target[2], cell ? BlockGround : BlockWall);
+          chunk.setCell(target[0], target[1], target[2], cell ? CellGround : CellWall);
           break;
       }
     });

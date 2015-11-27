@@ -1,12 +1,12 @@
 /// <reference path="globals.ts"/>
-/// <reference path="blocktypes.ts"/>
+/// <reference path="celltypes.ts"/>
 /// <reference path="ground.ts"/>
 /// <reference path="wall.ts"/>
 /// <reference path="floor.ts"/>
 
 module Eden {
 
-  export interface BlockType {
+  export interface CellType {
     render(env: number[]): twgl.BufferInfo;
   }
 
@@ -31,7 +31,7 @@ module Eden {
   }
 
   export function geomForEnv(x: number, y: number, z: number, env: number[]): twgl.BufferInfo {
-    var bt = blockTypes[blockType(env[envOfsCenter(0, 0, 0)])];
+    var bt = cellTypes[cellType(env[envOfsCenter(0, 0, 0)])];
     if (!bt) {
       return null;
     }

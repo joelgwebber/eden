@@ -1,4 +1,4 @@
-/// <reference path="blocktypes.ts"/>
+/// <reference path="celltypes.ts"/>
 
 module Eden {
 
@@ -120,8 +120,8 @@ module Eden {
     return planes;
   }
 
-  // Counts the number of blocks set in the given environment.
-  function countBlocks(env: boolean[]): number {
+  // Counts the number of cells set in the given environment.
+  function countCells(env: boolean[]): number {
     var total = 0;
     for (var i = 0; i < 5 * 5 * 5; i++) {
       if (env[i]) {
@@ -133,7 +133,7 @@ module Eden {
 
   var _count = 0;
   function optimizePlanes(planes: Plane[], env: boolean[]): Plane[] {
-    var total = countBlocks(env);
+    var total = countCells(env);
 
     // Sort planes by descending size.
     planes.sort((a, b) => {

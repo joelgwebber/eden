@@ -1,6 +1,6 @@
-/// <reference path="blocktypes.ts"/>
+/// <reference path="celltypes.ts"/>
 /// <reference path="csg.ts"/>
-/// <reference path="blocks.ts"/>
+/// <reference path="cells.ts"/>
 /// <reference path="math.ts"/>
 /// <reference path="envlines.ts"/>
 /// <reference path="envplanes.ts"/>
@@ -67,12 +67,12 @@ module Eden {
   function bitEnv(env: number[]): boolean[] {
     var bits = <boolean[]> new Array(125);
     for (var i = 0; i < 125; i++) {
-      bits[i] = blockType(env[i]) == BlockWall;
+      bits[i] = cellType(env[i]) == CellWall;
     }
     return bits;
   }
 
-  export class WallBlock implements BlockType {
+  export class WallCell implements CellType {
     render(env: number[]): twgl.BufferInfo {
       var planeBits = planeBitsForEnv(bitEnv(env));
 
@@ -111,7 +111,7 @@ module Eden {
     var points = planePoints[plane];
     for (var i = 0, dirBit = 1; i < 8; i++, dirBit <<= 1) {
       var p = points[dirBit];
-      if (env[envOfsCenter(p[0], p[1], p[2])] == BlockWall) {
+      if (env[envOfsCenter(p[0], p[1], p[2])] == CellWall) {
         dirBits |= dirBit;
       }
     }
@@ -123,5 +123,5 @@ module Eden {
     return [m[0], m[1], m[2], m[4], m[5], m[6], m[8], m[9], m[10]];
   }
 
-  registerBlock(BlockWall, new WallBlock());
+  registerCell(CellWall, new WallCell());
 }

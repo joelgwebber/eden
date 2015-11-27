@@ -11,8 +11,8 @@ namespace Eden {
     var cube: number[] = new Array(8);
     for (var i = 0; i < 8; i++) {
       var ofs = vertexOffset[i];
-      var block = env[envOfsCenter(ofs[0], ofs[1], ofs[2])];
-      cube[i] = (blockType(block) == BlockGround) ? blockArgs(block) / 0xffff : 0;
+      var cell = env[envOfsCenter(ofs[0], ofs[1], ofs[2])];
+      cube[i] = (cellType(cell) == CellGround) ? cellArgs(cell) / 0xffff : 0;
     }
     return cube;
   }

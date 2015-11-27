@@ -2,5 +2,5 @@
 
 module Eden {
 
-  export const TAU = 2 * Math.PI;
+  export var gl: WebGLRenderingContext;
 }

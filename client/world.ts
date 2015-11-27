@@ -1,7 +1,13 @@
+/// <reference path="math.ts"/>
 /// <reference path="blocks.ts"/>
 /// <reference path="camera.ts"/>
 
 module Eden {
+
+  import v3 = twgl.v3;
+  import m4 = twgl.m4;
+  import Vec3 = twgl.v3.Vec3;
+  import Mat4 = twgl.m4.Mat4;
 
   const ChunkExp = 4;
   const ChunkExp2 = ChunkExp << 1;
@@ -46,9 +52,8 @@ module Eden {
         }
       }
 
-      // this.fill(2, 2, 2, 2, 4, 4, BlockWall); // X__
-      this.fill(2, 2, 2, 10, 2, 10, BlockWall); // _Y_
-      // this.fill(2, 2, 2, 4, 4, 2, BlockWall); // __Z
+      // this.fill(2, 2, 2, 10, 2, 10, 0xffff0000 | BlockGround);
+      this.fill(3, 3, 3, 4, 4, 4, 0xffff0000 | BlockGround);
     }
 
     render(camera: Camera) {
@@ -133,7 +138,7 @@ module Eden {
     }
 
     private env(cx: number, cy: number, cz: number): number[] {
-      var env = [];
+      var env = new Array(125);
       for (var x = 0; x < 5; x++) {
         for (var y = 0; y < 5; y++) {
           for (var z = 0; z < 5; z++) {

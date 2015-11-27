@@ -7,7 +7,11 @@
 
 module Eden {
 
-  // TODO: Don't actually need these.
+  import v3 = twgl.v3;
+  import m4 = twgl.m4;
+  import Vec3 = twgl.v3.Vec3;
+  import Mat4 = twgl.m4.Mat4;
+
   export const EAST = 0x01;      // +du  0
   export const WEST = 0x02;      // -du  0
   export const SOUTH = 0x04;     //  0  +dv
@@ -60,10 +64,17 @@ module Eden {
     }
   }
 
-  export class WallBlock implements BlockType {
+  function bitEnv(env: number[]): boolean[] {
+    var bits = <boolean[]> new Array(125);
+    for (var i = 0; i < 125; i++) {
+      bits[i] = blockType(env[i]) == BlockWall;
+    }
+    return bits;
+  }
 
+  export class WallBlock implements BlockType {
     render(env: number[]): twgl.BufferInfo {
-      var planeBits = planeBitsForEnv(env);
+      var planeBits = planeBitsForEnv(bitEnv(env));
 
       // Now render all the walls.
       // Start with a box.

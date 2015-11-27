@@ -194,7 +194,7 @@ module CSG {
           r[0] * (2 * (i & 1 ? 1 : 0) - 1),
           r[1] * (2 * (i & 2 ? 1 : 0) - 1),
           r[2] * (2 * (i & 4 ? 1 : 0) - 1)
-          );
+        );
         var normal = Vector.fromArray(info[1]);
         if (options.xform) {
           pos = pos.mat3Times(options.xform);
@@ -235,7 +235,7 @@ module CSG {
         Math.cos(theta) * Math.sin(phi),
         Math.cos(phi),
         Math.sin(theta) * Math.sin(phi)
-        );
+      );
       vertices.push(new Vertex(c.plus(dir.times(r)), dir));
     }
 
@@ -364,7 +364,7 @@ module CSG {
         this.y * a.z - this.z * a.y,
         this.z * a.x - this.x * a.z,
         this.x * a.y - this.y * a.x
-        );
+      );
     }
 
     mat3Times(xf: number[]): Vector {
@@ -372,7 +372,7 @@ module CSG {
         xf[0] * this.x + xf[3] * this.y + xf[6] * this.z,
         xf[1] * this.x + xf[4] * this.y + xf[7] * this.z,
         xf[2] * this.x + xf[5] * this.y + xf[8] * this.z
-        );
+      );
     }
   }
 

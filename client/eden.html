@@ -9,8 +9,9 @@
   uniform mat4 u_model;
   uniform vec3 u_lightDir;
 
-  attribute vec4 a_position;
+  attribute vec3 a_position;
   attribute vec3 a_normal;
+  attribute vec3 a_color;
   attribute vec2 a_texcoord;
 
   varying vec3 v_color;
@@ -18,10 +19,10 @@
 
   void main() {
     v_texCoord = a_texcoord;
-    gl_Position = u_viewProjection * u_model * a_position;
+    gl_Position = u_viewProjection * u_model * vec4(a_position, 1);
 
     float lit = dot(u_lightDir, a_normal);
-    v_color = vec3(1, 1, 1) * lit;
+    v_color = a_color * lit;
   }
   </script>
 

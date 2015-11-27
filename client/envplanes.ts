@@ -85,12 +85,11 @@ module Eden {
   }
 
   // TODO:
-  // - Convert env to booleans to avoid the `== BlockWall` crap.
   // - Cache found planes.
   //   When caching, fill all rotations/inversions to avoid redundant work.
 
   // TODO: Explain.
-  export function planeBitsForEnv(env: number[]): number {
+  export function planeBitsForEnv(env: boolean[]): number {
     // Get bits for filled planes.
     var planes = findAllPlanes(env);
     planes = optimizePlanes(planes, env);
@@ -105,12 +104,12 @@ module Eden {
     return bits;
   }
 
-  function findAllPlanes(env: number[]): Plane[] {
+  function findAllPlanes(env: boolean[]): Plane[] {
     var planes: Plane[] = [];
     for (var i = 0; i < AllPlanes.length; ++i) {
       var line = copyPlane(AllPlanes[i]);
       for (var j = 0; j < line.points.length; j++) {
-        if (env[line.points[j]] == BlockWall) {
+        if (env[line.points[j]]) {
           line.hit++;
         }
       }
@@ -122,10 +121,10 @@ module Eden {
   }
 
   // Counts the number of blocks set in the given environment.
-  function countBlocks(env: number[]): number {
+  function countBlocks(env: boolean[]): number {
     var total = 0;
     for (var i = 0; i < 5 * 5 * 5; i++) {
-      if (env[i] == BlockWall) {
+      if (env[i]) {
         total++;
       }
     }
@@ -133,7 +132,7 @@ module Eden {
   }
 
   var _count = 0;
-  function optimizePlanes(planes: Plane[], env: number[]): Plane[] {
+  function optimizePlanes(planes: Plane[], env: boolean[]): Plane[] {
     var total = countBlocks(env);
 
     // Sort planes by descending size.
@@ -151,7 +150,7 @@ module Eden {
     return optimizeHelper(planes, total, env, touched);
   }
 
-  function optimizeHelper(planes: Plane[], total: number, env: number[], touched: boolean[]): Plane[] {
+  function optimizeHelper(planes: Plane[], total: number, env: boolean[], touched: boolean[]): Plane[] {
     // Find all candidate planes of equal size.
     var bestResult: Plane[], bestLength = 100;
     while (true) {
@@ -179,14 +178,14 @@ module Eden {
     return bestResult;
   }
 
-  function optimizePlane(head: Plane, tail: Plane[], total: number, env: number[], touched: boolean[]): Plane[] {
+  function optimizePlane(head: Plane, tail: Plane[], total: number, env: boolean[], touched: boolean[]): Plane[] {
     _count++;
 
     // Walk the line through the environment, updating `total` and `touched`.
     var anythingTouched = false;
     for (var j = 0; j < head.points.length; j++) {
       var ofs = head.points[j];
-      if (env[ofs] == BlockWall && !touched[ofs]) {
+      if (env[ofs] && !touched[ofs]) {
         anythingTouched = true;
         touched[ofs] = true;
         total--;

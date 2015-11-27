@@ -10,18 +10,11 @@ sockServer.on('connection', function (sock) {
     sock.on('message', function (message) {
         try {
             console.log(message);
-            broadcast("wut");
-            sock.send("wutwut");
+            sock.send(message);
         }
         catch (e) {
             console.error(e.message);
         }
     });
 });
-function broadcast(data) {
-    sockServer.clients.forEach(function (client) {
-        client.send(data);
-    });
-}
-;
 console.log('Server is running on port', port);

@@ -1,4 +1,5 @@
 /// <reference path="lib/twgl.d.ts"/>
+/// <reference path="globals.ts"/>
 /// <reference path="envplanes.ts"/>
 /// <reference path="csg.ts"/>
 /// <reference path="camera.ts"/>
@@ -10,13 +11,11 @@
 
 module Eden {
 
-  export var gl: WebGLRenderingContext;
-
   var world: World;
   var camera: Camera;
 
   var theta = 0, phi = 0;
-  var target = [8, 3, 8];
+  var target = [2, 2, 2];
 
   function init() {
     // Order matters. Yuck.
@@ -52,7 +51,7 @@ module Eden {
         case KeySpace:
           var chunk = world.chunk(0, 0, 0);
           var cell = chunk.cell(target[0], target[1], target[2]);
-          chunk.setCell(target[0], target[1], target[2], cell ? BlockAir : BlockWall);
+          chunk.setCell(target[0], target[1], target[2], cell ? BlockGround : BlockWall);
           break;
       }
     });

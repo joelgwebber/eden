@@ -8,6 +8,7 @@
   uniform mat4 u_viewProjection;
   uniform mat4 u_model;
   uniform vec3 u_lightDir;
+  uniform float u_ambient;
 
   attribute vec3 a_position;
   attribute vec3 a_normal;
@@ -22,7 +23,7 @@
     gl_Position = u_viewProjection * u_model * vec4(a_position, 1);
 
     float lit = dot(u_lightDir, a_normal);
-    v_color = a_color * lit;
+    v_color = u_ambient + a_color * lit;
   }
   </script>
 

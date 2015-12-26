@@ -12,12 +12,12 @@ namespace Eden {
     for (var i = 0; i < 8; i++) {
       var ofs = vertexOffset[i];
       var cell = env[envOfsCenter(ofs[0], ofs[1], ofs[2])];
-      cube[i] = (cellType(cell) == CellGround) ? cellArgs(cell) / 0xffff : 0;
+      cube[i] = (cellType(cell) & CellTerrainBit) ? cellArgs(cell) / 0xffff : 0;
     }
     return cube;
   }
 
-  export function marchCube(pos: Vec3, cube: number[], vertIndex: { [key: number]: number }, verts: number[], indices: number[]) {
+  export function marchCube(pos: Vec3, cube: number[], vertCache: { [key: number]: number }, verts: number[], indices: number[]) {
     // Find which vertices are inside of the surface and which are outside.
     var flagIndex = 0;
     for (var i = 0; i < 8; i++) {
@@ -65,18 +65,13 @@ namespace Eden {
 
       var idx = verts.length / 3;
       for (var j = 0; j < 3; j++) {
-        // Build a key for the vertex, by flooring the x.y part and mushing them into a uint64.
-        var _x = (triVerts[j][0]+2.0)*32.0;
-        var _y = (triVerts[j][1]+2.0)*32.0;
-        var _z = (triVerts[j][2]+2.0)*32.0;
-        var key = (_x << 20) | (_y << 10) | _z;
-
-        if (key in vertIndex) {
+        var key = vertKey(triVerts[j]);
+        if (key in vertCache) {
           // Already have a vertex at roughly this position.
-          indices.push(vertIndex[key]);
+          indices.push(vertCache[key]);
         } else {
           // New vertex.
-          vertIndex[key] = idx;
+          vertCache[key] = idx;
           indices.push(idx);
           verts.push(triVerts[j][0]);
           verts.push(triVerts[j][1]);
@@ -85,6 +80,14 @@ namespace Eden {
         }
       }
     }
+  }
+
+  // Build a key for the vertex, by flooring the x.y part and mushing them into a single number.
+  function vertKey(v: Vec3): number {
+    var _x = (v[0]+2.0)*32.0;
+    var _y = (v[1]+2.0)*32.0;
+    var _z = (v[2]+2.0)*32.0;
+    return (_x << 20) | (_y << 10) | _z;
   }
 
   function getOffset(v1: number, v2: number): number {

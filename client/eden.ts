@@ -51,7 +51,7 @@ module Eden {
         case KeySpace:
           var chunk = world.chunk(0, 0, 0);
           var cell = chunk.cell(target[0], target[1], target[2]);
-          chunk.setCell(target[0], target[1], target[2], cell ? CellGround : CellWall);
+          chunk.setCell(target[0], target[1], target[2], cell ? CellAir : terrainCell(CellGrass, 1.0));
           break;
       }
     });

@@ -1,25 +1,15 @@
 /// <reference path="globals.ts"/>
 /// <reference path="celltypes.ts"/>
-/// <reference path="ground.ts"/>
+/// <reference path="terrain.ts"/>
 /// <reference path="wall.ts"/>
 /// <reference path="floor.ts"/>
 
 module Eden {
 
+  var _geomCache: { [key: string]: twgl.BufferInfo } = {};
+
   export interface CellType {
     render(env: number[]): twgl.BufferInfo;
-  }
-
-  // HACK: Just prints out y=2 plane for now.
-  export function envStr(env: number[]): string {
-    var s = "";
-    for (var z = 0; z < 5; z++) {
-      for (var x = 0; x < 5; x++) {
-        s += "" + env[envOfs(x, 2, z)] + " ";
-      }
-      s += "\n";
-    }
-    return s;
   }
 
   export function envOfs(x: number, y: number, z: number): number {
@@ -31,11 +21,16 @@ module Eden {
   }
 
   export function geomForEnv(x: number, y: number, z: number, env: number[]): twgl.BufferInfo {
-    var bt = cellTypes[cellType(env[envOfsCenter(0, 0, 0)])];
-    if (!bt) {
-      return null;
+    var key = envKey(env);
+    if (!(key in _geomCache)) {
+      var bt = typeForCell(cellType(env[envOfsCenter(0, 0, 0)]));
+      if (bt) {
+        _geomCache[key] = bt.render(env);
+      } else {
+        _geomCache[key] = null;
+      }
     }
-    return bt.render(env);
+    return _geomCache[key];
   }
 
   export function csgPolysToBuffers(polys: CSG.Polygon[]): twgl.BufferInfo {
@@ -73,5 +68,9 @@ module Eden {
     a.push(v.x);
     a.push(v.y);
     a.push(v.z);
+  }
+
+  function envKey(env: number[]): string {
+    return env.toString();
   }
 }

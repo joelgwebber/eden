@@ -74,8 +74,4 @@ module Eden {
 
     return twgl.createBufferInfoFromArrays(gl, arrays);
   }
-
-  export function terrainCell(type: number, density: number): number {
-    return ((density * 0xffff) << 16) | type;
-  }
 }

@@ -27,7 +27,7 @@ module Eden {
       if (bt) {
         _geomCache[key] = bt.render(env);
       } else {
-        _geomCache[key] = null;
+        delete _geomCache[key];
       }
     }
     return _geomCache[key];

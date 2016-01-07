@@ -51,4 +51,16 @@ module Eden {
   export function terrainCellColor(cell: number): Vec3 {
     return terrainColor[cell & TerrainTypeMask];
   }
+
+  export function makeCell(type: number, args: number = 0): number {
+    return (args << CellArgsShift) | type;
+  }
+
+  export function terrainCell(type: number, density: number): number {
+    return makeCell(type, density * 0xffff);
+  }
+
+  export function isTerrain(type: number): boolean {
+    return (type & CellTerrainBit) != 0;
+  }
 }

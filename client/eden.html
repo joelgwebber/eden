@@ -2,13 +2,13 @@
 <html>
 <body style="margin:0; overflow: hidden;">
 
-  <script id="vs" type="notjs">
+  <script id="worldVS" type="notjs">
   precision mediump float;
 
   uniform mat4 u_viewProjection;
   uniform mat4 u_model;
   uniform vec3 u_lightDir;
-  uniform float u_ambient;
+  uniform vec3 u_ambient;
 
   attribute vec3 a_position;
   attribute vec3 a_normal;
@@ -27,7 +27,7 @@
   }
   </script>
 
-  <script id="fs" type="notjs">
+  <script id="worldFS" type="notjs">
   precision mediump float;
 
   varying vec3 v_color;

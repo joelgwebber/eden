@@ -30,6 +30,7 @@ module Eden {
     document.body.appendChild(canvas);
 
     gl = twgl.getWebGLContext(canvas);
+    initWorldRendering();
 
     world = new World();
     camera = new Camera();
@@ -51,7 +52,7 @@ module Eden {
         case KeySpace:
           var chunk = world.chunk(0, 0, 0);
           var cell = chunk.cell(target[0], target[1], target[2]);
-          chunk.setCell(target[0], target[1], target[2], cell ? CellAir : terrainCell(CellGrass, 1.0));
+          chunk.setCell(target[0], target[1], target[2], (cell != CellAir) ? CellAir : makeCell(CellWall));
           break;
       }
     });

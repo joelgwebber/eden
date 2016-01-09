@@ -117,16 +117,16 @@ module Eden {
       for (var x = 2; x < ChunkSize - 4; x++) {
         for (var y = 2; y < ChunkSize - 4; y++) {
           for (var z = 2; z < ChunkSize - 4; z++) {
-            if (this.cell(x, y, z) == CellAir) {
-              continue;
+            var meshIdx = cellIndex(x, y, z);
+            var mesh = this._meshes[meshIdx];
+            var geom: twgl.BufferInfo;
+            if (this.cell(x, y, z) != CellAir) {
+              var env = makeEnv(this._cells, x, y, z);
+              geom = geomForEnv(x, y, z, env);
             }
 
-            var meshIdx = cellIndex(x, y, z);
-            var bi = this._meshes[meshIdx];
-            var env = makeEnv(this._cells, x, y, z);
-            var geom = geomForEnv(x, y, z, env);
             if (!geom) {
-              if (bi) {
+              if (mesh) {
                 delete this._meshes[meshIdx];
               }
             } else {

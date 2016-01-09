@@ -10,40 +10,13 @@ module Eden {
   import Vec3 = twgl.v3.Vec3;
   import Mat4 = twgl.m4.Mat4;
 
-  export var ChunkExp = 4;
-  export var ChunkExp2 = ChunkExp * 2;
-  export var ChunkExp3 = ChunkExp * 3;
-  export var ChunkSize = 1 << ChunkExp;
-  export var ChunkSize2 = 1 << ChunkExp2;
-  export var ChunkSize3 = 1 << ChunkExp3;
-
   var worldPI: twgl.ProgramInfo;
 
   export function initWorldRendering() {
     worldPI = twgl.createProgramInfo(gl, ["worldVS", "worldFS"]);
   }
 
-  export class World {
-    private _chunk: Chunk;
-
-    constructor() {
-      this._chunk = new Chunk();
-    }
-
-    chunk(x: number, y: number, z: number): Chunk {
-      return this._chunk;
-    }
-
-    update() {
-      this._chunk.update();
-    }
-
-    render(camera: Camera) {
-      this._chunk.render(camera);
-    }
-  }
-
-  class Chunk {
+  export class Chunk {
     private _cells = new Uint32Array(ChunkSize3);
     private _terrain: twgl.BufferInfo;
     private _meshes: twgl.BufferInfo[] = [];
@@ -119,7 +92,7 @@ module Eden {
           for (var z = 2; z < ChunkSize - 4; z++) {
             var meshIdx = cellIndex(x, y, z);
             var mesh = this._meshes[meshIdx];
-            var geom: twgl.BufferInfo;
+            var geom: twgl.BufferInfo = null;
             if (this.cell(x, y, z) != CellAir) {
               var env = makeEnv(this._cells, x, y, z);
               geom = geomForEnv(x, y, z, env);

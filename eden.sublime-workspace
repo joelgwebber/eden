@@ -1,0 +1,2230 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"BlockArg",
+				"BlockArgsShift	const"
+			],
+			[
+				"Pricin",
+				"PricingResponse	interface"
+			],
+			[
+				"HI",
+				"HISTORY_BILLING	property"
+			],
+			[
+				"Debug",
+				"Debug	 Ɩ"
+			],
+			[
+				"Wri",
+				"WriteString	n int, err error ƒ"
+			],
+			[
+				"proc",
+				"processNode	 ƒ"
+			],
+			[
+				"pro",
+				"processNode	 ƒ"
+			],
+			[
+				"Subsc",
+				"SubscriptionInfoRequest	struct ʈ"
+			],
+			[
+				"Subscrip",
+				"SubscriptionInfoParams	struct ʈ"
+			],
+			[
+				"Subs",
+				"SubscriptionInfoResponse	struct ʈ"
+			],
+			[
+				"up",
+				"updateTo	method"
+			],
+			[
+				"Quta",
+				"QuotaCycleStart	property"
+			],
+			[
+				"update",
+				"updateSubscribeButton	method"
+			],
+			[
+				"inli",
+				"inline-block"
+			],
+			[
+				"Custom",
+				"CustomerSuccessTrialExpiration	property"
+			],
+			[
+				"getD",
+				"getDateInputCompatibleString	function"
+			],
+			[
+				"corePac",
+				"corePackExpiration	property"
+			],
+			[
+				"corePa",
+				"corePackExpiration	property"
+			],
+			[
+				"coreP",
+				"corePackExpiration	property"
+			],
+			[
+				"histo",
+				"historySlider	property"
+			],
+			[
+				"s",
+				"Sessions	property"
+			],
+			[
+				"sess",
+				"sessionSlider	property"
+			],
+			[
+				"Fprin",
+				"Fprintf	n int, err error ƒ"
+			],
+			[
+				"Fea",
+				"FeatureSetCore	 Ɩ"
+			],
+			[
+				"Fe",
+				"FeatureSetCore	 Ɩ"
+			],
+			[
+				"removeNode",
+				"removeNodeFromIdMap"
+			],
+			[
+				"removeNo",
+				"removeNodeFromIdMap"
+			],
+			[
+				"elemPlayback",
+				"elemPlaybackNoteShare	 Ɩ"
+			],
+			[
+				"override",
+				"overridenFlags	local var"
+			],
+			[
+				"overrid",
+				"overridenFlags	local var"
+			],
+			[
+				"_cur",
+				"_currentPage	property"
+			],
+			[
+				"b",
+				"Bools	map[Flag]bool ν"
+			],
+			[
+				"back",
+				"background-position"
+			],
+			[
+				"backg",
+				"background-color"
+			],
+			[
+				"in",
+				"inline-block"
+			],
+			[
+				"base",
+				"bass-metre"
+			],
+			[
+				"lam",
+				"lambda"
+			],
+			[
+				"GoogleLo",
+				"GoogleLoader_callback"
+			],
+			[
+				"GoogleL",
+				"GoogleLoader_callback"
+			],
+			[
+				"C",
+				"CONNECT_TIMEOUT_SECS"
+			],
+			[
+				"_remov",
+				"_removeSubscription"
+			],
+			[
+				"_dispo",
+				"_disposing"
+			],
+			[
+				"exist",
+				"existingStack"
+			],
+			[
+				"_remo",
+				"_removeCards"
+			],
+			[
+				"THU",
+				"THUMB_WIDTH"
+			],
+			[
+				"Segm",
+				"SegmentedEffortsPlaceImpl"
+			],
+			[
+				"Sched",
+				"ScheduledDates"
+			],
+			[
+				"_brow",
+				"_browsePlace"
+			],
+			[
+				"_bros",
+				"_browsePlace"
+			],
+			[
+				"res",
+				"resourceWidth"
+			],
+			[
+				"boardp",
+				"boardPanelDelegate"
+			],
+			[
+				"CardDeta",
+				"CardDetailButtonsView"
+			],
+			[
+				"las",
+				"lastSeenIp"
+			],
+			[
+				"formatDateTi",
+				"formatDateNicknameWithTime"
+			],
+			[
+				"MIME_APP",
+				"MIME_APPLICATION_VND_WORDPROCESSINGML"
+			],
+			[
+				"CONt",
+				"ContentTypes"
+			],
+			[
+				"MIME_APPli",
+				"MIME_APPLICATION_MSWORD"
+			],
+			[
+				"MIME_APPLICATION_vnd",
+				"MIME_APPLICATION_VND_MSWORD"
+			],
+			[
+				"mime_app",
+				"MIME_APPLICATION_ZIP"
+			],
+			[
+				"MIME_TE",
+				"MIME_TEXT_PLAIN"
+			],
+			[
+				"mIME_TExt",
+				"MIME_TEXT_HTML"
+			],
+			[
+				"MIME_tex",
+				"MIME_TEXT_XML"
+			],
+			[
+				"MIME_imag",
+				"MIME_IMAGE_SVG"
+			],
+			[
+				"MIME_IM",
+				"MIME_IMAGE_XICON"
+			],
+			[
+				"COnte",
+				"ContentTypes"
+			],
+			[
+				"conte",
+				"ContentTypes"
+			],
+			[
+				"Cont",
+				"ContentTypes"
+			],
+			[
+				"iconf",
+				"iconFromName"
+			],
+			[
+				"icon",
+				"iconFromContentType"
+			],
+			[
+				"_stack",
+				"_stackings"
+			],
+			[
+				"Cad",
+				"CardDetailStack"
+			],
+			[
+				"Card",
+				"CardDetailButtonsView"
+			],
+			[
+				"Establish",
+				"EstablishSessionRsp"
+			],
+			[
+				"fixstyle",
+				"fixStyleRuleProperty"
+			],
+			[
+				"form",
+				"REQUEST_FORM_PAGE"
+			],
+			[
+				"_boardin",
+				"_boardInfoPanel"
+			],
+			[
+				"_pla",
+				"_placeParams"
+			],
+			[
+				"_upda",
+				"_updateNextPrevButtons"
+			],
+			[
+				"hidd",
+				"_hiddenTransform"
+			],
+			[
+				"Cardde",
+				"CardDetailOverlay"
+			],
+			[
+				"subs",
+				"subscription"
+			],
+			[
+				"paren",
+				"parentBundle"
+			],
+			[
+				"_contentsPresen",
+				"_contentsPresenter"
+			],
+			[
+				"contents",
+				"resourceContents"
+			],
+			[
+				"_removeBu",
+				"_removeButton"
+			],
+			[
+				"_uploadPro",
+				"_uploadProgressView"
+			],
+			[
+				"Boardin",
+				"BoardInfoPresenter"
+			],
+			[
+				"BoardI",
+				"BoardInfoPresenter"
+			],
+			[
+				"_got",
+				"_gotCollectionData"
+			],
+			[
+				"coll",
+				"collectionData"
+			],
+			[
+				"_serv",
+				"_serverLogger"
+			],
+			[
+				"Boardd",
+				"BoardDetailView"
+			],
+			[
+				"BoardD",
+				"BoardDetailImpl"
+			],
+			[
+				"CardDet",
+				"CardDetailOverlay"
+			],
+			[
+				"CardCommen",
+				"CardCommentBodyMirror"
+			],
+			[
+				"Defau",
+				"DEFAULT_SORTBYS"
+			],
+			[
+				"at",
+				"_attached"
+			],
+			[
+				"_boar",
+				"_boardDetail"
+			],
+			[
+				"_cach",
+				"_cacheCards"
+			],
+			[
+				"_lastSaveCom",
+				"_lastSaveCompleted"
+			],
+			[
+				"_hidenet",
+				"_hideNetworkFeedback"
+			],
+			[
+				"_asy",
+				"_AsyncTest"
+			],
+			[
+				"_oncon",
+				"_onConnects"
+			],
+			[
+				"_onC",
+				"_onConnects"
+			],
+			[
+				"Col",
+				"CollectionSortBy"
+			],
+			[
+				"Organi",
+				"OrganizerPlace"
+			],
+			[
+				"_thinG_comm",
+				"_Thing_comments_at"
+			],
+			[
+				"_Thin",
+				"_Thing_nested_stuff_item"
+			],
+			[
+				"neste",
+				"NestedThing"
+			],
+			[
+				"exp",
+				"expectCardsEqual"
+			],
+			[
+				"_addLi",
+				"_addListInsert"
+			],
+			[
+				"Initi",
+				"InitiativeDetailView"
+			],
+			[
+				"EVERYONE_i",
+				"EVERYONE_ICON"
+			],
+			[
+				"OR",
+				"ORGANIZER_LABEL"
+			],
+			[
+				"readf",
+				"_readFromUiCard"
+			],
+			[
+				"IdeaD",
+				"IdeaDetailView"
+			],
+			[
+				"getF",
+				"getFieldRef"
+			],
+			[
+				"te",
+				"team"
+			],
+			[
+				"Re",
+				"ResourceMerger"
+			],
+			[
+				"ResourceD",
+				"ResourceDetailView"
+			],
+			[
+				"main",
+				"main	method (main)"
+			],
+			[
+				"ser",
+				"serviceName"
+			],
+			[
+				"_recon",
+				"_reconnecting"
+			],
+			[
+				"uns",
+				"unsubscribe"
+			],
+			[
+				"_hid",
+				"_hideUpdate"
+			],
+			[
+				"metri",
+				"metricslist-update"
+			],
+			[
+				"Metricsup",
+				"MetricsUpdatePopupView"
+			],
+			[
+				"_sele",
+				"_sectionSelected"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "web/client/eden.html",
+			"settings":
+			{
+				"buffer_size": 902,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "web/client/eden.ts",
+			"settings":
+			{
+				"buffer_size": 2626,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "web/client/world.ts",
+			"settings":
+			{
+				"buffer_size": 5933,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "web/client/cells.ts",
+			"settings":
+			{
+				"buffer_size": 2268,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 187.0,
+		"last_filter": "git iff",
+		"selected_items":
+		[
+			[
+				"git iff",
+				"Git: Diff"
+			],
+			[
+				"git diff",
+				"Git: Diff"
+			],
+			[
+				"format",
+				"TypeScript: Format Document"
+			],
+			[
+				":w",
+				":w - Save"
+			],
+			[
+				"git status",
+				"Git: Status"
+			],
+			[
+				"git ",
+				"Git: Status"
+			],
+			[
+				"wrap",
+				"Word Wrap: Toggle"
+			],
+			[
+				"word",
+				"Word Wrap: Toggle"
+			],
+			[
+				":q",
+				"Set Syntax: SQL"
+			],
+			[
+				"dif",
+				"Git: Diff Cached"
+			],
+			[
+				"diff",
+				"Git: Diff"
+			],
+			[
+				"git log",
+				"Git: Log"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				":wq",
+				"Pretty JSON: JSON query with ./jq"
+			],
+			[
+				"git dif",
+				"Git: Diff"
+			],
+			[
+				"wr",
+				"Word Wrap: Toggle"
+			],
+			[
+				"wor",
+				"Word Wrap: Toggle"
+			],
+			[
+				"package",
+				"Package Control: Install Package"
+			],
+			[
+				"update",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"pretty",
+				"Pretty JSON: Format (Pretty Print) JSON"
+			],
+			[
+				"git blame",
+				"Git: Blame"
+			],
+			[
+				"git bla",
+				"Git: Blame"
+			],
+			[
+				"typesc",
+				"TypeScript: FormatDocument"
+			],
+			[
+				"typescript",
+				"TypeScript: GoToDefinition"
+			],
+			[
+				"commit",
+				"Git: Commit"
+			],
+			[
+				"git quick",
+				"Git: Quick Add"
+			],
+			[
+				"json",
+				"Pretty JSON: Format (Pretty Print) JSON"
+			],
+			[
+				"git commit",
+				"Git: Commit"
+			],
+			[
+				"git add",
+				"Git: Quick Add"
+			],
+			[
+				"git: log",
+				"Git: Log"
+			],
+			[
+				"git: dif",
+				"Git: Diff"
+			],
+			[
+				"package control: up",
+				"Package Control: Upgrade Package"
+			],
+			[
+				"gitmo",
+				"Set Syntax: GitMode > Graph"
+			],
+			[
+				"packa",
+				"Package Control: Install Package"
+			],
+			[
+				"typescript:",
+				"TypeScript: GoToDefinition"
+			],
+			[
+				"gofmt",
+				"GoSublime: Fmt and save"
+			],
+			[
+				"typescript: format",
+				"TypeScript: FormatSelection"
+			],
+			[
+				"typescip",
+				"TypeScript: FormatBlock"
+			],
+			[
+				"error",
+				"TypeScript: ShowErrorList"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"typescript: ",
+				"TypeScript: NavigateToSymbol"
+			],
+			[
+				"packag",
+				"Package Control: Install Package"
+			],
+			[
+				"Typescript:",
+				"TypeScript: NavigateToSymbol"
+			],
+			[
+				"find",
+				"TypeScript: FindReferences"
+			],
+			[
+				"gosublime:",
+				"GoSublime: Show call tip"
+			],
+			[
+				"gosublime",
+				"GoSublime: Goto Definition"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"remove ",
+				"Package Control: Remove Package"
+			],
+			[
+				"package control: remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"upd",
+				"Package Control: Upgrade Package"
+			],
+			[
+				":",
+				":w - Save"
+			],
+			[
+				"go",
+				"Snippet: go func()"
+			],
+			[
+				":4",
+				"Set Syntax: camlp4"
+			],
+			[
+				"remov",
+				"Package Control: Remove Package"
+			],
+			[
+				"prety",
+				"Pretty JSON: Format (Pretty Print) JSON"
+			],
+			[
+				"ext",
+				"Extempore: Evaluate"
+			],
+			[
+				"disconn",
+				"Extempore: Disconnect"
+			],
+			[
+				"ex",
+				"Extempore: Connect"
+			],
+			[
+				"prettty",
+				"Pretty JSON: Format (Pretty Print) JSON"
+			],
+			[
+				"git push",
+				"Git: Push"
+			],
+			[
+				"git stat",
+				"Git: Status"
+			],
+			[
+				"git st",
+				"Git: Show Tags"
+			],
+			[
+				"git statu",
+				"Git: Status"
+			],
+			[
+				"git:",
+				"Git: Status"
+			],
+			[
+				"pretyt",
+				"Pretty JSON: Reformat (Pretty Print) JSON"
+			],
+			[
+				"gosub",
+				"GoSublime: Default Settings"
+			],
+			[
+				"git check",
+				"Git: Checkout Tag"
+			],
+			[
+				"git: ",
+				"Git: Status"
+			],
+			[
+				"git",
+				"Git: Diff Tool All"
+			],
+			[
+				"gdb",
+				"SublimeGDB: Start Debugging"
+			],
+			[
+				"git:diff",
+				"Git: Diff All"
+			],
+			[
+				"git: di",
+				"Git: Diff All"
+			],
+			[
+				"prett",
+				"Pretty JSON: Reformat (Pretty Print) JSON"
+			],
+			[
+				"pret",
+				"Pretty JSON: Reformat (Pretty Print) JSON"
+			],
+			[
+				"package controll",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"joso",
+				"Pretty JSON: Reformat (Pretty Print) JSON"
+			],
+			[
+				"package ",
+				"Package Control: Install Package"
+			],
+			[
+				":s",
+				":w - Save"
+			],
+			[
+				":d",
+				"GoSublime: Default Settings"
+			],
+			[
+				":W",
+				":w - Save"
+			]
+		],
+		"width": 467.0
+	},
+	"console":
+	{
+		"height": 125.0,
+		"history":
+		[
+			"import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read())"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/jgw/src/eden/web",
+		"/Users/jgw/src/eden/web/client",
+		"/Users/jgw/src/eden/web/client/lib",
+		"/Users/jgw/src/eden/web/server"
+	],
+	"file_history":
+	[
+		"/Users/jgw/Library/Application Support/Sublime Text 3/Packages/TypeScript/tsserver/lib.d.ts",
+		"/Users/jgw/src/eden/web/client/envplanes.ts",
+		"/Users/jgw/src/eden/web/client/wall.ts",
+		"/Users/jgw/src/eden/web/client/celltypes.ts",
+		"/Users/jgw/src/eden/web/client/csg.ts",
+		"/Users/jgw/src/eden/web/client/walls.txt",
+		"/Users/jgw/src/eden/web/client/terrain.ts",
+		"/Users/jgw/src/eden/web/client/march.ts",
+		"/Users/jgw/src/eden/web/client/lib/twgl-full.js",
+		"/Users/jgw/src/eden/web/client/lib/twgl.d.ts",
+		"/Users/jgw/src/eden/web/client/cells.ts",
+		"/Users/jgw/src/eden/web/server/server.ts",
+		"/Users/jgw/src/eden/web/client/eden.ts",
+		"/Users/jgw/src/eden/web/client/floor.ts",
+		"/Users/jgw/src/eden/web/client/envlines.ts",
+		"/Users/jgw/src/eden/web/client/world.ts",
+		"/Users/jgw/src/eden/web/client/ground.ts",
+		"/Users/jgw/src/eden/web/server/node.d.ts",
+		"/Users/jgw/src/eden/web/client/blocktypes.ts",
+		"/Users/jgw/src/eden/web/client/camera.ts",
+		"/Users/jgw/src/eden/web/client/math.ts",
+		"/Users/jgw/src/eden/web/client/eden.html",
+		"/Users/jgw/src/eden/web/client/blocks.ts",
+		"/Users/jgw/src/eden/web/client/globals.ts",
+		"/Users/jgw/src/eden/web/script/lib/example.es",
+		"/Users/jgw/src/eden/web/script/ast/ast.ts",
+		"/Users/jgw/src/eden/web/server/ws.d.ts",
+		"/Users/jgw/src/eden/web/server/wut.ts",
+		"/Users/jgw/src/eden/web/server/wut.js",
+		"/Users/jgw/src/eden/web/server/package.json",
+		"/Users/jgw/src/eden/web/script/math.es",
+		"/Users/jgw/src/eden/web/eden.ts",
+		"/Users/jgw/src/eden/web/world.ts",
+		"/Users/jgw/src/eden/web/script/example.es",
+		"/Users/jgw/src/eden/web/script/collections.es",
+		"/Users/jgw/src/eden/web/walls.txt",
+		"/Users/jgw/src/eden/web/tsUnit.ts",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/admin/billing.go",
+		"/Users/jgw/src/mn/projects/fullstory/ts/goimports/fs_api_pricingapi.ts",
+		"/Users/jgw/src/mn/projects/fullstory/views/admin/ConfigureBilling.htmto",
+		"/Users/jgw/src/mn/projects/fullstory/views/ui/settings/billing/Billing.htmto",
+		"/Users/jgw/src/mn/projects/fullstory/appengine/admin/s/pricing.main.ts",
+		"/Users/jgw/src/mn/projects/fullstory/ts/ui/api/clientapi.ts",
+		"/Users/jgw/src/mn/projects/fullstory/ts/ui/plans/planeditor.ts",
+		"/Users/jgw/src/mn/projects/fullstory/ts/ui/settings/billing.ts",
+		"/Users/jgw/src/mn/projects/fullstory/appengine/admin/s/index.main.ts",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/store/store_test.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/store/store.go",
+		"/Users/jgw/src/mn/projects/fullstory/views/ui/spinner.scss",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/ui/handlers.go",
+		"/Users/jgw/src/mn/projects/fullstory/ts/ui/app.ts",
+		"/Users/jgw/src/mn/projects/fullstory/ts/ui/settings/team.ts",
+		"/Users/jgw/src/mn/projects/fullstory/views/shared.scss",
+		"/Users/jgw/src/mn/projects/fullstory/views/ui/plans/PlanEditor.htmto",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/api/pricingapi/tsexport.go",
+		"/Users/jgw/src/mn/projects/fullstory/ts/util/utils.ts",
+		"/usr/local/go/src/time/time.go",
+		"/usr/local/go/src/time/format.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/recording/recording.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/pricing/charges.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/billing/subscription.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/billing/billing.go",
+		"/Users/jgw/src/mn/projects/fullstory/ts/ui/settings/settings.ts",
+		"/Users/jgw/src/mn/projects/fullstory/views/ui/settings/team/SeatConfirmation.htmto",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/clientapi/clientapi.go",
+		"/Users/jgw/src/mn/projects/fullstory/ts/ui/notifications.ts",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/alerts/notifications.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/souq/souq.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/billing/stripeclient.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/store/migrators.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/store/provision.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/tasks/tasksimpl/quotas.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/tasks/tasksimpl/tasksimpl.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/admin/api.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/billing/pricing.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/google.golang.org/appengine/datastore/datastore.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/shared/schema/types.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/shared/flags/flags.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/shared/schema/schema.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/google.golang.org/appengine/datastore/prop.go",
+		"/usr/local/go/src/encoding/json/decode.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/google.golang.org/appengine/datastore/doc.go",
+		"/Users/jgw/src/mn/projects/fullstory/ts/ui/admin/index/orgactions/billing.ts",
+		"/Users/jgw/src/mn/projects/fullstory/dist/admin/s/pricing.js",
+		"/Users/jgw/src/mn/projects/fullstory/tools/productionize",
+		"/Users/jgw/src/mn/projects/fullstory/python/lib/fs.py",
+		"/Users/jgw/src/mn/projects/fullstory/gulpfile.babel.js",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/github.com/fullstorydev/appengine/datastore/doc.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/github.com/fullstorydev/appengine/datastore/datastore_test.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/github.com/fullstorydev/appengine/datastore/datastore.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/shared/flags/packs.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/fstesting/gaequick/gaequick.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/shared/flags/roles.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/billing/packs/packs.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/pricing/main/pricing/pricing.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/pricing/pricing_test.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/pricing/official.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/pricing/certification_test.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/ui/tsexport.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/admin/pricing.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/admin/admin.go",
+		"/Users/jgw/src/mn/projects/fullstory/appengine/app/routes.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/pricing/pricing.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/transform/service/patterns/patterns.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/billing/cloudcosts/cloudcosts.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/billing/PricingServiceStub.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/api/pricingapi/pricingapi.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/billing/webhooks.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/souq/fsoauth2/fsoauth2.go",
+		"/Users/jgw/src/mn/projects/fullstory/ts/recording/recorder.ts",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/search/org/org.go",
+		"/Users/jgw/src/mn/projects/fullstory/services.py",
+		"/Users/jgw/src/mn/projects/fullstory/python/lib/servicetypes.py",
+		"/Users/jgw/src/mn/projects/fullstory/ts/ui/flags.ts",
+		"/Users/jgw/src/mn/projects/fullstory/ts/ui/admin/index/adminapi.ts",
+		"/Users/jgw/src/mn/projects/fullstory/views/admin/ModifyPlan.htmto",
+		"/Users/jgw/src/mn/projects/fullstory/gen/adminviews.ts",
+		"/Users/jgw/src/mn/projects/fullstory/tests/_fixtures/searchUsers_1.json",
+		"/Users/jgw/src/mn/projects/fullstory/tests/app_spec.js",
+		"/Users/jgw/src/mn/projects/fullstory/appengine/app/tmpl/shared/header.html",
+		"/Users/jgw/src/mn/projects/fullstory/cypress.json",
+		"/Users/jgw/src/mn/projects/fullstory/tests/_support/spec_helper.js",
+		"/Users/jgw/src/mn/projects/fullstory/appengine/app/tmpl/login.base.html",
+		"/Users/jgw/src/mn/projects/fullstory/appengine/admin/tmpl/header.inc.html",
+		"/Users/jgw/src/mn/projects/fullstory/tests/_fixtures/example.json",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/fstesting/integration/ui/settings_test.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/fstesting/integration/integration.go",
+		"/Users/jgw/src/mn/projects/fullstory/go/src/fs/fstesting/integration/newloginpage.go"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			"*.ts",
+			"*.go",
+			"*.ts",
+			"*.scss",
+			"*.go",
+			"*.ts",
+			"*.go",
+			"*.ts",
+			"*.go",
+			"go/src/fs/**.go",
+			"go/src/fs/*.go",
+			"*.go",
+			"*.ts",
+			"go/src/fs/**.go",
+			"*",
+			"*.htmto",
+			"*.ts",
+			"go/src/fs/**.go",
+			"*.go",
+			"*.ts",
+			"*.go",
+			"*.o",
+			"*.ts",
+			"*.t",
+			"*.go",
+			"*.ts",
+			"go/src/fs/**.go",
+			"*.go",
+			"*.ts",
+			"*.scss",
+			"*.htmto",
+			"*.scss",
+			"*.go",
+			"*.html",
+			"*.htmto",
+			"*.go",
+			"*.ts",
+			"*.go",
+			"*.ts",
+			"*.go",
+			"go/src/fs/**.go",
+			"go/src/**.go",
+			"*.go",
+			"*.ts",
+			"*.go",
+			"*.ts",
+			"*.scss",
+			"*.ts",
+			"*.scss",
+			"*.htmto",
+			"*.ts",
+			"*.go",
+			"*.ts",
+			"*.go",
+			"*.ts",
+			"*.scss",
+			"*.ts",
+			"go/src/fs/**.ts",
+			"go/src/fs/**.go",
+			"*.go",
+			"*.ts",
+			"*.go",
+			"*.ts",
+			"*.htmto",
+			"*.go",
+			"*.ts",
+			"go/src/fs/**.go",
+			"*.go",
+			"*.ts",
+			"*.scss",
+			"*.ts",
+			"*.htmto",
+			"*.ts",
+			"*.js",
+			"*.htmto",
+			"*.ts",
+			"*.js",
+			"*.htmto",
+			"*.js",
+			"*",
+			"*.ts",
+			"*.hts",
+			"*.htmto",
+			"*.ts",
+			"*.go",
+			"*.py",
+			"*.go",
+			"*.ts",
+			"*.go",
+			"*.py",
+			"*.go",
+			"*.py",
+			"*",
+			"*.py",
+			"*.PY",
+			"*.go",
+			"*.ts",
+			"*.py",
+			"*.ts",
+			"*.go",
+			"*.ts",
+			"*.go",
+			"*.yaml",
+			"*.go",
+			"*",
+			"*.htmto",
+			"*.scss",
+			"*.html",
+			"*.htmto",
+			"*.scss",
+			"*.go",
+			"*.ts",
+			"*.go",
+			"*.ts",
+			"*.go",
+			"*.ts",
+			"*.go",
+			"*.ts",
+			"*.go",
+			"*.htmto",
+			"*.ts",
+			"*.go",
+			"*.html",
+			"*.go",
+			"*.html",
+			"*.htmto",
+			"*.go",
+			"*.html"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"update",
+			"[xyz]",
+			"x",
+			"InternalChunk",
+			"y",
+			"x",
+			"x:",
+			"[xyz]",
+			"setCell",
+			"bi",
+			"mesh",
+			"ambi",
+			"lightDir",
+			"key",
+			"makeEnv",
+			"fill",
+			"isTerrain",
+			"env",
+			"terrainCell",
+			"CellWall",
+			"init",
+			"envpl",
+			"Wall",
+			"_meshes",
+			"fill",
+			"setUnifo",
+			"cell",
+			"renderCell",
+			"programInfo",
+			"3",
+			"ambient",
+			"texCoord",
+			"programInfo",
+			"ambient",
+			"pushVec",
+			"cellForType",
+			"type",
+			"cellIndex",
+			"cube",
+			"vertexOffset",
+			"fillCube",
+			"vertIndex",
+			"color",
+			"verts",
+			"cellTypes",
+			"cell",
+			"CellGrass",
+			"setCell",
+			"verts",
+			"normal",
+			"ChunkSize",
+			"4",
+			"25",
+			"vertIndex",
+			"key",
+			"vertIndex",
+			"indices",
+			"terrainCell",
+			"density",
+			"normals",
+			"idx",
+			"normals",
+			"normalForPoint",
+			"At",
+			"float ",
+			"fill",
+			"cellIndex",
+			"fill",
+			"geomFor",
+			"cellAt",
+			"<< ",
+			"renderTerrain",
+			"_cells",
+			"Exp",
+			"ChunkExp",
+			"ChunkSize",
+			"ChunkExp",
+			"ChunkExp3",
+			"ChunkExp2",
+			"->",
+			"int ",
+			"this",
+			"env",
+			"_cells",
+			"ChunkExp3",
+			"_cells",
+			"envStr",
+			"_meshes",
+			"Dirt",
+			"csgTo",
+			"ground.ts",
+			"block",
+			"Block",
+			"block",
+			"blocktypes.ts",
+			"blocks.ts",
+			" == BlockWall",
+			"env: ",
+			"blocks.ts",
+			"Block",
+			"indices",
+			"2",
+			"3",
+			"normal",
+			"2",
+			"6",
+			"_geomCache",
+			"Vec3",
+			"create",
+			"v3",
+			"Push",
+			"vertIndex",
+			"edgeVertex",
+			"flagIndex",
+			"offset",
+			"getOffset",
+			"int ",
+			"m4",
+			"pos",
+			"\\}",
+			"\\{",
+			"\\}",
+			"\\{",
+			"0, 1",
+			"v3",
+			"csgPolysToBuffer",
+			"pos",
+			"a_normal"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+			"cell",
+			"Cell",
+			"cell",
+			"Cell",
+			"]",
+			"•",
+			" ",
+			"  •",
+			"•",
+			".",
+			"",
+			" ",
+			"TestClipNavigation",
+			"\"",
+			"",
+			"Dom.create"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "web/client/eden.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 902,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								580,
+								580
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "web/client/eden.ts",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2626,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1368,
+								1368
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/TypeScript/TypeScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true,
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 2,
+								"tabSize": 2
+							},
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 204.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "web/client/world.ts",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5933,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3687,
+								3687
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/TypeScript/TypeScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true,
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 2,
+								"tabSize": 2
+							},
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1785.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "web/client/cells.ts",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2268,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								562,
+								562
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/TypeScript/TypeScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true,
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": true,
+								"indentSize": 2,
+								"tabSize": 2
+							},
+							"use_tab_stops": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.9o:///":
+	{
+		"height": 112.0
+	},
+	"output.9o:///Users/jgw/src/eden/web/client":
+	{
+		"height": 112.0
+	},
+	"output.9o:///Users/jgw/src/mn/build/ij/production/go/cowpath/frontend":
+	{
+		"height": 106.0
+	},
+	"output.9o:///Users/jgw/src/mn/jsx/mn/ui/mvp":
+	{
+		"height": 112.0
+	},
+	"output.9o:///Users/jgw/src/mn/projects/cowpath":
+	{
+		"height": 260.0
+	},
+	"output.9o:///Users/jgw/src/mn/projects/cowpath/go/src/cowpath":
+	{
+		"height": 220.0
+	},
+	"output.9o:///Users/jgw/src/mn/projects/cowpath/go/src/cowpath/frontend":
+	{
+		"height": 274.0
+	},
+	"output.9o:///Users/jgw/src/mn/projects/cowpath/go/src/cowpath/store":
+	{
+		"height": 106.0
+	},
+	"output.9o:///Users/jgw/src/mn/projects/cowpath/ts/recording":
+	{
+		"height": 100.0
+	},
+	"output.9o:///Users/jgw/src/mn/projects/dragon/jsx/dragon":
+	{
+		"height": 118.0
+	},
+	"output.9o:///Users/jgw/src/mn/projects/dragon/jsx/dragon/detail":
+	{
+		"height": 112.0
+	},
+	"output.9o:///Users/jgw/src/mn/projects/dragon/jsx/extension":
+	{
+		"height": 112.0
+	},
+	"output.9o:///Users/jgw/src/mn/projects/dragon/jsx/shared/ui":
+	{
+		"height": 112.0
+	},
+	"output.9o:///Users/jgw/src/mn/projects/dragon/jsx/test/dragon":
+	{
+		"height": 118.0
+	},
+	"output.9o:///Users/jgw/src/mn/projects/dragon/jsx/views/dragon/detail":
+	{
+		"height": 118.0
+	},
+	"output.9o:///Users/jgw/src/mn/projects/dragon/jsx/views/shared/ui":
+	{
+		"height": 112.0
+	},
+	"output.9o:///Users/jgw/src/mn/projects/dragon/sass/dragon":
+	{
+		"height": 112.0
+	},
+	"output.9o:///Users/jgw/src/mn/projects/fullstory/go/src/fs/borges/library":
+	{
+		"height": 112.0
+	},
+	"output.9o:///Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/billing":
+	{
+		"height": 112.0
+	},
+	"output.9o:///Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/recording":
+	{
+		"height": 112.0
+	},
+	"output.9o:///Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/store":
+	{
+		"height": 112.0
+	},
+	"output.9o:///Users/jgw/src/mn/projects/fullstory/go/src/fs/frontend/ui":
+	{
+		"height": 112.0
+	},
+	"output.9o:///Users/jgw/src/spdy/go/src/spdy":
+	{
+		"height": 106.0
+	},
+	"output.GoSublime-main-output":
+	{
+		"height": 106.0
+	},
+	"output.GoSublime-source-output":
+	{
+		"height": 112.0
+	},
+	"output.GsComplete.completion-hint-output":
+	{
+		"height": 112.0
+	},
+	"output.GsDoc-output-output":
+	{
+		"height": 212.0
+	},
+	"output.MarGo-output":
+	{
+		"height": 112.0
+	},
+	"output.doc":
+	{
+		"height": 0.0
+	},
+	"output.errorlist":
+	{
+		"height": 156.0
+	},
+	"output.exec":
+	{
+		"height": 106.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.git":
+	{
+		"height": 100.0
+	},
+	"output.git-commit":
+	{
+		"height": 112.0
+	},
+	"pinned_build_system": "",
+	"project": "eden.sublime-project",
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"celltypes",
+				"client/celltypes.ts"
+			],
+			[
+				"envplanes",
+				"client/envplanes.ts"
+			],
+			[
+				"wall.ts",
+				"client/wall.ts"
+			],
+			[
+				"twgl.",
+				"client/lib/twgl-full.js"
+			],
+			[
+				"eden.ts",
+				"client/eden.ts"
+			],
+			[
+				"eden.html",
+				"client/eden.html"
+			],
+			[
+				"server.ts",
+				"server/server.ts"
+			],
+			[
+				"march.ts",
+				"client/march.ts"
+			],
+			[
+				"floor.ts",
+				"client/floor.ts"
+			],
+			[
+				"ground.ts",
+				"client/ground.ts"
+			],
+			[
+				"world.ts",
+				"client/world.ts"
+			],
+			[
+				"floor",
+				"client/floor.ts"
+			],
+			[
+				"blocktypes",
+				"client/blocktypes.ts"
+			],
+			[
+				"camera.ts",
+				"client/camera.ts"
+			],
+			[
+				"math.ts",
+				"client/math.ts"
+			],
+			[
+				"twgl",
+				"client/lib/twgl-full.js"
+			],
+			[
+				"blocks.ts",
+				"client/blocks.ts"
+			],
+			[
+				"ground",
+				"client/ground.ts"
+			],
+			[
+				"csg.ts",
+				"client/csg.ts"
+			],
+			[
+				"twgl.js",
+				"client/lib/twgl-full.js"
+			],
+			[
+				"wut.ts",
+				"server/wut.ts"
+			],
+			[
+				"ws.d.ts",
+				"server/ws.d.ts"
+			],
+			[
+				"ws.d",
+				"server/ws.d.ts"
+			],
+			[
+				"node.ts",
+				"server/node.d.ts"
+			],
+			[
+				"node.",
+				"server/node.d.ts"
+			],
+			[
+				"modifyplan",
+				"views/admin/ModifyPlan.htmto"
+			],
+			[
+				"billing.htmto",
+				"views/admin/ConfigureBilling.htmto"
+			],
+			[
+				"planedit",
+				"ts/ui/plans/planeditor.ts"
+			],
+			[
+				"pricing.main.ts",
+				"appengine/admin/s/pricing.main.ts"
+			],
+			[
+				"clientapi.ts",
+				"ts/ui/api/clientapi.ts"
+			],
+			[
+				"planeditor.ts",
+				"ts/ui/plans/planeditor.ts"
+			],
+			[
+				"billing.ts",
+				"ts/ui/settings/billing.ts"
+			],
+			[
+				"admin/index.main.ts",
+				"appengine/admin/s/index.main.ts"
+			],
+			[
+				"fs_pricin",
+				"ts/goimports/fs_api_pricingapi.ts"
+			],
+			[
+				"team.ts",
+				"ts/ui/settings/team.ts"
+			],
+			[
+				"shared.scss",
+				"views/shared.scss"
+			],
+			[
+				"plane",
+				"views/ui/plans/PlanEditor.htmto"
+			],
+			[
+				"pricingapi.go",
+				"go/src/fs/api/pricingapi/tsexport.go"
+			],
+			[
+				"fs_",
+				"ts/goimports/fs_api_pricingapi.ts"
+			],
+			[
+				"utils.ts",
+				"ts/util/utils.ts"
+			],
+			[
+				"subscription",
+				"go/src/fs/frontend/billing/subscription.go"
+			],
+			[
+				"settings.ts",
+				"ts/ui/settings/settings.ts"
+			],
+			[
+				"settings/ts",
+				"views/ui/settings/team/SeatConfirmation.htmto"
+			],
+			[
+				"clientapi.go",
+				"go/src/fs/frontend/clientapi/clientapi.go"
+			],
+			[
+				"ui/handlers.go",
+				"go/src/fs/frontend/ui/handlers.go"
+			],
+			[
+				"notifications.go",
+				"go/src/fs/frontend/alerts/notifications.go"
+			],
+			[
+				"notifications.ts",
+				"ts/ui/notifications.ts"
+			],
+			[
+				"app.ts",
+				"ts/ui/app.ts"
+			],
+			[
+				"souq.go",
+				"go/src/fs/frontend/souq/souq.go"
+			],
+			[
+				"charges.go",
+				"go/src/fs/pricing/charges.go"
+			],
+			[
+				"store.go",
+				"go/src/fs/frontend/store/store.go"
+			],
+			[
+				"store_tes",
+				"go/src/fs/frontend/store/store_test.go"
+			],
+			[
+				"stripeclient",
+				"go/src/fs/frontend/billing/stripeclient.go"
+			],
+			[
+				"admin/billing.go",
+				"go/src/fs/frontend/admin/billing.go"
+			],
+			[
+				"admin/api",
+				"go/src/fs/frontend/admin/api.go"
+			],
+			[
+				"quotas.go",
+				"go/src/fs/frontend/tasks/tasksimpl/quotas.go"
+			],
+			[
+				"frontend/billing.go",
+				"go/src/fs/frontend/billing/billing.go"
+			],
+			[
+				"clientapi.",
+				"ts/ui/api/clientapi.ts"
+			],
+			[
+				"provision.go",
+				"go/src/fs/frontend/store/provision.go"
+			],
+			[
+				"provision",
+				"go/src/fs/frontend/store/provision.go"
+			],
+			[
+				"datastore.go",
+				"go/src/google.golang.org/appengine/datastore/datastore.go"
+			],
+			[
+				"migrators.go",
+				"go/src/fs/frontend/store/migrators.go"
+			],
+			[
+				"schema.go",
+				"go/src/fs/shared/schema/schema.go"
+			],
+			[
+				"datastore/doc.go",
+				"go/src/google.golang.org/appengine/datastore/doc.go"
+			],
+			[
+				"fs_apipric",
+				"ts/goimports/fs_api_pricingapi.ts"
+			],
+			[
+				"orgactions/billing",
+				"ts/ui/admin/index/orgactions/billing.ts"
+			],
+			[
+				"pricing.js",
+				"dist/admin/s/pricing.js"
+			],
+			[
+				"fs_pr",
+				"ts/goimports/fs_api_pricingapi.ts"
+			],
+			[
+				"gulp",
+				"gulpfile.babel.js"
+			],
+			[
+				"fs.py",
+				"python/lib/fs.py"
+			],
+			[
+				"productionize",
+				"tools/productionize"
+			],
+			[
+				"ui/handers.go",
+				"go/src/fs/frontend/ui/handlers.go"
+			],
+			[
+				"subscription.go",
+				"go/src/fs/frontend/billing/subscription.go"
+			],
+			[
+				"packs.go",
+				"go/src/fs/shared/flags/packs.go"
+			],
+			[
+				"fs_api",
+				"ts/goimports/fs_api_pricingapi.ts"
+			],
+			[
+				"gaequick",
+				"go/src/fs/fstesting/gaequick/gaequick.go"
+			],
+			[
+				"roles.go",
+				"go/src/fs/shared/flags/roles.go"
+			],
+			[
+				"tsexport.go",
+				"go/src/fs/frontend/ui/tsexport.go"
+			],
+			[
+				"routes.go",
+				"appengine/app/routes.go"
+			],
+			[
+				"admin.go",
+				"go/src/fs/frontend/admin/admin.go"
+			],
+			[
+				"pricingapi",
+				"go/src/fs/api/pricingapi/tsexport.go"
+			],
+			[
+				"pricing.go",
+				"go/src/fs/pricing/pricing.go"
+			],
+			[
+				"billing/pricing.go",
+				"go/src/fs/frontend/billing/pricing.go"
+			],
+			[
+				"subscip",
+				"go/src/fs/frontend/billing/subscription.go"
+			],
+			[
+				"stripeclient.go",
+				"go/src/fs/frontend/billing/stripeclient.go"
+			],
+			[
+				"admin/billing",
+				"go/src/fs/frontend/admin/billing.go"
+			],
+			[
+				"fsoauth2",
+				"go/src/fs/frontend/souq/fsoauth2/fsoauth2.go"
+			],
+			[
+				"recorder.ts",
+				"ts/recording/recorder.ts"
+			],
+			[
+				"org.go",
+				"go/src/fs/search/org/org.go"
+			],
+			[
+				"servicetypes",
+				"python/lib/servicetypes.py"
+			],
+			[
+				"services.py",
+				"services.py"
+			],
+			[
+				"flags.ts",
+				"ts/ui/flags.ts"
+			],
+			[
+				"flags.go",
+				"go/src/fs/shared/flags/flags.go"
+			],
+			[
+				"header.html",
+				"appengine/app/tmpl/shared/header.html"
+			],
+			[
+				"header.",
+				"appengine/admin/tmpl/header.inc.html"
+			],
+			[
+				"login.htm",
+				"appengine/app/tmpl/login.base.html"
+			],
+			[
+				"cypre",
+				"cypress.json"
+			],
+			[
+				"integration.go",
+				"go/src/fs/fstesting/integration/integration.go"
+			],
+			[
+				"integration_test",
+				"go/src/google.golang.org/cloud/datastore/integration_test.go"
+			],
+			[
+				"admin/routes.go",
+				"appengine/admin/routes.go"
+			],
+			[
+				"admin/admin.go",
+				"go/src/fs/frontend/admin/admin.go"
+			],
+			[
+				"billing/billing.go",
+				"go/src/fs/frontend/billing/billing.go"
+			],
+			[
+				"chagnequotas.htmto",
+				"views/admin/ChangeQuotas.htmto"
+			],
+			[
+				"settings/billing.ts",
+				"ts/ui/settings/billing.ts"
+			],
+			[
+				"api/clientapi.ts",
+				"ts/ui/api/clientapi.ts"
+			],
+			[
+				"index/adminapi",
+				"ts/ui/admin/index/adminapi.ts"
+			],
+			[
+				"store/store.go",
+				"go/src/fs/frontend/store/store.go"
+			],
+			[
+				"subs",
+				"go/src/fs/frontend/billing/subscription.go"
+			],
+			[
+				"export.go",
+				"go/src/fs/frontend/dataexport/dataexport.go"
+			],
+			[
+				"inviteusers",
+				"views/ui/settings/team/InviteUsers.htmto"
+			],
+			[
+				"customvars.go",
+				"go/src/fs/shared/customvars/customvars.go"
+			],
+			[
+				"updateem",
+				"views/ui/plans/UpdateEmail.htmto"
+			],
+			[
+				"dialogs.ts",
+				"ts/ui/dialogs.ts"
+			],
+			[
+				"settings.scss",
+				"views/ui/settings/settings.scss"
+			],
+			[
+				"updateemail",
+				"views/ui/plans/UpdateEmail.htmto"
+			],
+			[
+				"mvp.ts",
+				"ts/ui/mvp.ts"
+			],
+			[
+				"invitehtmto",
+				"views/ui/settings/team/InviteUsers.htmto"
+			],
+			[
+				"views.ts",
+				"gen/views.ts"
+			],
+			[
+				"ctx.ts",
+				"ts/ui/ctx.ts"
+			],
+			[
+				"integrationdetail.htm",
+				"views/ui/settings/integrations/IntegrationDetail.htmto"
+			],
+			[
+				"integrationdet",
+				"views/ui/settings/integrations/IntegrationDetail.htmto"
+			],
+			[
+				"integrationdetail",
+				"ts/ui/settings/integrationdetail.ts"
+			],
+			[
+				"cookie.go",
+				"go/src/fs/frontend/auth/cookie.go"
+			],
+			[
+				"resources.go",
+				"go/src/fs/frontend/resources/resources.go"
+			],
+			[
+				"util.go",
+				"go/src/fs/frontend/util/util.go"
+			],
+			[
+				"billing/billin.ggo",
+				"go/src/fs/frontend/billing/billing.go"
+			],
+			[
+				"clientapi/client",
+				"go/src/fs/frontend/clientapi/clientapi.go"
+			],
+			[
+				"flags_test.main.ts",
+				"ts/ui/flags_test.main.ts"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"j1",
+				"/Users/jgw/j15r.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 295.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

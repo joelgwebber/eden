@@ -1,3 +1,0 @@
-#!/bin/sh
-tsc --out server.js --target ES5 server.ts
-node server.js

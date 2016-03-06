@@ -22,7 +22,7 @@ module Eden {
     private _meshes: twgl.BufferInfo[] = [];
     private _dirty: boolean;
 
-    constructor() {
+    constructor(private _cx: number, private _cy: number, private _cz: number) {
       for (var x = 0; x < ChunkSize; x++) {
         for (var y = 0; y < ChunkSize; y++) {
           for (var z = 0; z < ChunkSize; z++) {
@@ -39,7 +39,7 @@ module Eden {
         u_ambient: [0.3, 0.3, 0.3],
         u_lightDir: v3.normalize([-1, -2, -3]),
         u_viewProjection: camera.viewProjection(),
-        u_model: m4.identity()
+        u_model: m4.translation([this._cx * ChunkInterior, this._cy * ChunkInterior, this._cz * ChunkInterior])
       };
 
       // Draw the terrain.
@@ -64,6 +64,22 @@ module Eden {
           }
         }
       }
+    }
+
+    setCells(cells: number[]) {
+      if (cells.length != ChunkSize3) {
+        throw "invalid cell count";
+      }
+
+      for (var i = 0; i < ChunkSize3; i++) {
+        this._cells[i] = cells[i];
+      }
+
+      this._dirty = true;
+    }
+
+    setActors(actors: Actor[]) {
+      // TODO: Not sure quite how we want to handle this.
     }
 
     cell(x: number, y: number, z: number): number {

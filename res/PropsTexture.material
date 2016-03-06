@@ -1,0 +1,10 @@
+{
+  "VertexShader": "@plain.vertex.glsl",
+  "FragmentShader": "@plain.fragment.glsl",
+  "CameraTransform": "camera",
+  "ModelTransform": "model",
+  "Samplers": [{
+    "Name": "tex",
+    "TextureFile": "Human_props_texture_high.png"
+  }]
+}

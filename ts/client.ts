@@ -8,6 +8,7 @@ module Eden {
   export class Client {
     private _sock: WebSocket;
 
+    private _actorId: number;
     private _world: World;
     private _camera: Camera;
 
@@ -19,6 +20,7 @@ module Eden {
       this._world = new World();
       this._camera = new Camera();
       this.connect();
+      this.render();
     }
 
     mouseMove(x: number, y: number) {
@@ -67,10 +69,36 @@ module Eden {
     private recvMessage(msg: Message) {
       console.log(msg);
       switch (msg.Type) {
-        case MessageTypePlayerState:
-          // Kick off rendering.
-          this.render();
+        case MessageTypeConnected:
+          this.handleConnected(msg.Connected);
           break;
+        case MessageTypeChunk:
+          this.handleChunk(msg.Chunk);
+          break;
+        case MessageTypeActorState:
+          this.handleActorState(msg.ActorState);
+          break;
+      }
+    }
+
+    private handleConnected(conn: MessageConnected) {
+      this._actorId = conn.ActorId;
+      this._target = [conn.Pos.X, conn.Pos.Y, conn.Pos.Z];
+    }
+
+    private handleChunk(chunk: MessageChunk) {
+      var loc = chunk.Loc;
+      this._world.setChunk(loc.X, loc.Y, loc.Z, chunk.Cells, chunk.Actors);
+    }
+
+    private handleActorState(state: MessageActorState) {
+      for (var i = 0; i < state.Actors.length; i++) {
+        var actor = state.Actors[i];
+        if (actor.Id == 0) {
+          this._target = [actor.Pos.X, actor.Pos.Y, actor.Pos.Z];
+        }
+
+        // ...
       }
     }
 

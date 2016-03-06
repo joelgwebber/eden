@@ -1,3 +1,5 @@
 .DS_Store
 web/eden.js
-eden
+client
+server
+.idea

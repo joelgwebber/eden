@@ -1,0 +1,4 @@
+Arcball: http://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Tutorial_Arcball
+Fluid dynamics book: http://ekaoktariyantonugroho.files.wordpress.com/2008/04/an-introduction-to-computational-fluid-dynamics-versteeg.pdf
+Fast int hash: http://preshing.com/20130107/this-hash-table-is-faster-than-a-judy-array/
+Fast allocator: http://g.oswego.edu/dl/html/malloc.html

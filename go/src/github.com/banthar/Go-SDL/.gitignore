@@ -1,0 +1,11 @@
+**~
+main
+**.[o86]
+.obj/
+**.cgo*.*
+**/_obj
+**/*.out
+test/test
+shoot.png
+**_cgo*
+*.so

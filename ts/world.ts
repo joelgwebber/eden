@@ -18,7 +18,7 @@ module Eden {
   export var ChunkSize2 = 1 << ChunkExp2;
   export var ChunkSize3 = 1 << ChunkExp3;
 
-  var ChunkInterior = ChunkSize - 4;
+  export var ChunkInterior = ChunkSize - 4;
 
   function chunkKey(cx: number, cy: number, cz: number): string {
     return "" + cx + ":" + cy + ":" + cz;
@@ -28,23 +28,28 @@ module Eden {
     private _chunks: { [key: number]: Chunk } = {};
 
     constructor() {
-      this.ensureChunk(0, 0, 0);
     }
 
     chunk(cx: number, cy: number, cz: number): Chunk {
       return this._chunks[chunkKey(cx, cy, cz)];
     }
 
-    chunkForCell(x: number, y: number, z: number): Chunk {
+    chunkForPos(x: number, y: number, z: number): Chunk {
       return this.chunk(Math.floor(x / ChunkInterior), Math.floor(y / ChunkInterior), Math.floor(z / ChunkInterior));
     }
 
     cell(x: number, y: number, z: number): number {
-      return this.chunkForCell(x, y, z).cell(x % ChunkInterior, y % ChunkInterior, z % ChunkInterior);
+      return this.chunkForPos(x, y, z).cell(x % ChunkInterior, y % ChunkInterior, z % ChunkInterior);
     }
 
     setCell(x: number, y: number, z: number, cell: number) {
-      this.chunkForCell(x, y, z).setCell(x % ChunkInterior, y % ChunkInterior, z % ChunkInterior, cell);
+      this.chunkForPos(x, y, z).setCell(x % ChunkInterior, y % ChunkInterior, z % ChunkInterior, cell);
+    }
+
+    setChunk(cx: number, cy: number, cz: number, cells: number[], actors: Actor[]) {
+      var chunk = this.ensureChunk(cx, cy, cz);
+      chunk.setCells(cells);
+      chunk.setActors(actors);
     }
 
     update() {
@@ -60,11 +65,12 @@ module Eden {
       }
     }
 
-    ensureChunk(cx: number, cy: number, cz: number) {
+    ensureChunk(cx: number, cy: number, cz: number): Chunk {
       var key = chunkKey(cx, cy, cz);
       if (!(key in this._chunks)) {
-        this._chunks[key] = new Chunk();
+        this._chunks[key] = new Chunk(cx, cy, cz);
       }
+      return this._chunks[key];
     }
   }
 }

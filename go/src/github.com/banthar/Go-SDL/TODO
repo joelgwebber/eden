@@ -1,0 +1,7 @@
+* Windows support. Since Go supports GUI applications now, this should be possible.
+* Mac support. Go-SDL has been reported to work with X11 video driver (SDL_VIDEODRIVER=x11). Default (Quartz) driver doesn't work.
+* missing functions, threads and file access are useless in Go, but there are probably some usefull functions left
+* add joystick support
+* other SDL libraries: SGE, gfx ...
+* more/better test/example apps
+* Add real ColorModel support to Surfaces.

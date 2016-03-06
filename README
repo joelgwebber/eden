@@ -1,0 +1,11 @@
+# Project Eden
+
+This is just me toying around with some ideas for an open-world sandbox game,
+primarily as a way to leverage my daughter's Minecraft obsession into something
+more productive.
+
+It contains a simple server, a slightly-working browser client, and not-working-at-all
+Go and C++ clients.
+
+Don't build this and expect it to do very much yet. When there's something actually
+worth playing with, I'll update the README to reflect that.

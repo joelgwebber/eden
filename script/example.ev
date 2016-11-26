@@ -29,7 +29,8 @@ when kill (enemy Enemy):
 # or                 [:collision player animal]
 when collision (player Player, animal Animal):
   [:kill animal]
-  [player :score] <- [player :score] + 1
+  # [player :score] <- [player :score] + 1
+  [player :set-score [[player :score] :plus 1]]
 
 when collision (player Player, enemy Enemy):
   [player :health] <- [player :health] - 1
@@ -56,8 +57,8 @@ when start:
 
 when addEnemy:
   var enemy <- [:make Enemy]
-  [:enemy x] <- [:random 100]
-  [:enemy y] <- [:random 100]
+  [enemy :x] <- [:random 100]
+  [enemy :y] <- [:random 100]
   [:add enemy :to enemies]
 
 when addAnimal:
@@ -67,3 +68,4 @@ when addAnimal:
   [:add animal :to animals]
 
 [player :collidesWith [enemies :at 0]]
+

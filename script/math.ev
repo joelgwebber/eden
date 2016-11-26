@@ -1,0 +1,19 @@
+let TAU = 6.283185307
+let PI = TAU / 2
+
+when (x number) :eq (y :number) -> bool: native
+when (x number) :gt (y :number) -> bool: native
+when (x number) :lt (y :number) -> bool: native
+
+when (x number) :add (y :number) -> number: native
+when (x number) :sub (y :number) -> number: native
+when (x number) :mul (y :number) -> number: native
+when (x number) :div (y :number) -> number: native
+when (x number) :mod (y :number) -> number: native
+
+when sin (x number) -> number: native
+when cos (x number) -> number: native
+when tan (x number) -> number: native
+# ...
+
+when random -> number: native

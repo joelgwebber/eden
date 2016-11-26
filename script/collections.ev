@@ -2,7 +2,7 @@
 object List(T): native
 when add (obj T) to (list List): native
 when insert (obj T) into (list List) before (befObj T): native
-when at (index number): native
+when (list List) at (index number): native
 
 # Map
 object Map(K, V): native

@@ -1,0 +1,31 @@
+World structure use-cases:
+
+- Floor/ground:
+  Two types, with transitions
+  Maybe handle things like rugs, alternate flora
+
+- Wall structure (presence for all four possible walls)
+  One wall type per cell?
+  Wall decorations:
+    Windows
+    Torches, banners.
+    Shelves, etc. (could just be static container objects)
+
+- Static objects:
+  Tables
+  Chairs (people sitting in them?)
+    Direction?
+  Stairs
+    Direction + up/down?
+  Containers (chests, etc).
+  Trees, other large plants
+
+- Dynamic objects:
+  Inventory objects, food, etc.
+  Small containers
+  Handle things like plates + food?
+
+- Actors:
+  Player, non-player
+  Maybe allow two per cell?
+

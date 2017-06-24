@@ -1,0 +1,5 @@
+.idea
+*.iml
+server
+go/pkg
+go/bin

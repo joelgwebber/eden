@@ -1,5 +1,5 @@
 .DS_Store
 web/eden.js
-client
-server
+ts/node_modules
+eden
 .idea

@@ -1,6 +1,5 @@
-/// <reference path="lib/twgl.d.ts"/>
+export var gl: WebGLRenderingContext;
 
-module Eden {
-
-  export var gl: WebGLRenderingContext;
+export function initGlobals(canvas: HTMLCanvasElement) {
+  gl = twgl.getWebGLContext(canvas);
 }

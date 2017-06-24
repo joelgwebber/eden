@@ -66,10 +66,10 @@ namespace Eden {
       var idx = verts.length / 3;
       for (var j = 0; j < 3; j++) {
         var key = vertKey(triVerts[j]);
-        if (key in vertCache) {
-          // Already have a vertex at roughly this position.
-          indices.push(vertCache[key]);
-        } else {
+        // if (key in vertCache) {
+        //   // Already have a vertex at roughly this position.
+        //   indices.push(vertCache[key]);
+        // } else {
           // New vertex.
           vertCache[key] = idx;
           indices.push(idx);
@@ -77,7 +77,7 @@ namespace Eden {
           verts.push(triVerts[j][1]);
           verts.push(triVerts[j][2]);
           idx++;
-        }
+        // }
       }
     }
   }

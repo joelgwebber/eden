@@ -1,7 +1,6 @@
 /// <reference path="lib/twgl.d.ts"/>
 /// <reference path="globals.ts"/>
 /// <reference path="client.ts"/>
-/// <reference path="envplanes.ts"/>
 /// <reference path="csg.ts"/>
 /// <reference path="chunk.ts"/>
 /// <reference path="arcball.ts"/>
@@ -20,8 +19,6 @@ module Eden {
     gl = twgl.getWebGLContext(canvas);
 
     // Order matters. Yuck.
-    initEnvPlanes();
-    initWall();
     initWorldRendering();
 
     // Kick off the client and hook events.

@@ -1,7 +1,6 @@
 /// <reference path="globals.ts"/>
 /// <reference path="celltypes.ts"/>
 /// <reference path="terrain.ts"/>
-/// <reference path="wall.ts"/>
 /// <reference path="floor.ts"/>
 
 module Eden {
@@ -13,11 +12,11 @@ module Eden {
   }
 
   export function envOfs(x: number, y: number, z: number): number {
-    return (y * 25) + (z * 5) + x;
+    return (y * 9) + (z * 3) + x;
   }
 
   export function envOfsCenter(dx: number, dy: number, dz: number): number {
-    return 62 + (dy * 25) + (dz * 5) + dx;
+    return 13 + (dy * 9) + (dz * 3) + dx;
   }
 
   export function geomForEnv(x: number, y: number, z: number, env: number[]): twgl.BufferInfo {

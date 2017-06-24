@@ -18,7 +18,7 @@ module Eden {
   export var ChunkSize2 = 1 << ChunkExp2;
   export var ChunkSize3 = 1 << ChunkExp3;
 
-  export var ChunkInterior = ChunkSize - 4;
+  export var ChunkInterior = ChunkSize - 2;
 
   function chunkKey(cx: number, cy: number, cz: number): string {
     return "" + cx + ":" + cy + ":" + cz;

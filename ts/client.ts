@@ -42,7 +42,7 @@ module Eden {
           var cell = this._world.cell(t[0], t[1], t[2]);
           this._world.setCell(t[0], t[1], t[2], (cell != CellAir) ? CellAir : makeCell(CellWall));
           break;
-      } 
+      }
     }
 
     private connect() {
@@ -67,12 +67,17 @@ module Eden {
     }
 
     private recvMessage(msg: Message) {
-      console.log(msg);
+      // console.log(msg);
       switch (msg.Type) {
         case MessageTypeConnected:
           this.handleConnected(msg.Connected);
           break;
         case MessageTypeChunk:
+          if ((msg.Chunk.Loc.X >= 0) &&
+              (msg.Chunk.Loc.Y >= 0) &&
+              (msg.Chunk.Loc.Z >= 0)) {
+            console.log(msg.Chunk);
+          }
           this.handleChunk(msg.Chunk);
           break;
         case MessageTypeActorState:

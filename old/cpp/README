@@ -1,0 +1,2 @@
+Early prototype of a C++ client using the Urho3D engine. Not actually integrated with the rest of the code in any meaningful
+way; I just didn't want to throw it out.

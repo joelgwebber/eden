@@ -21,9 +21,9 @@ module Eden {
     var verts = <number[]>arrays["position"];
     var indices = <number[]>arrays["indices"];
     var vertCache: {[key: number]: number} = {}
-    for (var y = 2; y < ChunkSize - 4; y++) {
-      for (var z = 2; z < ChunkSize - 4; z++) {
-        for (var x = 2; x < ChunkSize - 4; x++) {
+    for (var y = 1; y < ChunkSize - 1; y++) {
+      for (var z = 1; z < ChunkSize - 1; z++) {
+        for (var x = 1; x < ChunkSize - 1; x++) {
           // TODO: This is grossly inefficient. We can do a lot better than reusing the 'env' logic.
           var env = makeEnv(cells, x, y, z);
           var cube = fillCube(env);

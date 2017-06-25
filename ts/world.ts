@@ -2,10 +2,10 @@ import {Chunk} from "./chunk";
 import {Camera} from "./camera";
 import * as proto from "./protocol";
 
+import Vec3 = twgl.Vec3;
+import Mat4 = twgl.Mat4;
 import v3 = twgl.v3;
 import m4 = twgl.m4;
-import Vec3 = twgl.v3.Vec3;
-import Mat4 = twgl.m4.Mat4;
 
 export var ChunkExp = 4;
 export var ChunkExp2 = ChunkExp * 2;

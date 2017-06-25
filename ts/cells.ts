@@ -1,6 +1,6 @@
-import {gl} from "./globals";
 import {Polygon, Vector} from "./csg";
-import Vec3 = twgl.v3.Vec3;
+import {gl} from "./eden";
+import Vec3 = twgl.Vec3;
 
 var _geomCache: { [key: string]: twgl.BufferInfo } = {};
 

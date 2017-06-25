@@ -1,20 +1,14 @@
-import {gl} from "./globals";
 import {ChunkExp, ChunkExp2, ChunkInterior, ChunkSize, ChunkSize3} from "./world";
 import {renderTerrain} from "./terrain";
 import {Camera} from "./camera";
+import {gl, worldProgram} from "./eden";
 import * as proto from "./protocol";
 import * as cells from "./cells";
 
+import Vec3 = twgl.Vec3;
+import Mat4 = twgl.Mat4;
 import v3 = twgl.v3;
 import m4 = twgl.m4;
-import Vec3 = twgl.v3.Vec3;
-import Mat4 = twgl.m4.Mat4;
-
-var worldPI: twgl.ProgramInfo;
-
-export function initWorldRendering() {
-  worldPI = twgl.createProgramInfo(gl, ["worldVS", "worldFS"]);
-}
 
 export class Chunk {
   private _cells = new Uint32Array(ChunkSize3);
@@ -41,9 +35,9 @@ export class Chunk {
     };
 
     // Draw the terrain.
-    gl.useProgram(worldPI.program);
-    twgl.setBuffersAndAttributes(gl, worldPI, this._terrain);
-    twgl.setUniforms(worldPI, uniforms);
+    gl.useProgram(worldProgram.program);
+    twgl.setBuffersAndAttributes(gl, worldProgram, this._terrain);
+    twgl.setUniforms(worldProgram, uniforms);
     gl.drawElements(gl.TRIANGLES, this._terrain.numElements, gl.UNSIGNED_SHORT, 0);
 
     // Draw the individual cells.
@@ -54,9 +48,9 @@ export class Chunk {
           var meshIdx = cellIndex(x, y, z);
           var bi = this._meshes[meshIdx];
           if (bi) {
-            twgl.setBuffersAndAttributes(gl, worldPI, bi);
+            twgl.setBuffersAndAttributes(gl, worldProgram, bi);
             uniforms["u_model"] = m4.translation([x, y, z]);
-            twgl.setUniforms(worldPI, uniforms);
+            twgl.setUniforms(worldProgram, uniforms);
             gl.drawElements(gl.TRIANGLES, bi.numElements, gl.UNSIGNED_SHORT, 0);
           }
         }

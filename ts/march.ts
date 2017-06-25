@@ -2,8 +2,8 @@ import * as cells from "./cells";
 
 import v3 = twgl.v3;
 import m4 = twgl.m4;
-import Vec3 = twgl.v3.Vec3;
-import Mat4 = twgl.m4.Mat4;
+import Vec3 = twgl.Vec3;
+import Mat4 = twgl.Mat4;
 
 export function fillCube(env: number[]): number[] {
   var cube: number[] = new Array(8);

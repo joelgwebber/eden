@@ -1,58 +1,8 @@
-declare namespace twgl.v3 {
-  type Vec3 = number[] | Float32Array;
+declare namespace twgl {
 
-  function add(a: Vec3, b: Vec3, dst?: Vec3): Vec3;
-  function copy(v: Vec3, dst?: Vec3): Vec3;
-  function create(): Vec3;
-  function cross(a: Vec3, b: Vec3, dst?: Vec3): Vec3;
-  function divide(a: Vec3, b: Vec3, dst?: Vec3): Vec3;
-  function divScalar(v: Vec3, k: number, dst?: Vec3): Vec3;
-  function dot(a: Vec3, b: Vec3): number;
-  function length(v: Vec3): number;
-  function lengthSq(v: Vec3): number;
-  function lerp(a: Vec3, b: Vec3, t: number, dst?: Vec3);
-  function mulScalar(v: Vec3, k: number, dst?: Vec3): Vec3;
-  function multiply(a: Vec3, b: Vec3, dst?: Vec3): Vec3;
-  function negate(v: Vec3, dst?: Vec3): Vec3;
-  function normalize(a: Vec3, dst?: Vec3): Vec3;
-  function subtract(a: Vec3, b: Vec3, dst?: Vec3): Vec3;
-}
-
-declare namespace twgl.m4 {
   type Vec3 = number[] | Float32Array;
   type Mat4 = number[] | Float32Array;
 
-  function axisRotate(m: Mat4, axis: number, angleInRadians: number, dst?: Mat4): Mat4;
-  function axisRotation(axis: Vec3, angleInRadians: number, dst?: Mat4): Mat4;
-  function copy(m: Mat4, dst?: Mat4): Mat4;
-  function frustum(left: number, right: number, bottom: number, top: number, near: number, far: number, dst?: Mat4): Mat4;
-  function getAxis(m: Mat4, axis: Vec3): Vec3;
-  function getTranslation(m: Mat4): Vec3;
-  function identity(dst?: Mat4): Mat4;
-  function inverse(m: Mat4, dst?: Mat4): Mat4;
-  function lookAt(eye: Vec3, target: Vec3, up: Vec3, dst?: Mat4): Mat4;
-  function multiply(a: Mat4, b: Mat4, dst?: Mat4): Mat4;
-  function negate(m: Mat4, dst?: Mat4): Mat4;
-  function ortho(left: number, right: number, top: number, bottom: number, near: number, far: number, dst?: Mat4): Mat4;
-  function perspective(fieldOfViewYInRadians: number, aspect: number, zNear: number, zFar: number, dst?: Mat4): Mat4;
-  function rotateX(m: Mat4, angleInRadians: number, dst?: Mat4): Mat4;
-  function rotateY(m: Mat4, angleInRadians: number, dst?: Mat4): Mat4;
-  function rotateZ(m: Mat4, angleInRadians: number, dst?: Mat4): Mat4;
-  function rotationX(angleInRadians: number, dst?: Mat4): Mat4;
-  function rotationY(angleInRadians: number, dst?: Mat4): Mat4;
-  function rotationZ(angleInRadians: number, dst?: Mat4): Mat4;
-  function scale(m: Mat4, v: Vec3, dst?: Mat4): Mat4;
-  function scaling(v: Vec3, dst?: Mat4): Mat4;
-  function setTranslation(a, v: Vec3, dst?: Mat4): Mat4;
-  function transformDirection(m: Mat4, v: Vec3, dst?: Vec3): Vec3;
-  function transformNormal(m: Mat4, v: Vec3, dst?: Vec3): Vec3;
-  function transformPoint(m: Mat4, v: Vec3, dst?: Vec3): Vec3;
-  function translate(m: Mat4, v: Vec3, dst?: Mat4): Mat4;
-  function translation(v: Vec3, dst?: Mat4): Mat4;
-  function transpose(m: Mat4, dst?: Mat4): Mat4;
-}
-
-declare namespace twgl {
   type Arrays = {[name: string]: ArraySpec};
   type ArraySpec = number[] | ArrayBuffer | FullArraySpec;
 
@@ -178,51 +128,100 @@ declare namespace twgl {
   function setTextureParameters(gl: WebGLRenderingContext, tex: WebGLTexture, options: TextureOptions);
   function setTextureTo1PixelColor(gl: WebGLRenderingContext, tex: WebGLTexture, options?: TextureOptions);
   function setUniforms(setters: ProgramInfo | {[name: string]: (x: any) => void}, values: {[name: string]: any});
-}
 
-declare namespace twgl.primitives {
-  function create3DFBufferInfo(gl): BufferInfo
-  function create3DFBuffers(gl): { [name: string]: WebGLBuffer};
-  function create3DFVertices(): { [name: string]: ArrayBuffer};
-  function createCresentBufferInfo(gl, verticalRadius, outerRadius, innerRadius, thickness, subdivisionsDown, subdivisionsThick, startOffset, endOffset): BufferInfo
-  function createCresentBuffers(gl, verticalRadius, outerRadius, innerRadius, thickness, subdivisionsDown, subdivisionsThick, startOffset, endOffset): { [name: string]: WebGLBuffer};
-  function createCresentVertices(verticalRadius, outerRadius, innerRadius, thickness, subdivisionsDown, subdivisionsThick, startOffset, endOffset): { [name: string]: ArrayBuffer};
-  function createCubeBufferInfo(gl, size): BufferInfo
-  function createCubeBuffers(gl, size): { [name: string]: WebGLBuffer};
-  function createCubeVertices(size): { [name: string]: ArrayBuffer};
-  function createCylinderBufferInfo(gl, radius, height, radialSubdivisions, verticalSubdivisions, topCap, bottomCap): BufferInfo
-  function createCylinderBuffers(gl, radius, height, radialSubdivisions, verticalSubdivisions, topCap, bottomCap): { [name: string]: WebGLBuffer};
-  function createCylinderVertices(radius, height, radialSubdivisions, verticalSubdivisions, topCap, bottomCap): { [name: string]: ArrayBuffer};
-  function createDiscBufferInfo(gl, radius, divisions, stacks, innerRadius, stackPower): BufferInfo
-  function createDiscBuffers(gl, radius, divisions, stacks, innerRadius, stackPower): { [name: string]: WebGLBuffer};
-  function createDiscVertices(radius, divisions, stacks, innerRadius, stackPower): { [name: string]: ArrayBuffer};
-  function createPlaneBufferInfo(gl, width, depth, subdivisionsWidth, subdivisionsDepth, matrix): BufferInfo;
-  function createPlaneBuffers(gl, width, depth, subdivisionsWidth, subdivisionsDepth, matrix): { [name: string]: WebGLBuffer};
-  function createPlaneVertices(width, depth, subdivisionsWidth, subdivisionsDepth, matrix): { [name: string]: ArrayBuffer};
-  function createSphereBufferInfo(gl, radius, subdivisionsAxis, subdivisionsHeight, opt_startLatitudeInRadians, opt_endLatitudeInRadians, opt_startLongitudeInRadians, opt_endLongitudeInRadians): BufferInfo
-  function createSphereBuffers(gl, radius, subdivisionsAxis, subdivisionsHeight, opt_startLatitudeInRadians, opt_endLatitudeInRadians, opt_startLongitudeInRadians, opt_endLongitudeInRadians): { [name: string]: WebGLBuffer};
-  function createSphereVertices(radius, subdivisionsAxis, subdivisionsHeight, opt_startLatitudeInRadians, opt_endLatitudeInRadians, opt_startLongitudeInRadians, opt_endLongitudeInRadians): {[name: string]: ArrayBuffer};
-  function createTorusBufferInfo(gl, radius, thickness, radialSubdivisions, bodySubdivisions, startAngle, endAngle): BufferInfo
-  function createTorusBuffers(gl, radius, thickness, radialSubdivisions, bodySubdivisions, startAngle, endAngle): {[name: string]: WebGLBuffer};
-  function createTorusVertices(radius, thickness, radialSubdivisions, bodySubdivisions, startAngle, endAngle): {[name: string]: ArrayBuffer};
-  function createTruncatedConeBufferInfo(gl, bottomRadius, topRadius, height, radialSubdivisions, verticalSubdivisions, opt_topCap, opt_bottomCap): BufferInfo
-  function createTruncatedConeBuffers(gl, bottomRadius, topRadius, height, radialSubdivisions, verticalSubdivisions, opt_topCap, opt_bottomCap): {[name: string]: WebGLBuffer};
-  function createTruncatedConeVertices(bottomRadius, topRadius, height, radialSubdivisions, verticalSubdivisions, opt_topCap, opt_bottomCap): {[name: string]: ArrayBuffer};
-  function createXYQuadBufferInfo(gl, size, xOffset, yOffset): {[name: string]: WebGLBuffer};
-  function createXYQuadBuffers(gl, size, xOffset, yOffset): BufferInfo
-  function createXYQuadVertices(size, xOffset, yOffset)
-  function deindexVertices(vertices): {[name: string]: ArrayBuffer};
-  function flattenNormals(vertices): {[name: string]: ArrayBuffer};
-  function makeRandomVertexColors(vertices, options): {[name: string]: ArrayBuffer};
-  function reorientDirections(array, matrix): number[] | ArrayBuffer;
-  function reorientNormals(array, matrix): number[] | ArrayBuffer;
-  function reorientPositions(array, matrix): number[] | ArrayBuffer;
-  function reorientVertices(arrays, matrix): { [name: string]: (number[] | ArrayBuffer) };
+  namespace v3 {
+    function add(a: Vec3, b: Vec3, dst?: Vec3): Vec3;
+    function copy(v: Vec3, dst?: Vec3): Vec3;
+    function create(): Vec3;
+    function cross(a: Vec3, b: Vec3, dst?: Vec3): Vec3;
+    function divide(a: Vec3, b: Vec3, dst?: Vec3): Vec3;
+    function divScalar(v: Vec3, k: number, dst?: Vec3): Vec3;
+    function dot(a: Vec3, b: Vec3): number;
+    function length(v: Vec3): number;
+    function lengthSq(v: Vec3): number;
+    function lerp(a: Vec3, b: Vec3, t: number, dst?: Vec3);
+    function mulScalar(v: Vec3, k: number, dst?: Vec3): Vec3;
+    function multiply(a: Vec3, b: Vec3, dst?: Vec3): Vec3;
+    function negate(v: Vec3, dst?: Vec3): Vec3;
+    function normalize(a: Vec3, dst?: Vec3): Vec3;
+    function subtract(a: Vec3, b: Vec3, dst?: Vec3): Vec3;
+  }
 
-  type RandomColorFunc = (ndx, channel) => number;
+  namespace m4 {
+    function axisRotate(m: Mat4, axis: number, angleInRadians: number, dst?: Mat4): Mat4;
+    function axisRotation(axis: Vec3, angleInRadians: number, dst?: Mat4): Mat4;
+    function copy(m: Mat4, dst?: Mat4): Mat4;
+    function frustum(left: number, right: number, bottom: number, top: number, near: number, far: number, dst?: Mat4): Mat4;
+    function getAxis(m: Mat4, axis: Vec3): Vec3;
+    function getTranslation(m: Mat4): Vec3;
+    function identity(dst?: Mat4): Mat4;
+    function inverse(m: Mat4, dst?: Mat4): Mat4;
+    function lookAt(eye: Vec3, target: Vec3, up: Vec3, dst?: Mat4): Mat4;
+    function multiply(a: Mat4, b: Mat4, dst?: Mat4): Mat4;
+    function negate(m: Mat4, dst?: Mat4): Mat4;
+    function ortho(left: number, right: number, top: number, bottom: number, near: number, far: number, dst?: Mat4): Mat4;
+    function perspective(fieldOfViewYInRadians: number, aspect: number, zNear: number, zFar: number, dst?: Mat4): Mat4;
+    function rotateX(m: Mat4, angleInRadians: number, dst?: Mat4): Mat4;
+    function rotateY(m: Mat4, angleInRadians: number, dst?: Mat4): Mat4;
+    function rotateZ(m: Mat4, angleInRadians: number, dst?: Mat4): Mat4;
+    function rotationX(angleInRadians: number, dst?: Mat4): Mat4;
+    function rotationY(angleInRadians: number, dst?: Mat4): Mat4;
+    function rotationZ(angleInRadians: number, dst?: Mat4): Mat4;
+    function scale(m: Mat4, v: Vec3, dst?: Mat4): Mat4;
+    function scaling(v: Vec3, dst?: Mat4): Mat4;
+    function setTranslation(a, v: Vec3, dst?: Mat4): Mat4;
+    function transformDirection(m: Mat4, v: Vec3, dst?: Vec3): Vec3;
+    function transformNormal(m: Mat4, v: Vec3, dst?: Vec3): Vec3;
+    function transformPoint(m: Mat4, v: Vec3, dst?: Vec3): Vec3;
+    function translate(m: Mat4, v: Vec3, dst?: Mat4): Mat4;
+    function translation(v: Vec3, dst?: Mat4): Mat4;
+    function transpose(m: Mat4, dst?: Mat4): Mat4;
+  }
 
-  interface RandomVerticesOptions {
-    vertsPerColor?: number;
-    rand?: RandomColorFunc;
+  namespace primitives {
+    function create3DFBufferInfo(gl): BufferInfo
+    function create3DFBuffers(gl): { [name: string]: WebGLBuffer};
+    function create3DFVertices(): { [name: string]: ArrayBuffer};
+    function createCresentBufferInfo(gl, verticalRadius, outerRadius, innerRadius, thickness, subdivisionsDown, subdivisionsThick, startOffset, endOffset): BufferInfo
+    function createCresentBuffers(gl, verticalRadius, outerRadius, innerRadius, thickness, subdivisionsDown, subdivisionsThick, startOffset, endOffset): { [name: string]: WebGLBuffer};
+    function createCresentVertices(verticalRadius, outerRadius, innerRadius, thickness, subdivisionsDown, subdivisionsThick, startOffset, endOffset): { [name: string]: ArrayBuffer};
+    function createCubeBufferInfo(gl, size): BufferInfo
+    function createCubeBuffers(gl, size): { [name: string]: WebGLBuffer};
+    function createCubeVertices(size): { [name: string]: ArrayBuffer};
+    function createCylinderBufferInfo(gl, radius, height, radialSubdivisions, verticalSubdivisions, topCap, bottomCap): BufferInfo
+    function createCylinderBuffers(gl, radius, height, radialSubdivisions, verticalSubdivisions, topCap, bottomCap): { [name: string]: WebGLBuffer};
+    function createCylinderVertices(radius, height, radialSubdivisions, verticalSubdivisions, topCap, bottomCap): { [name: string]: ArrayBuffer};
+    function createDiscBufferInfo(gl, radius, divisions, stacks, innerRadius, stackPower): BufferInfo
+    function createDiscBuffers(gl, radius, divisions, stacks, innerRadius, stackPower): { [name: string]: WebGLBuffer};
+    function createDiscVertices(radius, divisions, stacks, innerRadius, stackPower): { [name: string]: ArrayBuffer};
+    function createPlaneBufferInfo(gl, width, depth, subdivisionsWidth, subdivisionsDepth, matrix): BufferInfo;
+    function createPlaneBuffers(gl, width, depth, subdivisionsWidth, subdivisionsDepth, matrix): { [name: string]: WebGLBuffer};
+    function createPlaneVertices(width, depth, subdivisionsWidth, subdivisionsDepth, matrix): { [name: string]: ArrayBuffer};
+    function createSphereBufferInfo(gl, radius, subdivisionsAxis, subdivisionsHeight, opt_startLatitudeInRadians, opt_endLatitudeInRadians, opt_startLongitudeInRadians, opt_endLongitudeInRadians): BufferInfo
+    function createSphereBuffers(gl, radius, subdivisionsAxis, subdivisionsHeight, opt_startLatitudeInRadians, opt_endLatitudeInRadians, opt_startLongitudeInRadians, opt_endLongitudeInRadians): { [name: string]: WebGLBuffer};
+    function createSphereVertices(radius, subdivisionsAxis, subdivisionsHeight, opt_startLatitudeInRadians, opt_endLatitudeInRadians, opt_startLongitudeInRadians, opt_endLongitudeInRadians): {[name: string]: ArrayBuffer};
+    function createTorusBufferInfo(gl, radius, thickness, radialSubdivisions, bodySubdivisions, startAngle, endAngle): BufferInfo
+    function createTorusBuffers(gl, radius, thickness, radialSubdivisions, bodySubdivisions, startAngle, endAngle): {[name: string]: WebGLBuffer};
+    function createTorusVertices(radius, thickness, radialSubdivisions, bodySubdivisions, startAngle, endAngle): {[name: string]: ArrayBuffer};
+    function createTruncatedConeBufferInfo(gl, bottomRadius, topRadius, height, radialSubdivisions, verticalSubdivisions, opt_topCap, opt_bottomCap): BufferInfo
+    function createTruncatedConeBuffers(gl, bottomRadius, topRadius, height, radialSubdivisions, verticalSubdivisions, opt_topCap, opt_bottomCap): {[name: string]: WebGLBuffer};
+    function createTruncatedConeVertices(bottomRadius, topRadius, height, radialSubdivisions, verticalSubdivisions, opt_topCap, opt_bottomCap): {[name: string]: ArrayBuffer};
+    function createXYQuadBufferInfo(gl, size, xOffset, yOffset): {[name: string]: WebGLBuffer};
+    function createXYQuadBuffers(gl, size, xOffset, yOffset): BufferInfo
+    function createXYQuadVertices(size, xOffset, yOffset)
+    function deindexVertices(vertices): {[name: string]: ArrayBuffer};
+    function flattenNormals(vertices): {[name: string]: ArrayBuffer};
+    function makeRandomVertexColors(vertices, options): {[name: string]: ArrayBuffer};
+    function reorientDirections(array, matrix): number[] | ArrayBuffer;
+    function reorientNormals(array, matrix): number[] | ArrayBuffer;
+    function reorientPositions(array, matrix): number[] | ArrayBuffer;
+    function reorientVertices(arrays, matrix): { [name: string]: (number[] | ArrayBuffer) };
+
+    type RandomColorFunc = (ndx, channel) => number;
+
+    interface RandomVerticesOptions {
+      vertsPerColor?: number;
+      rand?: RandomColorFunc;
+    }
   }
 }

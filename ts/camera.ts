@@ -1,8 +1,7 @@
-
+import Vec3 = twgl.Vec3;
+import Mat4 = twgl.Mat4;
 import v3 = twgl.v3;
 import m4 = twgl.m4;
-import Vec3 = twgl.v3.Vec3;
-import Mat4 = twgl.m4.Mat4;
 
 export class Camera {
   private _mat = m4.identity();

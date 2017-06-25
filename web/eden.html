@@ -39,6 +39,10 @@
   </script>
 
   <script src="lib/twgl-full.js"></script>
-  <script src="eden.js"></script>
+  <script>
+    var s = document.createElement("script");
+    s.src = (location.search.indexOf("?dev") === 0) ? "//localhost:8080/eden.js" : "eden.js";
+    document.body.appendChild(s);
+  </script>
 </body>
 </html>

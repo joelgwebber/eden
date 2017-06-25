@@ -1,11 +1,11 @@
+import {gl, View} from "./eden";
 import {World} from "./world";
 import {Camera} from "./camera";
-import {gl} from "./globals";
 import * as key from "./keys"
 import * as proto from "./protocol";
 import * as cells from "./cells";
 
-export class Client {
+export class Client implements View {
   private _sock: WebSocket;
 
   private _actorId: number;
@@ -19,8 +19,13 @@ export class Client {
   constructor(private _name: string) {
     this._world = new World();
     this._camera = new Camera();
+  }
+
+  create() {
     this.connect();
-    this.render();
+  }
+
+  destroy() {
   }
 
   mouseMove(x: number, y: number) {
@@ -28,9 +33,9 @@ export class Client {
     this._phi   = y / 100;
   }
 
-  keyDown(code: number) {
+  keyDown(keyCode: number) {
     var t = this._target;
-    switch (code) {
+    switch (keyCode) {
       case key.KeyW: t[2] -= 1; break;
       case key.KeyS: t[2] += 1; break;
       case key.KeyA: t[0] -= 1; break;
@@ -67,17 +72,11 @@ export class Client {
   }
 
   private recvMessage(msg: proto.Message) {
-    // console.log(msg);
     switch (msg.Type) {
       case proto.MessageTypeConnected:
         this.handleConnected(msg.Connected);
         break;
       case proto.MessageTypeChunk:
-        if ((msg.Chunk.Loc.X >= 0) &&
-            (msg.Chunk.Loc.Y >= 0) &&
-            (msg.Chunk.Loc.Z >= 0)) {
-          console.log(msg.Chunk);
-        }
         this.handleChunk(msg.Chunk);
         break;
       case proto.MessageTypeActorState:
@@ -107,9 +106,7 @@ export class Client {
     }
   }
 
-  private render() {
-    requestAnimationFrame(() => { this.render(); });
-
+  render() {
     var t = this._target;
     var cx = 8 * Math.cos(this._theta);
     var cy = 6;
@@ -117,8 +114,6 @@ export class Client {
     this._camera.setPosition([t[0] + cx, t[1] + cy, t[2] + cz]);
     this._camera.lookAt([t[0], t[1], t[2]], [0, 1, 0]);
 
-    gl.canvas.width = window.innerWidth;
-    gl.canvas.height = window.innerHeight;
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     this._camera.setAspect(gl.canvas.offsetWidth / gl.canvas.offsetHeight);

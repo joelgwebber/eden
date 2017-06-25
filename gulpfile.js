@@ -3,8 +3,9 @@ var path = require('path');
 var gutil = require("gulp-util");
 var webpack = require("webpack");
 var sass = require('gulp-sass');
+var WebpackDevServer = require("webpack-dev-server");
 
-gulp.task('default', ['sass'], function(done) {
+gulp.task('default', function(done) {
   webpack(webpackConfig, function(err, stats) {
     if (err) {
       throw new gutil.PluginError('webpack', err);
@@ -14,25 +15,22 @@ gulp.task('default', ['sass'], function(done) {
   });
 });
 
-gulp.task('sass', function() {
-  gulp.src('*.scss')
-    .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest('../web'));
-});
-
-gulp.task('watch', ['webpack'], function() {
-  gulp.watch([
-    '**/*.ts'
-  ], {}, ['webpack']);
-
-  gulp.watch(['**/*.scss'], {}, ['sass']);
+gulp.task("webpack-dev", function(callback) {
+  var compiler = webpack(webpackConfig);
+  new WebpackDevServer(compiler, {
+    // server and middleware options
+  }).listen(8080, "localhost", function(err) {
+    if(err) throw new gutil.PluginError("webpack-dev", err);
+    gutil.log("[webpack-dev]", "http://localhost:8080/webpack-dev-server/index.html");
+    // callback();
+  });
 });
 
 var webpackConfig = {
   context: path.resolve('.'),
-  entry: 'eden.ts',
+  entry: 'ts/main.ts',
   output: {
-    path: '../web',
+    path: path.resolve('./web'),
     publicPath: '/',
     filename: 'eden.js'
   },
@@ -46,6 +44,7 @@ var webpackConfig = {
     ]
   },
   plugins: [
-    new webpack.optimize.UglifyJsPlugin({}) // For now, remove this to get non-ugly output. TODO(jgw): Make this configurable.
+    // For now, remove this to get non-ugly output. TODO: Make this configurable.
+    // new webpack.optimize.UglifyJsPlugin({})
   ]
 };

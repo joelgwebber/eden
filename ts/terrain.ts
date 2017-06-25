@@ -2,12 +2,12 @@ import {ChunkSize} from "./world";
 import {cellIndex, makeEnv} from "./chunk";
 import {fillCube, marchCube} from "./march";
 import {terrainCellColor} from "./cells";
-import {gl} from "./globals";
+import {gl} from "./eden";
 
+import Vec3 = twgl.Vec3;
+import Mat4 = twgl.Mat4;
 import v3 = twgl.v3;
 import m4 = twgl.m4;
-import Vec3 = twgl.v3.Vec3;
-import Mat4 = twgl.m4.Mat4;
 
 export function renderTerrain(cells: Uint32Array): twgl.BufferInfo {
   var arrays: {[name: string]: number[]} = { position: [], normal: [], color: [], indices: [] };

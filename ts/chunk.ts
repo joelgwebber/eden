@@ -1,7 +1,7 @@
 import {ChunkExp, ChunkExp2, ChunkInterior, ChunkSize, ChunkSize3} from "./world";
 import {renderTerrain} from "./terrain";
 import {Camera} from "./camera";
-import {gl, worldProgram} from "./eden";
+import {gl, worldProgram, WorldUniforms} from "./eden";
 import * as proto from "./protocol";
 import * as cells from "./cells";
 
@@ -27,7 +27,7 @@ export class Chunk {
   }
 
   render(camera: Camera) {
-    var uniforms: {[name: string]: any} = {
+    var uniforms: WorldUniforms = {
       u_ambient: [0.3, 0.3, 0.3],
       u_lightDir: v3.normalize([-1, -2, -3]),
       u_viewProjection: camera.viewProjection(),

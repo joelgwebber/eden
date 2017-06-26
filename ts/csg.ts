@@ -44,6 +44,8 @@
 // Copyright (c) 2011 Evan Wallace (http://madebyevan.com/), under the MIT license.
 // Adapted to Typescript and extended by Joel Webber (jgw@pobox.com).
 
+import {gl} from "./eden";
+
 // Holds a binary space partition tree representing a 3D solid. Two solids can
 // be combined using the `union()`, `subtract()`, and `intersect()` methods.
 export class Model {
@@ -637,4 +639,41 @@ export class Node {
       this.back._build(back);
     }
   }
+}
+
+export function polysToBuffers(polys: Polygon[]): twgl.BufferInfo {
+  var arrays: {[name: string]: number[]} = { position: [], normal: [], color: [], indices: [] };
+  arrays['position']['size'] = 3;
+  arrays['normal']['size'] = 3;
+  arrays['color']['size'] = 3;
+
+  var vidx = 0;
+  for (var i = 0; i < polys.length; i++) {
+    var p = polys[i];
+
+    // Triangulate CSG polys, which can be convex polygons of any number of verts.
+    for (var j = 0; j < p.vertices.length - 2; j++) {
+      pushVector(arrays["position"], p.vertices[0].pos);
+      pushVector(arrays["normal"], p.vertices[0].normal);
+      arrays["color"].push(1, 1, 1);
+      for (var k = 0; k < 2; k++) {
+        var idx = (j + k + 1) % p.vertices.length;
+        pushVector(arrays["position"], p.vertices[idx].pos);
+        pushVector(arrays["normal"], p.vertices[idx].normal);
+        arrays["color"].push(1, 1, 1);
+      }
+      arrays["indices"].push(vidx+0);
+      arrays["indices"].push(vidx+1);
+      arrays["indices"].push(vidx+2);
+
+      vidx += 3;
+    }
+  }
+  return twgl.createBufferInfoFromArrays(gl, arrays);
+}
+
+function pushVector(a: number[], v: Vector) {
+  a.push(v.x);
+  a.push(v.y);
+  a.push(v.z);
 }

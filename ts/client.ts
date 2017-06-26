@@ -1,9 +1,24 @@
-import {gl, View} from "./eden";
+import {gl, View, worldProgram, WorldUniforms} from "./eden";
 import {World} from "./world";
 import {Camera} from "./camera";
+import {clamp, cos, sin, Tau} from "./math";
 import * as key from "./keys"
 import * as proto from "./protocol";
 import * as cells from "./cells";
+import * as csg from "./csg";
+
+import Vec3 = twgl.Vec3;
+import Mat4 = twgl.Mat4;
+import v3 = twgl.v3;
+import m4 = twgl.m4;
+
+const DefaultTheta = -Tau / 4;
+const MinTheta = -Tau / 2 + Tau / 16;
+const MaxTheta = 0 - Tau / 16;
+
+const DefaultPhi = 7 * Tau / 8;
+const MinPhi = 3 * Tau / 4;
+const MaxPhi = Tau - Tau / 16;
 
 export class Client implements View {
   private _sock: WebSocket;
@@ -12,13 +27,18 @@ export class Client implements View {
   private _world: World;
   private _camera: Camera;
 
-  private _theta = 0;
-  private _phi = 0;
-  private _target = [2, 2, 2];
+  private _theta = DefaultTheta;
+  private _phi = DefaultPhi;
+  private _target = [0, 0, 0];
+
+  private _cursor: twgl.BufferInfo;
 
   constructor(private _name: string) {
     this._world = new World();
     this._camera = new Camera();
+
+    var cube = csg.cube({ center: [0, 0, 0], radius: [0.5, 0.5, 0.5] });
+    this._cursor = csg.polysToBuffers(cube.toPolygons());
   }
 
   create() {
@@ -28,9 +48,9 @@ export class Client implements View {
   destroy() {
   }
 
-  mouseMove(x: number, y: number) {
-    this._theta = x / 100;
-    this._phi   = y / 100;
+  mouseMove(dx: number, dy: number) {
+    this._theta = clamp(this._theta + dx / 32, MinTheta, MaxTheta);
+    this._phi   = clamp(this._phi + dy / 32, MinPhi, MaxPhi);
   }
 
   keyDown(keyCode: number) {
@@ -108,22 +128,26 @@ export class Client implements View {
 
   render() {
     var t = this._target;
-    var cx = 8 * Math.cos(this._theta);
-    var cy = 6;
-    var cz = 8 * Math.sin(this._theta);
+    var cx = 16 * (cos(this._theta) * sin(this._phi));
+    var cy = 16 * cos(this._phi);
+    var cz = 16 * (sin(this._theta) * sin(this._phi));
     this._camera.setPosition([t[0] + cx, t[1] + cy, t[2] + cz]);
     this._camera.lookAt([t[0], t[1], t[2]], [0, 1, 0]);
-
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-
-    this._camera.setAspect(gl.canvas.offsetWidth / gl.canvas.offsetHeight);
     this._camera.update();
+
     this._world.update();
 
-    gl.enable(gl.DEPTH_TEST);
-    gl.enable(gl.CULL_FACE);
-    gl.clearColor(0x7e/0x100, 0xc0/0x100, 0xee/0x100, 1);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    var uniforms: WorldUniforms = {
+      u_ambient: [0.3, 0.3, 0.3],
+      u_lightDir: v3.normalize([-1, -2, -3]),
+      u_viewProjection: this._camera.viewProjection(),
+      u_model: m4.translation(t)
+    };
+
+    gl.useProgram(worldProgram.program);
+    twgl.setBuffersAndAttributes(gl, worldProgram, this._cursor);
+    twgl.setUniforms(worldProgram, uniforms);
+    gl.drawElements(gl.TRIANGLES, this._cursor.numElements, gl.UNSIGNED_SHORT, 0);
 
     this._world.render(this._camera);
   }

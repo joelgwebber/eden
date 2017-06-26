@@ -1,3 +1,8 @@
+import Vec3 = twgl.Vec3;
+import Mat4 = twgl.Mat4;
+import v3 = twgl.v3;
+import m4 = twgl.m4;
+
 const EPSILON = 1e-8;
 
 // Quaternion multiplication
@@ -98,12 +103,12 @@ export class Arcball {
 
   // Call this whenever the mouse moves.
   update(mx: number, my: number, flags: ArcballFlags) {
-    if(flags.rotate) {
+    if (flags.rotate) {
       var v0 = [this.last_x, -this.last_y, this.z_plane];
       var v1 = [mx, -my, this.z_plane];
       this.rotation = qnormalize(qmult(qcross(v0, v1), this.rotation));
     }
-    if(flags.pan || flags.zoom) {
+    if (flags.pan || flags.zoom) {
       var rmatrix = qmatrix(this.rotation);
 
       var dx = mx - this.last_x;
@@ -127,11 +132,11 @@ export class Arcball {
     var rmatrix = qmatrix(this.rotation);
     var result = new Array(4);
     var scale = Math.exp(this.zoom_factor);
-    for(var i=0; i<4; ++i) {
-      if(i < 3) {
+    for (var i = 0; i < 4; ++i) {
+      if (i < 3) {
         result[i] = new Array(4);
         result[i][3] = 0.0;
-        for(var j=0; j<3; ++j) {
+        for (var j = 0; j < 3; ++j) {
           result[i][j] = rmatrix[i][j] * scale;
           result[i][3] += rmatrix[i][j] * this.translation[j] * scale;
         }
@@ -140,5 +145,19 @@ export class Arcball {
       }
     }
     return result;
+  }
+
+  // TODO: wrong.
+  mat4(): twgl.Mat4 {
+    var m = this.matrix();
+    var r = m4.identity();
+
+    var c = 0;
+    for (var i = 0; i < 4; i++) {
+      for (var j = 0; j < 4; j++) {
+        r[c++] = m[i][j];
+      }
+    }
+    return r;
   }
 }

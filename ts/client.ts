@@ -49,8 +49,8 @@ export class Client implements View {
   }
 
   mouseMove(dx: number, dy: number) {
-    this._theta = clamp(this._theta + dx / 32, MinTheta, MaxTheta);
-    this._phi   = clamp(this._phi + dy / 32, MinPhi, MaxPhi);
+    this._theta = clamp(this._theta + dx / 128, MinTheta, MaxTheta);
+    this._phi   = clamp(this._phi + dy / 128, MinPhi, MaxPhi);
   }
 
   keyDown(keyCode: number) {

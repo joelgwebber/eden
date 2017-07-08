@@ -30,15 +30,15 @@ export class Eden {
 
   constructor() {
     // Setup canvas and GL context.
-    twgl.setAttributePrefix("a_");
+    twgl.attributes.setAttributePrefix("a_");
     var canvas = document.createElement("canvas");
     canvas.style.width = "100%";
     canvas.style.height = "100%";
     document.body.appendChild(canvas);
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    twgl.resizeCanvasToDisplaySize(canvas);
 
+    // gl = twgl.getContext(canvas);
     gl = twgl.getWebGLContext(canvas);
     worldProgram = twgl.createProgramInfo(gl, ["worldVS", "worldFS"]);
 
@@ -97,8 +97,7 @@ export class Eden {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-    this._views.forEach((view) => { view.render(); });
-
-    requestAnimationFrame(() => { this.render(); });
+    this._views.forEach((view) => view.render());
+    requestAnimationFrame(() => this.render());
   }
 }

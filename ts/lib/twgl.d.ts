@@ -1,3 +1,13 @@
+// http://twgljs.org/docs/module-twgl.html
+declare interface WebGLVertexArrayObject {
+}
+
+declare interface WebGLTransformFeedback {
+}
+
+declare interface WebGLSampler {
+}
+
 declare namespace twgl {
 
   type Vec3 = number[] | Float32Array;
@@ -6,6 +16,19 @@ declare namespace twgl {
   type Arrays = {[name: string]: ArraySpec};
   type ArraySpec = number[] | ArrayBuffer | FullArraySpec;
 
+  type CubemapReadyCallback = (err: any, tex: WebGLTexture, imgs: HTMLImageElement[]) => void;
+  type ThreeDReadyCallback = (err: any, tex: WebGLTexture, imgs: HTMLImageElement[]) => void;
+  type ErrorCallback = (msg: string) => void;
+  type TextureReadyCallback = (err: any, tex: WebGLTexture, img: HTMLImageElement) => void;
+  type TexturesReadyCallback = (err: any, tex: WebGLTexture, options: {[name: string]: TextureOptions}) => void;
+
+  type Setters = {[name: string]: (x: any) => void};
+  type Attribs = {[attribute: string]: AttribInfo};
+  type Textureish = number[] | ArrayBuffer | HTMLCanvasElement | HTMLImageElement | HTMLVideoElement | string | string[] | TextureFunc;
+  type TextureFunc = (gl: WebGLRenderingContext, options: TextureOptions) => Textureish;
+  type BufferOrAttribInfo = BufferInfo | Attribs;
+  type BufferOrVertexArrayInfo = BufferInfo | {[key: string]: VertexArrayInfo};
+
   interface AttachmentOptions {
     attach?: number;
     format?: number;
@@ -13,6 +36,13 @@ declare namespace twgl {
     target?: number;
     level?: number;
     attachment?: WebGLObject;
+  }
+
+  interface ProgramOptions {
+    errorCallback?: () => void;
+    attribLocations?: {[key: string]: number};
+    transformFeedbackVaryings?: BufferInfo | {[key: string]: AttribInfo} | string[];
+    transformFeedbackMode?: number;
   }
 
   interface AttribInfo {
@@ -25,13 +55,24 @@ declare namespace twgl {
     stride?: number;
   }
 
-  interface BufferInfo {
-    numElements: number;
-    attribs: {[attribute: string]: AttribInfo};
-    indices?: WebGLBuffer;
+  interface Defaults {
+    attribPrefix: string;
+    textureColor: number[];
+    crossOrigin: string;
+    enableVertexArrayObjects: boolean;
   }
 
-  type CubemapReadyCallback = (err: any, tex: WebGLTexture, imgs: HTMLImageElement[]) => void;
+  interface VertexArrayInfo {
+    numElements: number;
+    elementType?: number;
+    vertexArrayObject: WebGLVertexArrayObject;
+  }
+
+  interface BufferInfo {
+    numElements: number;
+    attribs: Attribs;
+    indices?: WebGLBuffer;
+  }
 
   interface DrawObject {
     active?: boolean;
@@ -42,8 +83,6 @@ declare namespace twgl {
     offset?: number;
     count?: number;
   }
-
-  type ErrorCallback = (msg: string) => void;
 
   interface FramebufferInfo {
     framebuffer: WebGLFramebuffer;
@@ -63,26 +102,48 @@ declare namespace twgl {
     attribName?: string;
   }
 
+  interface TransformFeedbackInfo {
+    index: number;
+    type: number;
+    size: number;
+  }
+
   interface ProgramInfo {
     program: WebGLProgram;
     uniformSetters: {[name: string]: (x: any) => void};
     attribSetters: {[name: string]: (x: any) => void};
+    transformFeedbackInfo: {[name: string]: TransformFeedbackInfo};
+    uniformBlockSpec: {[name: string]: UniformBlockInfo};
   }
 
-  type Textureish = number[] | ArrayBuffer | HTMLCanvasElement | HTMLImageElement | HTMLVideoElement | string | string[] | TextureFunc;
-  type TextureFunc = (gl: WebGLRenderingContext, options: TextureOptions) => Textureish;
+  interface UniformBlockInfo {
+    name: string;
+    array: ArrayBuffer;
+    asFloat: Float32Array;
+    buffer: WebGLBuffer;
+    offset?: number;
+    uniforms: {[key: string]: ArrayBufferView};
+  }
 
   interface TextureOptions {
     target?: number;
     width?: number;
     height?: number;
+    depth?: number;
     min?: number;
     mag?: number;
+    minMag?: number;
+    internalFormat?: number;
     format?: number;
     type?: number;
     wrap?: number;
     wrapS?: number;
     wrapT?: number;
+    wrapR?: number;
+    minLod?: number;
+    maxLod?: number;
+    baseLevel?: number;
+    maxLevel?: number;
     unpackAlignment?: number;
     premultiplyAlpha?: number;
     flipY?: number;
@@ -91,43 +152,84 @@ declare namespace twgl {
     auto?: boolean;
     cubeFaceOrder?: number[];
     src?: Textureish;
+    crossOrigin?: string;
   }
 
-  type TextureReadyCallback = (err: any, tex: WebGLTexture, img: HTMLImageElement) => void;
-  type TexturesReadyCallback = (err: any, tex: WebGLTexture, options: {[name: string]: TextureOptions}) => void;
-
-  function createAttribsFromArrays(gl: WebGLRenderingContext, arrays: Arrays): {[attrib: string]: AttribInfo};
-  function createAttributeSetters(program: WebGLProgram): {[attrib: string]: (x: any) => void};
-  function createAugmentedTypedArray(numComponents: number, numElements: number, opt_type?: Function): ArrayBuffer;
+  function bindFramebufferInfo(gl: WebGLRenderingContext, framebufferInfo?: FramebufferInfo, target?: number);
+  function bindTransformFeedbackInfo(gl: WebGLRenderingContext, transformFeedbackInfo: ProgramInfo | {[key: string]: TransformFeedbackInfo}, bufferInfo?: BufferOrAttribInfo);
+  function bindUniformBlock(gl: WebGLRenderingContext, programInfo: ProgramInfo | {[key: string]: UniformBlockInfo}, uniformBlockInfo?: BufferOrAttribInfo)
   function createBufferInfoFromArrays(gl: WebGLRenderingContext, arrays: Arrays): BufferInfo;
-  function createBuffersFromArrays(WebGLRenderingContext, arrays: Arrays): {[name: string]: WebGLBuffer};
   function createFramebufferInfo(gl: WebGLRenderingContext, attachments?: AttachmentOptions[], width?: number, height?: number): FramebufferInfo;
-  function createProgram(shaders: WebGLShader[], opt_attribs?: string[], opt_locations?: number[], opt_errorCallback?: ErrorCallback): WebGLProgram;
-  function createProgramFromScripts(gl: WebGLRenderingContext, shaderScriptIds: string[], opt_attribs?: string[], opt_locations?: number[], opt_errorCallback?: ErrorCallback): WebGLProgram;
-  function createProgramFromSources(gl: WebGLRenderingContext, shaderSources: string[], opt_attribs?: string[], opt_locations?: number[], opt_errorCallback?: ErrorCallback): WebGLProgram;
   function createProgramInfo(gl: WebGLRenderingContext, shaderSources: string[], opt_attribs?: string[], opt_locations?: number[], opt_errorCallback?: ErrorCallback): ProgramInfo;
   function createTexture(gl: WebGLRenderingContext, options?: TextureOptions, callback?: TextureReadyCallback): WebGLTexture;
   function createTextures(gl: WebGLRenderingContext, options: {[name: string]: TextureOptions}, callback?: TexturesReadyCallback): {[name: string]: WebGLTexture};
-  function createUniformSetters(program: WebGLProgram): {[name: string]: (x: number|number[]) => void};
-  function drawBufferInfo(gl: WebGLRenderingContext, type: number, bufferInfo: BufferInfo, count?: number, offset?: number);
+  function createTransformFeedback(gl: WebGLRenderingContext, programInfo: ProgramInfo | {[key: string]: TransformFeedbackInfo}, bufferInfo?: BufferOrAttribInfo): WebGLTransformFeedback;
+  function createTransformFeedbackInfo(gl: WebGLRenderingContext, program: WebGLProgram): {[key: string]: TransformFeedbackInfo};
+  function createUniformBlockInfo(gl: WebGLRenderingContext, programInfo: ProgramInfo, blockName: string): UniformBlockInfo;
+  function drawBufferInfo(gl: WebGLRenderingContext, bufferInfo: BufferInfo, type?: number, count?: number, offset?: number);
   function drawObjectList(objectsToDraw: DrawObject[]);
+  function getContext(canvas: HTMLCanvasElement, opt_attribs?: WebGLContextAttributes): WebGLRenderingContext;
   function getWebGLContext(canvas: HTMLCanvasElement, opt_attribs?: WebGLContextAttributes): WebGLRenderingContext;
-  function loadCubemapFromUrls(gl: WebGLRenderingContext, tex: WebGLTexture, options: TextureOptions, callback?: CubemapReadyCallback);
-  function loadTextureFromUrl(gl: WebGLRenderingContext, tex: WebGLTexture, options: TextureOptions, callback?: TextureReadyCallback): HTMLImageElement;
   function resizeCanvasToDisplaySize(canvas: HTMLCanvasElement, a?: number): boolean;
   function resizeFramebufferInfo(gl: WebGLRenderingContext, framebufferInfo: FramebufferInfo, attachments?: AttachmentOptions[], width?: number, height?: number);
   function resizeTexture(gl: WebGLRenderingContext, tex: WebGLTexture, options: TextureOptions, width?: number, height?: number);
-  function setAttributePrefix(prefix: string);
-  function setAttributes(setters: {[name: string]: (x: any) => void}, buffers: {[name: string]: AttribInfo});
-  function setBuffersAndAttributes(gl: WebGLRenderingContext, setters: ProgramInfo | {[name: string]: (x: any) => void}, buffers: BufferInfo);
-  function setDefaultTextureColor(color: number[]);
-  function setEmptyTexture(gl: WebGLRenderingContext, tex: WebGLTexture, options: TextureOptions);
-  function setTextureFilteringForSize(gl: WebGLRenderingContext, tex: WebGLTexture, options?: TextureOptions, width?: number, height?: number);
+  function setAttribInfoBufferFromArray(gl: WebGLRenderingContext, attribInfo: AttribInfo, array: ArraySpec, offset?: number);
+  function setBlockUniforms(uniformBlockInfo: UniformBlockInfo, values: {[key: string]: any});
+  function setBuffersAndAttributes(gl: WebGLRenderingContext, setters: ProgramInfo | Setters, buffers: BufferOrVertexArrayInfo);
+  function setDefaults(newDefaults: Defaults);
   function setTextureFromArray(gl: WebGLRenderingContext, tex: WebGLTexture, src: number[] | ArrayBuffer, options?: TextureOptions);
-  function setTextureFromElement(gl: WebGLRenderingContext, tex: WebGLTexture, element: HTMLElement, options?: TextureOptions);
-  function setTextureParameters(gl: WebGLRenderingContext, tex: WebGLTexture, options: TextureOptions);
-  function setTextureTo1PixelColor(gl: WebGLRenderingContext, tex: WebGLTexture, options?: TextureOptions);
-  function setUniforms(setters: ProgramInfo | {[name: string]: (x: any) => void}, values: {[name: string]: any});
+  function setUniformBlock(gl: WebGLRenderingContext, programInfo: ProgramInfo | {[name: string]: UniformBlockInfo}, uniformBlockInfo: UniformBlockInfo);
+  function setUniforms(setters: ProgramInfo | Setters, values: {[name: string]: any});
+
+  namespace attributes {
+    function createAttribsFromArrays(gl: WebGLRenderingContext, arrays: Arrays): Attribs;
+    function createBufferFromArray(gl: WebGLRenderingContext, array: ArraySpec, arrayName: string): WebGLBuffer;
+    function createBufferFromTypedArray(gl: WebGLRenderingContext, typedArray: ArrayBuffer | ArrayBufferView | WebGLBuffer, type: number, drawType: number): WebGLBuffer;
+    function createBufferInfoFromArrays(gl: WebGLRenderingContext, arrays: Arrays): BufferInfo;
+    function createBuffersFromArrays(WebGLRenderingContext, arrays: Arrays): {[name: string]: WebGLBuffer};
+    function setAttribInfoBufferFromArray(gl: WebGLRenderingContext, attribInfo: AttribInfo, array: ArraySpec, offset?: number);
+    function setAttributePrefix(prefix: string);
+  }
+
+  namespace textures {
+    function getBytesPerElementForInternalFormat(internalFormat: number, type: number): number;
+    function getNumComponentsForFormat(format: number): number;
+    function loadCubemapFromUrls(gl: WebGLRenderingContext, tex: WebGLTexture, options: TextureOptions, callback?: CubemapReadyCallback);
+    function loadSlicesFromUrls(gl: WebGLRenderingContext, tex: WebGLTexture, options: TextureOptions, callback?: ThreeDReadyCallback);
+    function loadTextureFromUrl(gl: WebGLRenderingContext, tex: WebGLTexture, options: TextureOptions, callback?: TextureReadyCallback): HTMLImageElement;
+    function setDefaultTextureColor(color: number[]);
+    function setEmptyTexture(gl: WebGLRenderingContext, tex: WebGLTexture, options: TextureOptions);
+    function setSamplerParameters(gl: WebGLRenderingContext, sampler: WebGLSampler, options: TextureOptions);
+    function setTextureFilteringForSize(gl: WebGLRenderingContext, tex: WebGLTexture, options?: TextureOptions, width?: number, height?: number);
+    function setTextureFromElement(gl: WebGLRenderingContext, tex: WebGLTexture, element: HTMLElement, options?: TextureOptions);
+    function setTextureParameters(gl: WebGLRenderingContext, tex: WebGLTexture, options: TextureOptions);
+    function setTextureTo1PixelColor(gl: WebGLRenderingContext, tex: WebGLTexture, options?: TextureOptions);
+  }
+
+  namespace programs {
+    function createAttributeSetters(program: WebGLProgram): {[key: string]: Function};
+    function createProgram(shaders: WebGLShader[], opt_attribs?: string[], opt_locations?: number[], opt_errorCallback?: ErrorCallback): WebGLProgram;
+    function createProgramFromScripts(gl: WebGLRenderingContext, shaderScriptIds: string[], opt_attribs?: string[], opt_locations?: number[], opt_errorCallback?: ErrorCallback): WebGLProgram;
+    function createProgramFromSources(gl: WebGLRenderingContext, shaderSources: string[], opt_attribs?: string[], opt_locations?: number[], opt_errorCallback?: ErrorCallback): WebGLProgram;
+    function createProgramInfo(gl: WebGLRenderingContext, shaderSources: string[], opt_attribs?: ProgramOptions | string[], opt_locations?: number[], opt_errorCallback?: ErrorCallback): ProgramInfo;
+    function createProgramInfoFromProgram(gl: WebGLRenderingContext, program: WebGLProgram): ProgramInfo;
+    function createUniformBlockInfoFromProgram(gl: WebGLRenderingContext, program: WebGLProgram, uniformBlockSpec: {[name: string]: UniformBlockInfo}, blockName: string): UniformBlockInfo;
+    function createUniformBlockSpecFromProgram(gl: WebGLRenderingContext, program: WebGLProgram): {[name: string]: UniformBlockInfo};
+    function createUniformSetters(program: WebGLProgram): {[name: string]: (x: number|number[]) => void};
+    function setAttributes(setters: Setters, buffers: Attribs);
+  }
+
+  namespace typedArray {
+    function getGLTypeForTypedArray(typedArray: ArrayBuffer | ArrayBufferView): number;
+    function getGLTypeForTypedArrayType(typedArrayType: Function): number;
+    function getTypedArrayTypeForGLType(type: number): Function;
+  }
+
+  namespace vertexArrays {
+    function createVAOAndSetAttributes(gl: WebGLRenderingContext, setters: Setters, attribs: Attribs, indices?: WebGLBuffer);
+    function createVAOFromBufferInfo(gl: WebGLRenderingContext, programInfo: ProgramInfo | {[key: string]: Function}, bufferInfo: BufferInfo, indices?: WebGLBuffer);
+    function createVertexArrayInfo(gl: WebGLRenderingContext, programInfo: ProgramInfo | {[key: string]: Function}, bufferInfo: BufferInfo): VertexArrayInfo;
+  }
 
   namespace v3 {
     function add(a: Vec3, b: Vec3, dst?: Vec3): Vec3;
@@ -178,10 +280,13 @@ declare namespace twgl {
     function transpose(m: Mat4, dst?: Mat4): Mat4;
   }
 
+  // TODO(jgw): Most params lack types.
   namespace primitives {
+    function concatVertices(arrays: Arrays): Arrays;
     function create3DFBufferInfo(gl): BufferInfo
     function create3DFBuffers(gl): { [name: string]: WebGLBuffer};
     function create3DFVertices(): { [name: string]: ArrayBuffer};
+    function createAugmentedTypedArray(numComponents: number, numElements: number, opt_type?: Function): ArrayBuffer;
     function createCresentBufferInfo(gl, verticalRadius, outerRadius, innerRadius, thickness, subdivisionsDown, subdivisionsThick, startOffset, endOffset): BufferInfo
     function createCresentBuffers(gl, verticalRadius, outerRadius, innerRadius, thickness, subdivisionsDown, subdivisionsThick, startOffset, endOffset): { [name: string]: WebGLBuffer};
     function createCresentVertices(verticalRadius, outerRadius, innerRadius, thickness, subdivisionsDown, subdivisionsThick, startOffset, endOffset): { [name: string]: ArrayBuffer};
@@ -210,6 +315,7 @@ declare namespace twgl {
     function createXYQuadBuffers(gl, size, xOffset, yOffset): BufferInfo
     function createXYQuadVertices(size, xOffset, yOffset)
     function deindexVertices(vertices): {[name: string]: ArrayBuffer};
+    function duplicateVertices(arrays): Arrays;
     function flattenNormals(vertices): {[name: string]: ArrayBuffer};
     function makeRandomVertexColors(vertices, options): {[name: string]: ArrayBuffer};
     function reorientDirections(array, matrix): number[] | ArrayBuffer;

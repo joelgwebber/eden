@@ -30,7 +30,9 @@ export class Eden {
 
   constructor() {
     // Setup canvas and GL context.
-    twgl.attributes.setAttributePrefix("a_");
+    twgl.setDefaults({
+      attribPrefix: "a_"
+    });
     var canvas = document.createElement("canvas");
     canvas.style.width = "100%";
     canvas.style.height = "100%";

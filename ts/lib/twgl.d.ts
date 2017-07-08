@@ -1,4 +1,5 @@
 // http://twgljs.org/docs/module-twgl.html
+// NOSUBMIT: This d.ts isn't quite done. It needs another pass.
 declare interface WebGLVertexArrayObject {
 }
 
@@ -56,10 +57,10 @@ declare namespace twgl {
   }
 
   interface Defaults {
-    attribPrefix: string;
-    textureColor: number[];
-    crossOrigin: string;
-    enableVertexArrayObjects: boolean;
+    attribPrefix?: string;
+    textureColor?: number[];
+    crossOrigin?: string;
+    enableVertexArrayObjects?: boolean;
   }
 
   interface VertexArrayInfo {

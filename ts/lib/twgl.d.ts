@@ -132,7 +132,7 @@ declare namespace twgl {
   namespace v3 {
     function add(a: Vec3, b: Vec3, dst?: Vec3): Vec3;
     function copy(v: Vec3, dst?: Vec3): Vec3;
-    function create(): Vec3;
+    function create(x?: number, y?: number, z?: number): Vec3;
     function cross(a: Vec3, b: Vec3, dst?: Vec3): Vec3;
     function divide(a: Vec3, b: Vec3, dst?: Vec3): Vec3;
     function divScalar(v: Vec3, k: number, dst?: Vec3): Vec3;

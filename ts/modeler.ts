@@ -1,34 +1,39 @@
 import {gl, View, worldProgram} from "./eden";
 import {Camera} from "./camera";
 import {clamp, cos, sin, Tau} from "./math";
-import * as csg from "./csg";
 
 import Vec3 = twgl.Vec3;
 import Mat4 = twgl.Mat4;
 import v3 = twgl.v3;
 import m4 = twgl.m4;
+import {KeyEnter} from "./keys";
+import {Model} from "./model";
 
 export class Modeler implements View {
-  private _input: HTMLTextAreaElement;
   private _camera: Camera;
   private _phi = 0;
   private _theta = 0;
-  private _buffer: twgl.BufferInfo;
+  private _model: Model;
+
+  private _codeContainer: HTMLElement;
+  private _input: HTMLTextAreaElement;
+  private _feedback: HTMLElement;
+
+  private _evalTimer: number;
 
   constructor() {
-    this._input = document.createElement("textarea");
     this._camera = new Camera();
-
-    var cube = csg.cube({ center: [0, 0, 0], radius: [1, 1, 1] });
-    this._buffer = csg.polysToBuffers(cube.toPolygons());
+    this._model = new Model();
+    this.createCodeLayer();
   }
 
   create() {
-    document.body.appendChild(this._input);
+    document.body.appendChild(this._codeContainer);
+    this._evalTimer = setInterval(() => this.eval(), 1000);
   }
 
   destroy() {
-    document.body.removeChild(this._input);
+    document.body.removeChild(this._codeContainer);
   }
 
   mouseMove(dx: number, dy: number) {
@@ -55,8 +60,38 @@ export class Modeler implements View {
     };
 
     gl.useProgram(worldProgram.program);
-    twgl.setBuffersAndAttributes(gl, worldProgram, this._buffer);
+    twgl.setBuffersAndAttributes(gl, worldProgram, this._model.buffer());
     twgl.setUniforms(worldProgram, uniforms);
-    gl.drawElements(gl.TRIANGLES, this._buffer.numElements, gl.UNSIGNED_SHORT, 0);
+    gl.drawElements(gl.TRIANGLES, this._model.buffer().numElements, gl.UNSIGNED_SHORT, 0);
+  }
+
+  private createCodeLayer() {
+    this._codeContainer = document.createElement("div");
+    this._codeContainer.className = "codeContainer";
+
+    this._feedback = document.createElement("pre");
+    this._feedback.className = "feedback";
+    this._codeContainer.appendChild(this._feedback);
+
+    this._input = document.createElement("textarea");
+    this._input.className = "input";
+    this._codeContainer.appendChild(this._input);
+    this._input.addEventListener("keydown", (e) => {
+      // Cmd/ctrl-enter: Eval.
+      if (e.keyCode == KeyEnter && e.metaKey || e.ctrlKey) {
+        this.eval();
+      }
+    });
+  }
+
+  private eval() {
+    console.log("evaling");
+    try {
+      this._feedback.textContent = "";
+      this._model.setCode(this._input.value);
+    } catch (e) {
+      this._feedback.textContent = e;
+    }
   }
 }
+

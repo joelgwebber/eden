@@ -32,8 +32,11 @@ export class Eden {
     // Setup canvas and GL context.
     twgl.setAttributePrefix("a_");
     var canvas = document.createElement("canvas");
-    canvas.style.width = "100%";
-    canvas.style.height = "100%";
+    canvas.style.position = "absolute";
+    canvas.style.left = "0";
+    canvas.style.right = "0";
+    canvas.style.top = "0";
+    canvas.style.bottom = "0";
     document.body.appendChild(canvas);
 
     canvas.width = window.innerWidth;
@@ -49,8 +52,8 @@ export class Eden {
     document.addEventListener("mousemove", (e) => { this.mouseMove(e.movementX, e.movementY); });
     document.addEventListener("keydown", (e: KeyboardEvent) => { this.keyDown(e.keyCode); });
 
-    this.addView(new Client("jimmy"));
-    // this.addView(new Modeler());
+    // this.addView(new Client("jimmy"));
+    this.addView(new Modeler());
 
     this.render();
   }
@@ -91,11 +94,13 @@ export class Eden {
   }
 
   private render() {
+    // twgl.resizeCanvasToDisplaySize(gl.canvas);
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.CULL_FACE);
     gl.clearColor(0x7e/0x100, 0xc0/0x100, 0xee/0x100, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     this._views.forEach((view) => { view.render(); });
 

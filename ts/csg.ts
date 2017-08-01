@@ -44,6 +44,7 @@
 // Copyright (c) 2011 Evan Wallace (http://madebyevan.com/), under the MIT license.
 // Adapted to Typescript and extended by Joel Webber (jgw@pobox.com).
 
+/// <reference path="lib/twgl.d.ts"/>
 import {gl} from "./eden";
 
 // Holds a binary space partition tree representing a 3D solid. Two solids can
@@ -174,11 +175,16 @@ export function empty(): Model {
 // Example code:
 //
 //     var cube = CSG.cube({
+//       color: [0, 1, 0],
 //       center: [0, 0, 0],
 //       radius: [1, 1, 1],
-//       xform: [1, 0, 0, 0, 1, 0, 0, 0, 1]
+//       xform: [1, 0, 0, 0,
+//               0, 1, 0, 0,
+//               0, 0, 1, 0,
+//               0, 0, 0, 1]
 //     });
-export function cube(options?: { center?: number[]; radius?: number[]; xform?: number[] }) {
+export function cube(options?: { color?: number[]; center?: number[]; radius?: number[]; xform?: twgl.Mat4 }) {
+  var color = Vector.fromArray(options.color || [1, 1, 1]);
   var c = Vector.fromArray(options.center || [0, 0, 0]);
   var r = options.radius ? options.radius : [1, 1, 1];
   return Model.fromPolygons([
@@ -197,15 +203,21 @@ export function cube(options?: { center?: number[]; radius?: number[]; xform?: n
       );
       var normal = Vector.fromArray(info[1]);
       if (options.xform) {
-        pos = pos.mat3Times(options.xform);
-        normal = normal.mat3Times(options.xform);
+        pos = pos.mat4Times(options.xform);
+        normal = normal.mat4Times(rotationOf(options.xform));
       }
       pos.x += c.x;
       pos.y += c.y;
       pos.z += c.z;
-      return new Vertex(pos, normal);
+      return new Vertex(pos, normal, color);
     }));
   }));
+}
+
+function rotationOf(m: twgl.Mat4): twgl.Mat4 {
+  let r = twgl.m4.copy(m);
+  r[12] = r[13] = r[14] = 0;
+  return r;
 }
 
 // Construct a solid sphere. Optional parameters are `center`, `radius`,
@@ -216,12 +228,14 @@ export function cube(options?: { center?: number[]; radius?: number[]; xform?: n
 // Example usage:
 //
 //     var sphere = CSG.sphere({
+//       color: [0, 1, 0],
 //       center: [0, 0, 0],
 //       radius: 1,
 //       slices: 16,
 //       stacks: 8
 //     });
-export function sphere(options?: { center?: number[]; radius?: number; slices?: number; stacks?: number; }) {
+export function sphere(options?: { color?: number[]; center?: number[]; radius?: number; slices?: number; stacks?: number; xform?: twgl.Mat4 }) {
+  var color = Vector.fromArray(options.color || [1, 1, 1]);
   var c = Vector.fromArray(options.center || [0, 0, 0]);
   var r = options.radius || 1;
   var slices = options.slices || 16;
@@ -236,7 +250,13 @@ export function sphere(options?: { center?: number[]; radius?: number; slices?: 
       Math.cos(phi),
       Math.sin(theta) * Math.sin(phi)
     );
-    vertices.push(new Vertex(c.plus(dir.times(r)), dir));
+
+    var pos = c.plus(dir.times(r));
+    if (options.xform) {
+      pos = pos.mat4Times(options.xform);
+      dir = dir.mat4Times(rotationOf(options.xform));
+    }
+    vertices.push(new Vertex(pos, dir, color));
   }
 
   for (var i = 0; i < slices; i++) {
@@ -263,12 +283,14 @@ export function sphere(options?: { center?: number[]; radius?: number; slices?: 
 // Example usage:
 //
 //     var cylinder = CSG.cylinder({
+//       color: [0, 1, 0],
 //       start: [0, -1, 0],
 //       end: [0, 1, 0],
 //       radius: 1,
 //       slices: 16
 //     });
-export function cylinder(options?: { start?: number[]; end?: number[]; radius?: number; slices?: number; }) {
+export function cylinder(options?: { color?: number[]; start?: number[]; end?: number[]; radius?: number; slices?: number; xform?: twgl.Mat4 }) {
+  var color = Vector.fromArray(options.color || [1, 1, 1]);
   var s = Vector.fromArray(options.start || [0, -1, 0]);
   var e = Vector.fromArray(options.end || [0, 1, 0]);
   var ray = e.minus(s);
@@ -277,8 +299,8 @@ export function cylinder(options?: { start?: number[]; end?: number[]; radius?: 
   var axisZ = ray.unit(), isY = (Math.abs(axisZ.y) > 0.5);
   var axisX = new Vector(isY ? 1 : 0, isY ? 0 : 1, 0).cross(axisZ).unit();
   var axisY = axisX.cross(axisZ).unit();
-  var start = new Vertex(s, axisZ.negated());
-  var end = new Vertex(e, axisZ.unit());
+  var start = new Vertex(s, axisZ.negated(), color);
+  var end = new Vertex(e, axisZ.unit(), color);
   var polygons = [];
 
   function point(stack, slice, normalBlend) {
@@ -286,7 +308,12 @@ export function cylinder(options?: { start?: number[]; end?: number[]; radius?: 
     var out = axisX.times(Math.cos(angle)).plus(axisY.times(Math.sin(angle)));
     var pos = s.plus(ray.times(stack)).plus(out.times(r));
     var normal = out.times(1 - Math.abs(normalBlend)).plus(axisZ.times(normalBlend));
-    return new Vertex(pos, normal);
+
+    if (options.xform) {
+      pos = pos.mat4Times(options.xform);
+      normal = normal.mat4Times(rotationOf(options.xform));
+    }
+    return new Vertex(pos, normal, color);
   }
 
   for (var i = 0; i < slices; i++) {
@@ -374,6 +401,14 @@ export class Vector {
       xf[2] * this.x + xf[5] * this.y + xf[8] * this.z
     );
   }
+
+  mat4Times(xf: twgl.Mat4) {
+    return new Vector(
+      xf[0] * this.x + xf[4] * this.y + xf[8] * this.z + xf[12],
+      xf[1] * this.x + xf[5] * this.y + xf[9] * this.z + xf[13],
+      xf[2] * this.x + xf[6] * this.y + xf[10] * this.z + xf[14]
+    )
+  }
 }
 
 // Represents a vertex of a polygon. Use your own vertex class instead of this
@@ -386,14 +421,16 @@ export class Vector {
 export class Vertex {
   pos: Vector;
   normal: Vector;
+  color: Vector;
 
-  constructor(pos, normal) {
+  constructor(pos: Vector, normal: Vector, color: Vector) {
     this.pos = pos.clone();
     this.normal = normal.clone();
+    this.color = color.clone();
   }
 
   clone() {
-    return new Vertex(this.pos.clone(), this.normal.clone());
+    return new Vertex(this.pos.clone(), this.normal.clone(), this.color.clone());
   }
 
   // Invert all orientation-specific data (e.g. vertex normal). Called when the
@@ -408,8 +445,9 @@ export class Vertex {
   interpolate(other, t) {
     return new Vertex(
       this.pos.lerp(other.pos, t),
-      this.normal.lerp(other.normal, t)
-      );
+      this.normal.lerp(other.normal, t),
+      this.color.lerp(other.color, t)
+    );
   }
 }
 
@@ -655,12 +693,12 @@ export function polysToBuffers(polys: Polygon[]): twgl.BufferInfo {
     for (var j = 0; j < p.vertices.length - 2; j++) {
       pushVector(arrays["position"], p.vertices[0].pos);
       pushVector(arrays["normal"], p.vertices[0].normal);
-      arrays["color"].push(1, 1, 1);
+      pushVector(arrays["color"], p.vertices[0].color);
       for (var k = 0; k < 2; k++) {
         var idx = (j + k + 1) % p.vertices.length;
         pushVector(arrays["position"], p.vertices[idx].pos);
         pushVector(arrays["normal"], p.vertices[idx].normal);
-        arrays["color"].push(1, 1, 1);
+        pushVector(arrays["color"], p.vertices[idx].color);
       }
       arrays["indices"].push(vidx+0);
       arrays["indices"].push(vidx+1);

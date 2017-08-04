@@ -58,7 +58,7 @@ export class Chunk {
     }
   }
 
-  setCells(cells: number[]) {
+  setTerrain(cells: number[]) {
     if (cells.length != ChunkSize3) {
       throw "invalid cell count";
     }
@@ -95,38 +95,28 @@ export class Chunk {
     // TODO: This can be a lot more efficient:
     // - Make 'env' a direct reference to the Uint32Array.
     // - Keep track of dirty region to minimize walking.
-    for (var x = 1; x < ChunkSize - 2; x++) {
-      for (var y = 1; y < ChunkSize - 2; y++) {
-        for (var z = 1; z < ChunkSize - 2; z++) {
-          var meshIdx = cellIndex(x, y, z);
-          var mesh = this._meshes[meshIdx];
-          var geom: twgl.BufferInfo = null;
-          if (this.cell(x, y, z) != cells.CellAir) {
-            var env = makeEnv(this._cells, x, y, z);
-            geom = cells.geomForEnv(x, y, z, env);
-          }
-
-          if (!geom) {
-            if (mesh) {
-              delete this._meshes[meshIdx];
-            }
-          } else {
-            this._meshes[meshIdx] = geom;
-          }
-          meshIdx++;
-        }
-      }
-    }
-  }
-
-  private fill(x0: number, y0: number, z0: number, x1: number, y1: number, z1: number, cell: number) {
-    for (var x = x0; x <= x1; x++) {
-      for (var y = y0; y <= y1; y++) {
-        for (var z = z0; z <= z1; z++) {
-          this.setCell(x, y, z, cell);
-        }
-      }
-    }
+    // for (var x = 1; x < ChunkSize - 2; x++) {
+    //   for (var y = 1; y < ChunkSize - 2; y++) {
+    //     for (var z = 1; z < ChunkSize - 2; z++) {
+    //       var meshIdx = cellIndex(x, y, z);
+    //       var mesh = this._meshes[meshIdx];
+    //       var geom: twgl.BufferInfo = null;
+    //       if (this.cell(x, y, z) != cells.CellAir) {
+    //         var env = makeEnv(this._cells, x, y, z);
+    //         geom = cells.geomForEnv(x, y, z, env);
+    //       }
+    //
+    //       if (!geom) {
+    //         if (mesh) {
+    //           delete this._meshes[meshIdx];
+    //         }
+    //       } else {
+    //         this._meshes[meshIdx] = geom;
+    //       }
+    //       meshIdx++;
+    //     }
+    //   }
+    // }
   }
 }
 

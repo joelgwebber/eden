@@ -5,3 +5,4 @@ Fast allocator: http://g.oswego.edu/dl/html/malloc.html
 
 Simple WebGL wrapper: https://github.com/kbirk/esper
 
+Lua to Javascript translater: http://starlight.paulcuth.me.uk/

@@ -54,7 +54,7 @@ export class Modeler implements View {
 
     var uniforms: {[name: string]: any} = {
       u_ambient: [0.3, 0.3, 0.3],
-      u_lightDir: v3.normalize([-1, -2, -3]),
+      u_lightDir: v3.normalize([1, 2, 3]),
       u_viewProjection: this._camera.viewProjection(),
       u_model: m4.translation([0, 0, 0])
     };

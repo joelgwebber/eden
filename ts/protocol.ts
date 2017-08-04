@@ -26,7 +26,8 @@ export interface MessageActorState {
 
 export interface MessageChunk {
   Loc: Vector;
-  Cells: number[];
+  Terrain: number[];
+  Objects: number[];
   Actors: Actor[];
 }
 

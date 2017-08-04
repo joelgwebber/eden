@@ -42,9 +42,9 @@ export class World {
     this.chunkForPos(x, y, z).setCell(x % ChunkInterior, y % ChunkInterior, z % ChunkInterior, cell);
   }
 
-  setChunk(cx: number, cy: number, cz: number, cells: number[], actors: proto.Actor[]) {
+  setChunk(cx: number, cy: number, cz: number, terrain: number[], actors: proto.Actor[]) {
     var chunk = this.ensureChunk(cx, cy, cz);
-    chunk.setCells(cells);
+    chunk.setTerrain(terrain);
     chunk.setActors(actors);
   }
 

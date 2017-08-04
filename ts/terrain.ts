@@ -1,7 +1,7 @@
 import {ChunkSize} from "./world";
 import {cellIndex, makeEnv} from "./chunk";
 import {fillCube, marchCube} from "./march";
-import {terrainCellColor} from "./cells";
+import {groundColor} from "./cells";
 import {gl} from "./eden";
 
 import Vec3 = twgl.Vec3;
@@ -36,7 +36,7 @@ export function renderTerrain(cells: Uint32Array): twgl.BufferInfo {
     var x = Math.floor(verts[i + 0]);
     var y = Math.floor(verts[i + 1]);
     var z = Math.floor(verts[i + 2]);
-    var color = terrainCellColor(cells[cellIndex(x, y, z)]);
+    var color = groundColor(cells[cellIndex(x, y, z)]);
     colors.push(color[0], color[1], color[2]);
   }
 

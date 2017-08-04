@@ -52,8 +52,8 @@ export class Eden {
     document.addEventListener("mousemove", (e) => { this.mouseMove(e.movementX, e.movementY); });
     document.addEventListener("keydown", (e: KeyboardEvent) => { this.keyDown(e.keyCode); });
 
-    // this.addView(new Client("jimmy"));
-    this.addView(new Modeler());
+    this.addView(new Client("jimmy"));
+    // this.addView(new Modeler());
 
     this.render();
   }

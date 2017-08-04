@@ -2,67 +2,61 @@ import Vec3 = twgl.Vec3;
 
 var _geomCache: { [key: string]: twgl.BufferInfo } = {};
 
-export interface CellType {
-  render(env: number[]): twgl.BufferInfo;
-}
+// terrain:
+//  ground type: 16 bits // 64k slots for ground types should be more than enough.
+//  ground fill:  5 bits // 32 levels should be enough resolution for fill
+//  liquid type:  6 bits // Don't need much more than water, ice, lava, cloud, etc.
+//  liquid fill:  5 bits // ...
 
-// Cell types stored in the low 16-bits.
-export const CellTypeMask = 0xffff;
+// Ground types stored in the low 16-bits.
+export const GroundTypeShift = 0;
+export const GroundTypeMask = 0xffff;
 
-// Cell args stored in the high 16-bits.
-export const CellArgsMask = 0xffff0000;
-export const CellArgsShift = 16;
+export const GroundFillShift = 16;
+export const GroundFillMask = 0x1f;
 
-// High bit of the cell-type: 1 => terrain (Participates in marching-cubes surface rendering).
-export const CellTerrainBit = 0x8000;
-export const TerrainTypeMask = 0x7fff;
+export const LiquidTypeShift = 21;
+export const LiquidTypeMask = 0x3f;
 
-// Chunk cells.
-export const CellAir = 0x0000; // Special case: air == 0 (always ignored).
-export const CellWall = 0x0001;
-export const CellFloor = 0x0002;
+export const LiquidFillShift = 27;
+export const LiquidFillMask = 0x1f;
 
-// Terrain cells.
-export const CellDirt = 0x8001;
-export const CellGrass = 0x8002;
+// Ground types.
+export const GroundDirt = 0x0001;
+export const GroundGrass = 0x0002;
+// ...
 
-var cellTypes: {[type: number]: CellType} = {};
-var terrainColor: { [terrainType: number]: Vec3} = {
+// Liquid types.
+export const LiquidWater = 0x01;
+export const LiquidIce = 0x02;
+export const LiquidLava = 0x03;
+export const LiquidCloud = 0x04;
+// ...
+
+var groundColors: { [groundType: number]: Vec3} = {
   0x0000: [0, 0, 0],     // Empty/unknown
   0x0001: [0.5, 0.2, 0], // Dirt
   0x0002: [0, 0.8, 0],   // Grass
 };
 
-export function cellType(cell: number): number {
-  return cell & CellTypeMask;
+export function groundType(cell: number): number {
+  return (cell >>> GroundTypeShift) & GroundTypeMask;
 }
 
-export function cellArgs(cell: number): number {
-  return (cell & CellArgsMask) >>> CellArgsShift;
+export function groundFill(cell: number): number {
+  return (cell >>> GroundFillShift) & GroundFillMask;
 }
 
-export function registerCell(cell: number, type: CellType) {
-  cellTypes[cell] = type;
+export function liquidType(cell: number): number {
+  return (cell >>> LiquidTypeShift) & LiquidTypeMask;
 }
 
-export function typeForCell(cell: number): CellType {
-  return cellTypes[cell];
+export function liquidFill(cell: number): number {
+  return (cell >>> LiquidFillShift) & LiquidFillMask;
 }
 
-export function terrainCellColor(cell: number): Vec3 {
-  return terrainColor[cell & TerrainTypeMask];
-}
-
-export function makeCell(type: number, args: number = 0): number {
-  return (args << CellArgsShift) | type;
-}
-
-export function terrainCell(type: number, density: number): number {
-  return makeCell(type, density * 0xffff);
-}
-
-export function isTerrain(type: number): boolean {
-  return (type & CellTerrainBit) != 0;
+export function groundColor(cell: number): Vec3 {
+  return groundColors[(cell >>> GroundTypeShift) & GroundTypeMask];
 }
 
 export function envOfs(x: number, y: number, z: number): number {
@@ -71,21 +65,4 @@ export function envOfs(x: number, y: number, z: number): number {
 
 export function envOfsCenter(dx: number, dy: number, dz: number): number {
   return 13 + (dy * 9) + (dz * 3) + dx;
-}
-
-export function geomForEnv(x: number, y: number, z: number, env: number[]): twgl.BufferInfo {
-  var key = envKey(env);
-  if (!(key in _geomCache)) {
-    var bt = typeForCell(cellType(env[envOfsCenter(0, 0, 0)]));
-    if (bt) {
-      _geomCache[key] = bt.render(env);
-    } else {
-      delete _geomCache[key];
-    }
-  }
-  return _geomCache[key];
-}
-
-function envKey(env: number[]): string {
-  return env.toString();
 }

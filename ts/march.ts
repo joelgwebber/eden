@@ -1,4 +1,5 @@
 import * as cells from "./cells";
+import {groundFill, GroundFillMask} from "./cells";
 
 import v3 = twgl.v3;
 import m4 = twgl.m4;
@@ -10,7 +11,7 @@ export function fillCube(env: number[]): number[] {
   for (var i = 0; i < 8; i++) {
     var ofs = vertexOffset[i];
     var cell = env[cells.envOfsCenter(ofs[0], ofs[1], ofs[2])];
-    cube[i] = cells.isTerrain(cell) ? cells.cellArgs(cell) / 0xffff : 0;
+    cube[i] = groundFill(cell) / GroundFillMask;
   }
   return cube;
 }

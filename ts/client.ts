@@ -37,7 +37,7 @@ export class Client implements View {
     this._world = new World();
     this._camera = new Camera();
 
-    var cube = csg.cube({ center: [0, 0, 0], radius: [0.5, 0.5, 0.5] });
+    var cube = csg.cube({ center: [0.5, 0.5, 0.5], radius: [0.5, 0.5, 0.5] });
     this._cursor = csg.polysToBuffers(cube.toPolygons());
   }
 
@@ -49,8 +49,8 @@ export class Client implements View {
   }
 
   mouseMove(dx: number, dy: number) {
-    this._theta = clamp(this._theta + dx / 32, MinTheta, MaxTheta);
-    this._phi   = clamp(this._phi + dy / 32, MinPhi, MaxPhi);
+    this._theta = clamp(this._theta + dx / 64, MinTheta, MaxTheta);
+    this._phi   = clamp(this._phi + dy / 64, MinPhi, MaxPhi);
   }
 
   keyDown(keyCode: number) {
@@ -62,11 +62,6 @@ export class Client implements View {
       case key.KeyD: t[0] += 1; break;
       case key.KeyF: t[1] -= 1; break;
       case key.KeyR: t[1] += 1; break;
-
-      case key.KeySpace:
-        var cell = this._world.cell(t[0], t[1], t[2]);
-        this._world.setCell(t[0], t[1], t[2], (cell != cells.CellAir) ? cells.CellAir : cells.makeCell(cells.CellWall));
-        break;
     }
   }
 
@@ -112,7 +107,7 @@ export class Client implements View {
 
   private handleChunk(chunk: proto.MessageChunk) {
     var loc = chunk.Loc;
-    this._world.setChunk(loc.X, loc.Y, loc.Z, chunk.Cells, chunk.Actors);
+    this._world.setChunk(loc.X, loc.Y, loc.Z, chunk.Terrain, chunk.Actors);
   }
 
   private handleActorState(state: proto.MessageActorState) {
@@ -139,7 +134,7 @@ export class Client implements View {
 
     var uniforms: WorldUniforms = {
       u_ambient: [0.3, 0.3, 0.3],
-      u_lightDir: v3.normalize([-1, -2, -3]),
+      u_lightDir: v3.normalize([1, 2, 3]),
       u_viewProjection: this._camera.viewProjection(),
       u_model: m4.translation(t)
     };

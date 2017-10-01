@@ -3,6 +3,7 @@ import Vec3 = twgl.Vec3;
 var _geomCache: { [key: string]: twgl.BufferInfo } = {};
 
 // terrain:
+// TODO: Some way to merge fills of ground/liquid?
 //  ground type: 16 bits // 64k slots for ground types should be more than enough.
 //  ground fill:  5 bits // 32 levels should be enough resolution for fill
 //  liquid type:  6 bits // Don't need much more than water, ice, lava, cloud, etc.

@@ -48,3 +48,4 @@ var webpackConfig = {
     // new webpack.optimize.UglifyJsPlugin({})
   ]
 };
+

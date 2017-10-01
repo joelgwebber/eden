@@ -1,5 +1,5 @@
 import {ChunkSize} from "./world";
-import {cellIndex, makeEnv} from "./chunk";
+import {cellIndex} from "./chunk";
 import {fillCube, marchCube} from "./march";
 import {groundColor} from "./cells";
 import {gl} from "./eden";
@@ -8,6 +8,20 @@ import Vec3 = twgl.Vec3;
 import Mat4 = twgl.Mat4;
 import v3 = twgl.v3;
 import m4 = twgl.m4;
+
+export function makeEnv(cells: Uint32Array, cx: number, cy: number, cz: number): number[] {
+  var env = new Array(27);
+  for (var x = 0; x < 3; x++) {
+    for (var y = 0; y < 3; y++) {
+      for (var z = 0; z < 3; z++) {
+        // Y, Z, X dominant order.
+        var cell = cells[cellIndex(cx + x - 1, cy + y - 1, cz + z - 1)];
+        env[y * 9 + z * 3 + x] = cell;
+      }
+    }
+  }
+  return env;
+}
 
 export function renderTerrain(cells: Uint32Array): twgl.BufferInfo {
   var arrays: {[name: string]: number[]} = { position: [], normal: [], color: [], indices: [] };
@@ -18,7 +32,7 @@ export function renderTerrain(cells: Uint32Array): twgl.BufferInfo {
   // Verts.
   var verts = <number[]>arrays["position"];
   var indices = <number[]>arrays["indices"];
-  var vertCache: {[key: number]: number} = {}
+  var vertCache: {[key: number]: number} = {};
   for (var y = 1; y < ChunkSize - 1; y++) {
     for (var z = 1; z < ChunkSize - 1; z++) {
       for (var x = 1; x < ChunkSize - 1; x++) {

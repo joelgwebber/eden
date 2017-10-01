@@ -38,14 +38,9 @@ export class World {
     return this.chunkForPos(x, y, z).cell(x % ChunkInterior, y % ChunkInterior, z % ChunkInterior);
   }
 
-  setCell(x: number, y: number, z: number, cell: number) {
-    this.chunkForPos(x, y, z).setCell(x % ChunkInterior, y % ChunkInterior, z % ChunkInterior, cell);
-  }
-
-  setChunk(cx: number, cy: number, cz: number, terrain: number[], actors: proto.Actor[]) {
+  mutate(cx: number, cy: number, cz: number, mut: proto.Mutation) {
     var chunk = this.ensureChunk(cx, cy, cz);
-    chunk.setTerrain(terrain);
-    chunk.setActors(actors);
+    chunk.mutate(mut);
   }
 
   update() {
@@ -67,5 +62,16 @@ export class World {
       this._chunks[key] = new Chunk(cx, cy, cz);
     }
     return this._chunks[key];
+  }
+
+  findObjet(id: number): [proto.Objet, Chunk] {
+    for (var key in this._chunks) {
+      let chunk = this._chunks[key];
+      let obj = this._chunks[key].objet(id);
+      if (obj) {
+        return [obj, chunk];
+      }
+    }
+    return [null, null];
   }
 }

@@ -50,8 +50,8 @@ export class Client implements View {
 
   keyDown(keyCode: number) {
     switch (keyCode) {
-      case key.KeyW: this.move( 0,  0,  1); break;
-      case key.KeyS: this.move( 0,  0, -1); break;
+      case key.KeyW: this.move( 0,  0, -1); break;
+      case key.KeyS: this.move( 0,  0,  1); break;
       case key.KeyA: this.move(-1,  0,  0); break;
       case key.KeyD: this.move( 1,  0,  0); break;
       case key.KeyF: this.move( 0, -1,  0); break;

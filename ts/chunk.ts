@@ -49,7 +49,7 @@ export class Chunk {
     if (mut.Objets) {
       for (var key in mut.Objets) {
         var obj = mut.Objets[key];
-        if (obj == null) {
+        if (obj.Id == 0) {
           delete this._objets[key];
         } else {
           this._objets[key] = obj;

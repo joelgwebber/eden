@@ -1,5 +1,6 @@
 .DS_Store
-web/eden.js
-node_modules
-eden
 .idea
+node_modules
+web/eden.js
+go/pkg
+go/bin

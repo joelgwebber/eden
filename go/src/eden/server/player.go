@@ -3,21 +3,15 @@ package server
 import (
 	"fmt"
 	"io"
+	"log"
 
 	"golang.org/x/net/websocket"
-	"log"
-)
-
-const (
-	channelBufSize = 256
 )
 
 type Player struct {
 	id     int
 	conn   *websocket.Conn
 	server *Server
-	ch     chan *Message
-	doneCh chan bool
 
 	name  string
 	obj   Objet
@@ -31,10 +25,16 @@ func NewPlayer(conn *websocket.Conn, server *Server, id int) *Player {
 		id:     id,
 		conn:   conn,
 		server: server,
-		ch:     make(chan *Message, channelBufSize),
-		doneCh: make(chan bool),
 		focus:  make(map[*Chunk]int),
 	}
+}
+
+func (p *Player) Think() {
+	// ...
+}
+
+func (p *Player) Objet() Objet {
+	return p.obj
 }
 
 func (p *Player) Conn() *websocket.Conn {
@@ -42,57 +42,21 @@ func (p *Player) Conn() *websocket.Conn {
 }
 
 func (p *Player) Send(msg *Message) {
-	select {
-	case p.ch <- msg:
-	default:
-		p.server.Remove(p)
-		err := fmt.Errorf("player %d is disconnected.", p.id)
-		p.server.Err(err)
-	}
+	websocket.JSON.Send(p.conn, msg)
 }
 
-func (p *Player) Done() {
-	p.doneCh <- true
-}
-
-// TODO: Ugh, do we really need two goroutines to handle each player?
 func (p *Player) Listen() {
-	go p.listenSend()
-	p.listenRead()
-}
-
-func (p *Player) listenSend() {
 	for {
-		select {
-		case msg := <-p.ch:
-			websocket.JSON.Send(p.conn, msg)
-
-		case <-p.doneCh:
+		var msg Message
+		err := websocket.JSON.Receive(p.conn, &msg)
+		if err == io.EOF {
+			log.Printf("player '%s' disconnected", p.name)
 			p.server.Remove(p)
-			p.Done()
 			return
-		}
-	}
-}
-
-func (p *Player) listenRead() {
-	for {
-		select {
-		case <-p.doneCh:
-			p.server.Remove(p)
-			p.Done()
-			return
-
-		default:
-			var msg Message
-			err := websocket.JSON.Receive(p.conn, &msg)
-			if err == io.EOF {
-				p.Done()
-			} else if err != nil {
-				p.server.Err(err)
-			} else {
-				p.recvMessage(&msg)
-			}
+		} else if err != nil {
+			log.Printf("error receiving from websocket: %s", err)
+		} else {
+			p.recvMessage(&msg)
 		}
 	}
 }
@@ -110,12 +74,12 @@ func (p *Player) handleCmd(cmd string, args []int32) {
 	switch cmd {
 	case CommandMove:
 		builder := p.chunk.BeginMutation()
-		newChunk, newPos := builder.MoveObjet(p.obj.Id, Delta{args[0], args[1], args[2]})
+		newChunk, obj, newPos := builder.MoveObjet(p.obj.Id, Delta{args[0], args[1], args[2]})
 		builder.Apply()
 
 		if newChunk != nil {
 			newBuilder := newChunk.BeginMutation()
-			newBuilder.AddObjet(p.obj, newPos)
+			newBuilder.AddObjet(obj, newPos)
 			newBuilder.Apply()
 			p.chunk = newChunk
 		}
@@ -143,6 +107,7 @@ func (p *Player) handleConnect(connect *MessageConnect) {
 			PlayerObjId: p.obj.Id,
 		},
 	})
+	fmt.Printf("Player '%s' connected.\n", p.name)
 }
 
 func (p *Player) sendChunkUpdates() {

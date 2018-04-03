@@ -60,8 +60,8 @@ type Chunk struct {
 	loc          Location
 	terrainField []uint32
 	objets       map[uint64]Objet
+	actors       map[uint64]Actor
 
-	// TODO: Track player focii to know when we can drop old versions.
 	version      int        // Current version
 	firstVersion int        // Version to which mutations[0] is applied
 	mutations    []Mutation // Outstanding mutations (culled once all clients have seen a version)
@@ -73,6 +73,7 @@ func NewChunk(world *World, loc Location) *Chunk {
 		loc:          loc,
 		terrainField: make([]uint32, ChunkSize3),
 		objets:       make(map[uint64]Objet),
+		actors:       make(map[uint64]Actor),
 	}
 	c.randomize()
 	return c
@@ -89,7 +90,7 @@ func (c *Chunk) mutate(mut Mutation) {
 	// Terrain cells.
 	src := 0
 	dst := 0
-	for (src < len(mut.Terrain)) {
+	for src < len(mut.Terrain) {
 		dst += int(mut.Terrain[src])   // Skip count
 		set := int(mut.Terrain[src+1]) // Set count
 		src += 2
@@ -116,7 +117,10 @@ func (c *Chunk) mutate(mut Mutation) {
 
 func (c *Chunk) Tick() {
 	c.pullFromNeighbors()
-	// TODO: more
+
+	for _, act := range c.actors {
+		act.Think()
+	}
 }
 
 func (c *Chunk) CurState() Mutation {
@@ -171,6 +175,7 @@ func (c *Chunk) pullFromNeighbors() {
 	builder := c.BeginMutation()
 
 	chunk := func(bit int32, cofsx, cofsy, cofsz int32, cx, cy, cz int32, c1x, c1y, c1z int32, sx, sy, sz int32) {
+		// TODO: Resurrect the dirty bits.
 		// if c.dirty&bit != 0 {
 		c1 := c.world.Chunk(Location{c.loc.X + cofsx, c.loc.Y + cofsy, c.loc.Z + cofsz})
 		if c1 == nil {

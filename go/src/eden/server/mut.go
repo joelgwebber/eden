@@ -7,6 +7,7 @@ type MutBuilder struct {
 	muts    []Mutation
 }
 
+// TODO: All these mutations can be coalesced into a single one.
 func (mb *MutBuilder) Apply() {
 	if mb.chunk.version != mb.version {
 		panic("can't apply mutation; version mismatch")
@@ -24,6 +25,27 @@ func (mb *MutBuilder) SetTerrain(loc Location, cell uint32) {
 			Terrain: []uint32{uint32(cellIndex(loc)), 1, cell},
 		})
 	}
+}
+
+func (mb *MutBuilder) AddActor(actor Actor, pos Position) {
+	var obj = actor.Objet()
+	mb.AddObjet(obj, pos)
+	mb.chunk.actors[obj.Id] = actor
+}
+
+func (mb *MutBuilder) RemoveActor(actor Actor) {
+	var id = actor.Objet().Id
+	mb.RemoveObjet(id)
+	delete(mb.chunk.actors, id)
+}
+
+func (mb *MutBuilder) MoveActor(actor Actor, delta Delta) (*Chunk, Position) {
+	id := actor.Objet().Id
+	chunk, _, pos := mb.MoveObjet(id, delta)
+	if chunk != nil {
+		return chunk, pos
+	}
+	return nil, 0
 }
 
 func (mb *MutBuilder) AddObjet(obj Objet, pos Position) {
@@ -46,9 +68,9 @@ func (mb *MutBuilder) RemoveObjet(id uint64) {
 	})
 }
 
-// Returns a *Chunk (and updated position) if the Objet has left this chunk and entered a new one.
+// Returns a *Chunk if the Objet has left this chunk and entered a new one.
 // The caller is responsible for adding the Objet to the new chunk at the proper position.
-func (mb *MutBuilder) MoveObjet(id uint64, delta Delta) (*Chunk, Position) {
+func (mb *MutBuilder) MoveObjet(id uint64, delta Delta) (*Chunk, Objet, Position) {
 	obj := mb.chunk.objets[id]
 	vec := VecFromPos(obj.Pos)
 	vec[0] += delta.DX
@@ -86,9 +108,9 @@ func (mb *MutBuilder) MoveObjet(id uint64, delta Delta) (*Chunk, Position) {
 	if newLoc.X != loc.X || newLoc.Y != loc.Y || newLoc.Z != loc.Z {
 		mb.RemoveObjet(id)
 		newChunk := mb.chunk.world.EnsureChunk(newLoc)
-		return newChunk, newPos
+		return newChunk, obj, newPos
 	}
 
 	mb.AddObjet(obj, newPos)
-	return nil, 0
+	return nil, Objet{}, 0
 }

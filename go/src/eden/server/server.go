@@ -14,19 +14,17 @@ type Server struct {
 	players     map[int]*Player
 	curPlayerId int
 
-	addCh    chan *Player
-	removeCh chan *Player
-	doneCh   chan bool
-	errCh    chan error
+	addCh      chan *Player
+	removeCh   chan *Player
+	shutdownCh chan bool
 }
 
 func NewServer() *Server {
 	s := &Server{
-		players:  make(map[int]*Player),
-		addCh:    make(chan *Player),
-		removeCh: make(chan *Player),
-		doneCh:   make(chan bool),
-		errCh:    make(chan error),
+		players:    make(map[int]*Player),
+		addCh:      make(chan *Player),
+		removeCh:   make(chan *Player),
+		shutdownCh: make(chan bool),
 	}
 	s.world.Init()
 	return s
@@ -40,12 +38,8 @@ func (s *Server) Remove(p *Player) {
 	s.removeCh <- p
 }
 
-func (s *Server) Done() {
-	s.doneCh <- true
-}
-
-func (s *Server) Err(err error) {
-	s.errCh <- err
+func (s *Server) Shutdown() {
+	s.shutdownCh <- true
 }
 
 func (s *Server) Listen() {
@@ -53,7 +47,7 @@ func (s *Server) Listen() {
 		defer func() {
 			err := ws.Close()
 			if err != nil {
-				s.errCh <- err
+				log.Printf("error closing websocket: %s", err)
 			}
 		}()
 
@@ -79,10 +73,7 @@ func (s *Server) Listen() {
 			log.Println("Removed player")
 			delete(s.players, c.id)
 
-		case err := <-s.errCh:
-			log.Println("Error:", err.Error())
-
-		case <-s.doneCh:
+		case <-s.shutdownCh:
 			return
 		}
 	}

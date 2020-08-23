@@ -2,5 +2,3 @@
 .idea
 node_modules
 web/eden.js
-go/pkg
-go/bin

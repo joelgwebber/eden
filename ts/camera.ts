@@ -1,40 +1,73 @@
-import {gl} from "./eden";
-import {Tau} from "./math";
+import { createProgramInfo, m4, ProgramInfo, setUniforms, v3 } from "twgl.js";
+import { GL } from "./eden";
+import Mat4 = m4.Mat4;
+import Vec3 = v3.Vec3;
 
-import Vec3 = twgl.Vec3;
-import Mat4 = twgl.Mat4;
-import v3 = twgl.v3;
-import m4 = twgl.m4;
+interface Uniforms {
+  u_lightWorldPos: Vec3;
+  u_lightColor: number[];
+  u_ambient: number[];
+  u_specular: number[];
+  u_shininess: number;
+  u_specularFactor: number;
+
+  u_viewInverse: Mat4;
+  u_world: Mat4;
+  u_worldInverseTranspose: Mat4;
+  u_worldViewProjection: Mat4;
+}
 
 export class Camera {
-  private _mat = m4.identity();
-  private _view = m4.identity();
-  private _viewProjection = m4.identity();
+  private program: ProgramInfo;
+  private uniforms: Uniforms;
+  private aspect: number;
+  private _xform: Mat4;
 
-  setMatrix(mat: Mat4) {
-    this._mat = mat;
+  constructor(gl: GL) {
+    this.program = createProgramInfo(gl, ["vs", "fs"]);
+
+    this.uniforms = {
+      u_lightWorldPos: [-6, 8, -10],
+      u_lightColor: [0.8, 1, 0.8, 1],
+      u_ambient: [0.3, 0.3, 0.3, 1],
+      u_specular: [1, 1, 1, 1],
+      u_shininess: 50,
+      u_specularFactor: 1,
+
+      u_viewInverse: null,
+      u_world: null,
+      u_worldInverseTranspose: null,
+      u_worldViewProjection: null,
+    };
+
+    this._xform = m4.identity();
   }
 
-  setPosition(pos: Vec3) {
-    m4.setTranslation(this._mat, pos, this._mat);
+  get xform(): Mat4 {
+    return this._xform;
   }
 
-  lookAt(target: Vec3, up: Vec3) {
-    this._mat = m4.lookAt(m4.getTranslation(this._mat), target, up);
+  setViewport(width: number, height: number): void {
+    this.aspect = width / height;
   }
 
-  update() {
-    var aspect = gl.canvas.offsetWidth / gl.canvas.offsetHeight;
-    var projection = m4.perspective(30 * Tau / 360, aspect, 0.1, 1000);
-    m4.inverse(this._mat, this._view);
-    m4.multiply(this._view, projection, this._viewProjection);
-  }
+  prep(gl: GL, world: Mat4): ProgramInfo {
+    const fov = 30 * Math.PI / 180;
+    const zNear = 0.01;
+    const zFar = 100;
+    const projection = m4.perspective(fov, this.aspect, zNear, zFar);
 
-  view(): Mat4 {
-    return this._view;
-  }
+    const view = m4.inverse(this.xform);
+    const viewProjection = m4.multiply(projection, view);
 
-  viewProjection(): Mat4 {
-    return this._viewProjection;
+    this.uniforms.u_viewInverse = this.xform;
+    this.uniforms.u_world = world;
+    this.uniforms.u_worldInverseTranspose = m4.transpose(m4.inverse(world));
+    this.uniforms.u_worldViewProjection = m4.multiply(viewProjection, world);
+
+    gl.useProgram(this.program.program);
+    setUniforms(this.program, this.uniforms);
+
+    return this.program;
   }
 }

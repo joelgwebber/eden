@@ -44,11 +44,12 @@
 // Copyright (c) 2011 Evan Wallace (http://madebyevan.com/), under the MIT license.
 // Adapted to Typescript and extended by Joel Webber (jgw@pobox.com).
 
-/// <reference path="lib/twgl.d.ts"/>
-import {gl} from "./eden";
-
 // Holds a binary space partition tree representing a 3D solid. Two solids can
 // be combined using the `union()`, `subtract()`, and `intersect()` methods.
+import { Arrays, m4, v3 } from "twgl.js";
+import Mat4 = m4.Mat4;
+import Vec3 = v3.Vec3;
+
 export class Model {
   polygons: Polygon[];
 
@@ -57,19 +58,19 @@ export class Model {
   }
 
   // Construct a CSG solid from a list of `Polygon` instances.
-  static fromPolygons(polygons: Polygon[]) {
+  static fromPolygons(polygons: Polygon[]): Model {
     var csg = new Model();
     csg.polygons = polygons;
     return csg;
   }
 
-  clone() {
+  clone(): Model {
     var csg = new Model();
     csg.polygons = this.polygons.map(function(p) { return p.clone(); });
     return csg;
   }
 
-  toPolygons() {
+  toPolygons(): Polygon[] {
     return this.polygons;
   }
 
@@ -87,7 +88,7 @@ export class Model {
   //          |       |            |       |
   //          +-------+            +-------+
   //
-  union(csg: Model) {
+  union(csg: Model): Model {
     var a = new Node(this.clone().polygons);
     var b = new Node(csg.clone().polygons);
     a.clipTo(b);
@@ -113,7 +114,7 @@ export class Model {
   //          |       |
   //          +-------+
   //
-  subtract(csg: Model) {
+  subtract(csg: Model): Model {
     var a = new Node(this.clone().polygons);
     var b = new Node(csg.clone().polygons);
     a.invert();
@@ -141,7 +142,7 @@ export class Model {
   //          |       |
   //          +-------+
   //
-  intersect(csg: Model) {
+  intersect(csg: Model): Model {
     var a = new Node(this.clone().polygons);
     var b = new Node(csg.clone().polygons);
     a.invert();
@@ -156,7 +157,7 @@ export class Model {
 
   // Return a new CSG solid with solid and empty space switched. This solid is
   // not modified.
-  inverse() {
+  inverse(): Model {
     var csg = this.clone();
     csg.polygons.map(function(p) { p.flip(); });
     return csg;
@@ -183,7 +184,10 @@ export function empty(): Model {
 //               0, 0, 1, 0,
 //               0, 0, 0, 1]
 //     });
-export function cube(options?: { color?: number[]; center?: number[]; radius?: number[]; xform?: twgl.Mat4 }) {
+export function cube(options?: { color?: number[]; center?: Vec3; radius?: Vec3; xform?: Mat4 }): Model {
+  if (!options) {
+    options = {};
+  }
   var color = Vector.fromArray(options.color || [1, 1, 1]);
   var c = Vector.fromArray(options.center || [0, 0, 0]);
   var r = options.radius ? options.radius : [1, 1, 1];
@@ -214,8 +218,8 @@ export function cube(options?: { color?: number[]; center?: number[]; radius?: n
   }));
 }
 
-function rotationOf(m: twgl.Mat4): twgl.Mat4 {
-  let r = twgl.m4.copy(m);
+function rotationOf(m: Mat4): Mat4 {
+  let r = m4.copy(m);
   r[12] = r[13] = r[14] = 0;
   return r;
 }
@@ -234,15 +238,18 @@ function rotationOf(m: twgl.Mat4): twgl.Mat4 {
 //       slices: 16,
 //       stacks: 8
 //     });
-export function sphere(options?: { color?: number[]; center?: number[]; radius?: number; slices?: number; stacks?: number; xform?: twgl.Mat4 }) {
+export function sphere(options?: { color?: number[]; center?: number[]; radius?: number; slices?: number; stacks?: number; xform?: Mat4 }): Model {
+  if (!options) {
+    options = {};
+  }
   var color = Vector.fromArray(options.color || [1, 1, 1]);
   var c = Vector.fromArray(options.center || [0, 0, 0]);
   var r = options.radius || 1;
   var slices = options.slices || 16;
   var stacks = options.stacks || 8;
-  var polygons = [], vertices;
+  var polygons = [], vertices: Vertex[];
 
-  function vertex(theta, phi) {
+  function vertex(theta: number, phi: number) {
     theta *= Math.PI * 2;
     phi *= Math.PI;
     var dir = new Vector(
@@ -289,7 +296,10 @@ export function sphere(options?: { color?: number[]; center?: number[]; radius?:
 //       radius: 1,
 //       slices: 16
 //     });
-export function cylinder(options?: { color?: number[]; start?: number[]; end?: number[]; radius?: number; slices?: number; xform?: twgl.Mat4 }) {
+export function cylinder(options?: { color?: number[]; start?: number[]; end?: number[]; radius?: number; slices?: number; xform?: Mat4 }): Model {
+  if (!options) {
+    options = {};
+  }
   var color = Vector.fromArray(options.color || [1, 1, 1]);
   var s = Vector.fromArray(options.start || [0, -1, 0]);
   var e = Vector.fromArray(options.end || [0, 1, 0]);
@@ -303,7 +313,7 @@ export function cylinder(options?: { color?: number[]; start?: number[]; end?: n
   var end = new Vertex(e, axisZ.unit(), color);
   var polygons = [];
 
-  function point(stack, slice, normalBlend) {
+  function point(stack: number, slice: number, normalBlend: number) {
     var angle = slice * Math.PI * 2;
     var out = axisX.times(Math.cos(angle)).plus(axisY.times(Math.sin(angle)));
     var pos = s.plus(ray.times(stack)).plus(out.times(r));
@@ -332,7 +342,7 @@ export function cylinder(options?: { color?: number[]; start?: number[]; end?: n
 //     new CSG.Vector(1, 2, 3);
 //     new CSG.Vector([1, 2, 3]);
 export class Vector {
-  static fromArray(a: number[]) {
+  static fromArray(a: Vec3): Vector {
     return new Vector(a[0], a[1], a[2]);
   }
 
@@ -402,7 +412,7 @@ export class Vector {
     );
   }
 
-  mat4Times(xf: twgl.Mat4) {
+  mat4Times(xf: Mat4): Vector {
     return new Vector(
       xf[0] * this.x + xf[4] * this.y + xf[8] * this.z + xf[12],
       xf[1] * this.x + xf[5] * this.y + xf[9] * this.z + xf[13],
@@ -429,7 +439,7 @@ export class Vertex {
     this.color = color.clone();
   }
 
-  clone() {
+  clone(): Vertex {
     return new Vertex(this.pos.clone(), this.normal.clone(), this.color.clone());
   }
 
@@ -442,7 +452,7 @@ export class Vertex {
   // Create a new vertex between this vertex and `other` by linearly
   // interpolating all properties using a parameter of `t`. Subclasses should
   // override this to interpolate additional properties.
-  interpolate(other, t) {
+  interpolate(other: Vertex, t: number): Vertex {
     return new Vertex(
       this.pos.lerp(other.pos, t),
       this.normal.lerp(other.normal, t),
@@ -457,7 +467,7 @@ export class Plane {
   // point is on the plane.
   static EPSILON = 1e-5;
 
-  static fromPoints = function(a, b, c) {
+  static fromPoints(a: Vector, b: Vector, c: Vector): Plane {
     var n = b.minus(a).cross(c.minus(a)).unit();
     return new Plane(n, n.dot(a));
   }
@@ -465,12 +475,12 @@ export class Plane {
   normal: Vector;
   w: number;
 
-  constructor(normal, w) {
+  constructor(normal: Vector, w: number) {
     this.normal = normal;
     this.w = w;
   }
 
-  clone() {
+  clone(): Plane {
     return new Plane(this.normal.clone(), this.w);
   }
 
@@ -484,7 +494,7 @@ export class Plane {
   // `coplanarFront` or `coplanarBack` depending on their orientation with
   // respect to this plane. Polygons in front or in back of this plane go into
   // either `front` or `back`.
-  splitPolygon(polygon, coplanarFront, coplanarBack, front, back) {
+  splitPolygon(polygon: Polygon, coplanarFront: Polygon[], coplanarBack: Polygon[], front: Polygon[], back: Polygon[]) {
     var COPLANAR = 0;
     var FRONT = 1;
     var BACK = 2;
@@ -553,7 +563,7 @@ export class Polygon {
     this.plane = Plane.fromPoints(vertices[0].pos, vertices[1].pos, vertices[2].pos);
   }
 
-  clone() {
+  clone(): Polygon {
     var vertices = this.vertices.map(function(v) { return v.clone(); });
     return new Polygon(vertices, this.shared);
   }
@@ -585,7 +595,7 @@ export class Node {
     }
   }
 
-  clone() {
+  clone(): Node {
     var node = new Node();
     node.plane = this.plane && this.plane.clone();
     node.front = this.front && this.front.clone();
@@ -611,7 +621,7 @@ export class Node {
   // tree.
   clipPolygons(polygons: Polygon[]): Polygon[] {
     if (!this.plane) return polygons.slice();
-    var front = [], back = [];
+    var front: Polygon[] = [], back: Polygon[] = [];
     for (var i = 0; i < polygons.length; i++) {
       this.plane.splitPolygon(polygons[i], front, back, front, back);
     }
@@ -660,7 +670,7 @@ export class Node {
     if (!this.plane) {
       this.plane = polygons[0].plane.clone();
     }
-    var front = [], back = [];
+    var front: Polygon[] = [], back: Polygon[] = [];
     for (var i = 0; i < polygons.length; i++) {
       this.plane.splitPolygon(polygons[i], this.polygons, this.polygons, front, back);
     }
@@ -679,11 +689,14 @@ export class Node {
   }
 }
 
-export function polysToBuffers(polys: Polygon[]): twgl.BufferInfo {
-  var arrays: {[name: string]: number[]} = { position: [], normal: [], color: [], indices: [] };
-  arrays['position']['size'] = 3;
-  arrays['normal']['size'] = 3;
-  arrays['color']['size'] = 3;
+export function polysToArrays(polys: Polygon[]): Arrays {
+  var arrays: {[name: string]: any} = {
+    position: [],
+    normal: [],
+    color: [],
+    indices: []
+  };
+  arrays.color.numComponents = 3;
 
   var vidx = 0;
   for (var i = 0; i < polys.length; i++) {
@@ -707,7 +720,7 @@ export function polysToBuffers(polys: Polygon[]): twgl.BufferInfo {
       vidx += 3;
     }
   }
-  return twgl.createBufferInfoFromArrays(gl, arrays);
+  return arrays
 }
 
 function pushVector(a: number[], v: Vector) {

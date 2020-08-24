@@ -52,7 +52,7 @@ vec4 lit(float l, float h, float m) {
 }
 
 void main() {
-  vec4 diffuseColor = vec4(vec3(0, 1, 0), 1);
+  vec4 diffuseColor = vec4(v_color, 1);
   vec3 a_normal = normalize(v_normal);
   vec3 surfaceToLight = normalize(v_surfaceToLight);
   vec3 surfaceToView = normalize(v_surfaceToView);

@@ -162,6 +162,15 @@ export class Model {
     csg.polygons.map(function(p) { p.flip(); });
     return csg;
   }
+
+  transform(xform: Mat4) {
+    for (let poly of this.polygons) {
+      for (let vert of poly.vertices) {
+        vert.pos = vert.pos.mat4Times(xform);
+        vert.normal = vert.normal.mat4Times(rotationOf(xform));
+      }
+    }
+  }
 }
 
 // Construct an empty model.
@@ -201,9 +210,9 @@ export function cube(options?: { color?: number[]; center?: Vec3; radius?: Vec3;
   ].map(function(info) {
     return new Polygon(info[0].map(function(i: number): Vertex {
       var pos = new Vector(
-        r[0] * (2 * (i & 1 ? 1 : 0) - 1),
-        r[1] * (2 * (i & 2 ? 1 : 0) - 1),
-        r[2] * (2 * (i & 4 ? 1 : 0) - 1)
+        r[0] * ((i & 1 ? 1 : 0)),
+        r[1] * ((i & 2 ? 1 : 0)),
+        r[2] * ((i & 4 ? 1 : 0))
       );
       var normal = Vector.fromArray(info[1]);
       if (options.xform) {

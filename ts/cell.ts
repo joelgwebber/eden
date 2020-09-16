@@ -1,5 +1,5 @@
-import { BufferInfo, createBufferInfoFromArrays, m4, setBuffersAndAttributes, v3 } from "twgl.js";
-import { cube, empty, Model, polysToArrays } from "./csg";
+import { BufferInfo, createBufferInfoFromArrays, m4, setBuffersAndAttributes } from "twgl.js";
+import { cube, empty, Model, Polygon, polysToArrays, Vector, Vertex } from "./csg";
 import { Camera } from "./camera";
 import { GL } from "./eden";
 import { TAU } from "./math";
@@ -9,6 +9,13 @@ import mul = m4.multiply;
 import tran = m4.translation;
 import rotx = m4.rotationX;
 import roty = m4.rotationY;
+import rotz = m4.rotationZ;
+
+export enum Plane {
+  X, Y, Z,
+  Xy, XY, Xz, XZ, Yz, YZ,
+  Xyz, XYz, XyZ, XYZ
+}
 
 // Rotations about X/Y/Z as a fraction of TAU.
 const x_1_8 = rotx(1 * TAU / 8);
@@ -24,62 +31,40 @@ const y_3_8 = roty(3 * TAU / 8);
 const y_5_8 = roty(5 * TAU / 8);
 const y_7_8 = roty(7 * TAU / 8);
 
-const z_1_8 = roty(1 * TAU / 8);
+const z_1_4 = rotz(1 * TAU / 4);
+const z_1_8 = rotz(1 * TAU / 8);
+const z_7_8 = rotz(7 * TAU / 8);
 
-const nq = -0.25, pq = 0.25;
+const r2 = Math.sqrt(2);
+const r22 = r2 / 2;
 
 // Face surface transforms.
 const faceXforms: Mat4[] = [
-  id(),  // F0
-  y_1_4, // F1
-  y_1_2, // F2
-  y_3_4, // F3
-  x_1_4, // F4
-  x_3_4, // F5
+             tran([0, 0, -0.05]),  // XY
+  mul(y_3_4, tran([0, 0, -0.05])), // YZ
+  mul(x_1_4, tran([0, 0, -0.05])), // XZ
 ];
 
-// Edge surface transforms.
-const edgeXforms: Mat4[] = [
-  mul(tran([0, nq, pq]), x_1_8),             // E0
-  mul(tran([pq, nq, 0]), mul(y_1_4, x_1_8)), // E1
-  mul(tran([0, nq, nq]), mul(y_1_2, x_1_8)), // E2
-  mul(tran([nq, nq, 0]), mul(y_3_4, x_1_8)), // E3
-  mul(tran([pq, 0, pq]), y_1_8),             // E4
-  mul(tran([pq, 0, nq]), y_3_8),             // E5
-  mul(tran([nq, 0, nq]), y_5_8),             // E6
-  mul(tran([nq, 0, pq]), y_7_8),             // E7
-  mul(tran([0, pq, pq]), x_7_8),             // E8
-  mul(tran([pq, pq, 0]), mul(y_1_4, x_7_8)), // E9
-  mul(tran([0, pq, nq]), mul(y_1_2, x_7_8)), // E10
-  mul(tran([nq, pq, 0]), mul(y_3_4, x_7_8)), // E11
+// Angle surface transforms.
+const angleXforms: Mat4[] = [
+                                                mul(y_7_8, tran([0, 0, -0.05])),    // +XZ
+  mul(tran([0, 0, 1]),                       mul(y_1_8, tran([0, 0, -0.05]))),   // -XZ
+  mul(tran([1, 0, 0]),            mul(x_1_8, mul(z_1_4, tran([0, 0, -0.05])))),  // +YZ
+  mul(tran([1, 0, 1]),            mul(x_7_8, mul(z_1_4, tran([0, 0, -0.05])))),  // -YZ
+                          mul(z_7_8, mul(y_1_4, mul(z_1_4, tran([0, 0, -0.05])))),  // +XY
+  mul(tran([1, 0, 0]), mul(z_1_8, mul(y_1_4, mul(z_1_4, tran([0, 0, -0.05]))))), // -XY
 ];
 
-// Corner surface transforms.
-const hexXForms: Mat4[] = [
-  // What the actual fuck? This should be TAU/8, or my linear algebra brain is broken.
-  // But something's gone apeshit and it's experimentally turned out to be around TAU/10.21?!
-  mul(y_1_8, rotx(TAU / 10.21)),
-  mul(y_3_8, rotx(TAU / 10.21)),
-  mul(y_5_8, rotx(TAU / 10.21)),
-  mul(y_7_8, rotx(TAU / 10.21)),
-  mul(y_1_8, rotx(-TAU / 10.21)),
-  mul(y_3_8, rotx(-TAU / 10.21)),
-  mul(y_5_8, rotx(-TAU / 10.21)),
-  mul(y_7_8, rotx(-TAU / 10.21)),
+// Angle surface transforms.
+const cornerXforms: Mat4[] = [
+  mul(y_7_8, mul(rotx(TAU / 10.21), tran([0, 0, -0.05]))),                                                  // +X)Z
 ];
 
-// Hex surface transforms.
-const cornerXForms: Mat4[] = [
-  // What the actual fuck? This should be TAU/8, or my linear algebra brain is broken.
-  // But something's gone apeshit and it's experimentally turned out to be around TAU/10.21?!
-  mul(tran([+1/3, -1/3, +1/3]), mul(y_1_8, rotx(TAU / 10.21))),
-  mul(tran([+1/3, -1/3, -1/3]), mul(y_3_8, rotx(TAU / 10.21))),
-  mul(tran([-1/3, -1/3, -1/3]), mul(y_5_8, rotx(TAU / 10.21))),
-  mul(tran([-1/3, -1/3, +1/3]), mul(y_7_8, rotx(TAU / 10.21))),
-  mul(tran([+1/3, +1/3, +1/3]), mul(y_1_8, rotx(-TAU / 10.21))),
-  mul(tran([+1/3, +1/3, -1/3]), mul(y_3_8, rotx(-TAU / 10.21))),
-  mul(tran([-1/3, +1/3, -1/3]), mul(y_5_8, rotx(-TAU / 10.21))),
-  mul(tran([-1/3, +1/3, +1/3]), mul(y_7_8, rotx(-TAU / 10.21))),
+const clipXForms: Mat4[] = [
+  z_1_8,
+  z_7_8,
+  y_1_8,
+  y_7_8,
 ];
 
 export class CellBuilder {
@@ -91,40 +76,73 @@ export class CellBuilder {
 
   face(face: number) {
     this.model = this.model.union(cube({
-      radius: [0.5, 0.5, 0.01],
+      radius: [1, 1, 0.1],
       color: [0, 1, 0],
       xform: faceXforms[face]
     }));
   }
 
-  edge(edge: number) {
+  angle(angle: number) {
     this.model = this.model.union(cube({
-      radius: [0.5, 0.5, 0.01],
+      radius: [r2, 1, 0.1],
       color: [0, 1, 0],
-      xform: edgeXforms[edge]
+      xform: angleXforms[angle]
     }));
   }
 
-  hex(edge: number) {
-    this.model = this.model.union(cube({
-      radius: [0.7071, 0.7071, 0.01],
+  angleTri(angle: number, clipAngle: number) {
+    var shape = cube({
+      radius: [r2, 1, 0.1],
       color: [0, 1, 0],
-      xform: hexXForms[edge]
+      xform: angleXforms[angle]
+    }).intersect(cube({
+      radius: [2, 2, 2],
+      color: [0, 1, 0],
+      xform: clipXForms[clipAngle],
     }));
+    this.model = this.model.union(shape);
   }
 
-  corner(edge: number) {
-    this.model = this.model.union(cube({
-      radius: [0.7071, 0.7071, 0.01],
+  corner(corner: number) {
+    var n = new Vector(0, 1, 0), c = new Vector(0, 1, 0);
+    function vert(x: number, y: number, z: number): Vertex {
+      return new Vertex(new Vector(x, y, z), n, c);
+    }
+    var verts = [
+      vert(  0, 0.0, -0.1), vert(0, 0.0, 0.1),
+      vert(r22, 1.2121, -0.1), vert(r22, 1.2121, 0.1),
+      vert( r2, 0.0, -0.1), vert( r2, 0.0, 0.1),
+    ];
+    function poly(indices: number[]): Polygon {
+      return new Polygon(indices.map((idx) => verts[idx]));
+    }
+
+    var tri = cube({
+      radius: [r2, 1.5, 0.1],
       color: [0, 1, 0],
-      xform: cornerXForms[edge]
-    }));
+      xform: tran([0, 0, -.05])
+    }).intersect(Model.fromPolygons([
+      poly([0, 2, 4]),
+      poly([1, 5, 3]),
+      poly([0, 1, 3, 2]),
+      poly([0, 4, 5, 1]),
+      poly([4, 2, 3, 5]),
+    ]));
+    tri.transform(mul(y_7_8, rotx(-TAU / 10.21)));
+
+    this.model = this.model.union(tri);
+
+    // this.model = this.model.union(cube({
+    //   radius: [r2, r2, 0.1],
+    //   color: [0, 1, 0],
+    //   xform: cornerXforms[corner]
+    // }).intersect(cube({
+    //   radius: [1, 1, 1],
+    //   color: [0, 1, 0],
+    // })));
   }
 
   build(gl: GL): Cell {
-    let outside = cube({radius: [0.5, 0.5, 0.5]});
-    outside = outside.inverse()
-    this.model = this.model.subtract(outside);
     var arrays = polysToArrays(this.model.toPolygons());
     return new Cell(createBufferInfoFromArrays(gl, arrays));
   }
